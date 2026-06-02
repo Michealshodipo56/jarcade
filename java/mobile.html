@@ -1,0 +1,794 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="style/main.css">
+  <link rel="stylesheet" type="text/css" href="style/confirm.css">
+  <link rel="stylesheet" type="text/css" href="style/progress_activity.css">
+  <link rel="stylesheet" type="text/css" href="style/headers.css">
+  <link rel="stylesheet" type="text/css" href="style/drawer.css">
+
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+
+  <script src="./libs/PicoAudio.js" type="text/javascript"></script>
+
+  <!-- Required for mid -->
+  <script src="./libs/webaudio.js" type="text/javascript"></script>
+  <script src="./libs/webaudio-tinysynth.js" type="text/javascript"></script>
+
+  <!-- Required for amr -->
+  <script src="./libs/BenzAMRRecorder.js" type="text/javascript"></script>
+
+
+  <!-- Required for non-UTF encodings -->
+  <script src="libs/encoding.js"></script>
+  <!-- Load config scripts separately because compiled-method-cache.js
+     - depends on them. -->
+  <script type="text/javascript" src="config/default.js" defer></script>
+  <script type="text/javascript" src="config/runtests.js" defer></script>
+  <script type="text/javascript" src="config/build.js" defer></script>
+  <script type="text/javascript" src="config/urlparams.js" defer></script>
+
+
+  <!--<script type="text/javascript" src="libs/terminal.js" defer></script>-->
+
+  <!-- Load promise-6.0.0.js and IndexedDB-getAll-shim.js separately
+     - because compiled-method-cache.js depends on them. -->
+  <script type="text/javascript" src="libs/promise-6.0.0.js" defer></script>
+  <script type="text/javascript" src="polyfill/IndexedDB-getAll-shim.js" defer></script>
+
+  <!-- Load compiled-method-cache.js separately because j2me.js depends on it. -->
+  <script type="text/javascript" src="libs/compiled-method-cache.js" defer></script>
+
+  <!-- Load bld/native.js separately because adding it to main-all.js
+     - throws an "asm.js type error". -->
+  <script type="text/javascript" src="bld/native.js" defer></script>
+
+  <!-- Load j2me.js separately because classes.jar.js depends on it (it adds
+     - members to the AOTMD hash that j2me.js defines); and also so its source
+     - map gets loaded by the debugger. -->
+  <script type="text/javascript" src="bld/j2me.js" defer></script>
+
+  <!-- Run `make aot` to generate these.  Load them separately, because adding
+     - classes.jar.js to main-all.js fails silently for unknown reasons. -->
+  <!--<script type="text/javascript" src="bld/classes.jar.js" defer></script>-->
+  <!--<script type="text/javascript" src="bld/program.jar.js" defer></script>-->
+  <!--<script type="text/javascript" src="bld/tests.jar.js" defer></script>-->
+
+  <!-- Load the rest of the scripts from the combined script main-all.js
+     - to improve startup and runtime performance.  See Makefile for the list
+     - of files that get combined into this one. -->
+  <script type="text/javascript" src="bld/main-all.js" defer></script>
+
+  <script type="text/javascript" src="keymap.js"></script>
+
+  <style>
+    /* --- 1% ENGINEER OVERRIDE --- */
+    body {
+      background-color: #000 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      /* We removed flexbox centering so our JS math has total control */
+      overflow: hidden !important; 
+    }
+
+    #pageContainer {
+      display: none !important;
+    }
+
+    #display-container {
+      float: none !important;
+      margin: 0 !important;
+      transition: none !important;
+    }
+
+    #canvas {
+      image-rendering: pixelated; 
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+    }
+
+    .text-editor {
+      display: none !important;
+    }
+
+
+
+    /* === Top Back Button (Gaming Style) === */
+    .top-back-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1000;
+      padding: 8px 16px;
+      background: rgba(30, 30, 40, 0.8);
+      border: 1px solid rgba(255, 204, 0, 0.4);
+      border-radius: 8px;
+      color: #ffcc00;
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .top-back-btn:hover {
+      background: #ffcc00;
+      color: #000;
+      box-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .top-back-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* === Top Help Button === */
+    .top-help-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 1000;
+      padding: 8px 16px;
+      background: rgba(30, 30, 40, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .top-help-btn:hover {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border-color: rgba(255,255,255,0.4);
+      transform: translateY(-2px);
+    }
+
+    .top-help-btn:active { transform: scale(0.95); }
+
+    /* === In-game Help Modal === */
+    .ig-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(14px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .ig-modal-overlay.show {
+      display: flex !important;
+      opacity: 1;
+    }
+
+    .ig-modal {
+      background: linear-gradient(145deg, rgba(18, 18, 28, 0.98), rgba(8, 8, 16, 0.99));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      max-width: 520px;
+      width: 92vw;
+      max-height: 88vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+      transform: translateY(20px) scale(0.96);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .ig-modal-overlay.show .ig-modal { transform: translateY(0) scale(1); }
+
+    .ig-modal-header {
+      padding: 20px 22px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .ig-modal-header h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 900;
+      color: #ffcc00;
+      text-transform: uppercase;
+      font-family: 'Arial Black', Arial, sans-serif;
+    }
+
+    .ig-modal-close {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      padding: 0;
+    }
+
+    .ig-modal-close:hover { background: rgba(255,60,60,0.6); color: #fff; }
+
+    .ig-modal-body {
+      overflow-y: auto;
+      padding: 18px 22px 22px;
+      scrollbar-width: thin;
+      scrollbar-color: #333 transparent;
+    }
+
+    .ig-modal-body::-webkit-scrollbar { width: 4px; }
+    .ig-modal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+    .ig-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #ffcc00;
+      margin: 0 0 10px;
+      font-family: 'Arial Black', Arial, sans-serif;
+    }
+
+    .ig-key-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .ig-key-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 9px;
+    }
+
+    .ig-key-chip {
+      background: rgba(255,204,0,0.1);
+      border: 1px solid rgba(255,204,0,0.4);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffcc00;
+      white-space: nowrap;
+      font-family: 'Courier New', monospace;
+      flex-shrink: 0;
+    }
+
+    .ig-key-desc {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.3;
+    }
+
+    .ig-note {
+      font-size: 12px;
+      color: rgba(255,255,255,0.38);
+      font-style: italic;
+      line-height: 1.6;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin: 0;
+    }
+
+    .ig-modal-footer {
+      padding: 14px 22px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    .ig-close-btn {
+      padding: 11px 24px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
+      color: rgba(255,255,255,0.8);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Arial Black', Arial, sans-serif;
+    }
+
+    .ig-close-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+    .launcher-screen {
+      display: none;
+      min-height: 100vh;
+      box-sizing: border-box;
+      padding: 72px 16px 24px;
+      color: #f5f1d4;
+      background:
+        radial-gradient(circle at top, rgba(255, 204, 0, 0.18), transparent 36%),
+        linear-gradient(180deg, #111 0%, #050505 100%);
+      font-family: Arial, sans-serif;
+    }
+
+    .launcher-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .launcher-screen h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      color: #ffcc00;
+      letter-spacing: 1px;
+    }
+
+    .launcher-screen p {
+      margin: 0 0 22px;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.5;
+    }
+
+    .launcher-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .launcher-grid button {
+      padding: 14px 12px;
+      border: 1px solid rgba(255, 204, 0, 0.38);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(44, 44, 54, 0.95) 0%, rgba(15, 15, 20, 0.98) 100%);
+      color: #fff3bf;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .launcher-grid button:hover,
+    .launcher-grid button:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 204, 0, 0.85);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      outline: none;
+    }
+
+    body.launcher-mode {
+      overflow: auto !important;
+    }
+
+    body.launcher-mode .launcher-screen {
+      display: block;
+    }
+
+    body.launcher-mode .top-back-btn,
+    body.launcher-mode .edge-btn,
+    body.launcher-mode #display-container,
+    body.launcher-mode #pageContainer {
+      display: none !important;
+    }
+  </style>
+
+  <script>
+    const testGames = [
+      { jar: 'gangstar_rio_320x240.jar', className: 'GloftGRIO', canvasSize: 'size-320x240', label: 'Gangstar Rio (320x240)' },
+      { jar: 'godofwar2.jar', className: 'GOWMIDlet', canvasSize: 'size-240x320', label: 'God of War' },
+      { jar: 'zskc.jar', className: 'GloftDIRU', canvasSize: 'size-240x320', label: 'Diamond Rush (Fixed)' },
+      { jar: 'BounceTales.jar', className: 'RMIDlet', canvasSize: 'size-no', label: 'Bounce Tales' },
+      { jar: 'pvz.jar', className: 'Game', canvasSize: 'size-240x320', label: 'Plants vs Zombies' },
+      { jar: 'kybc6.jar', className: 'GloftASP6', canvasSize: 'size-no', label: 'Asphalt 6' },
+      { jar: 'call_of_duty_2_240x320-9173.jar', className: 'CODII', canvasSize: 'size-240x320', label: 'Call of Duty' },
+      { jar: 'batmannoki_8Qi8Psx7.jar', className: 'GloftBANA', canvasSize: 'size-240x320', label: 'Batman' },
+      { jar: 'thor_the_dark_world_320x240_253099.jar', className: 'GloftBANA', canvasSize: 'size-320x240', label: 'Thor' },
+      { jar: 'sim3.jar', className: 'com.ea.sims3.MonkeyApp', canvasSize: 'size-no', label: 'Sim 3' },
+      { jar: 'scarlottis_mafia_war_240x320_157342.jar', className: 'GloftBANA', canvasSize: 'size-240x320', label: 'Scarlottis Mafia War' }
+    ];
+
+    function playTestGame(jar, className, canvasSize = 'size-no') {
+      const params = new URLSearchParams();
+      params.set('jars', `jar/${jar}`);
+      if (className) {
+        params.set('midletClassName', className);
+      }
+      params.set('gamepad', '1');
+      params.set('canvasSize', canvasSize);
+      params.set('gameresize', 'resize-1');
+      window.location.href = `mobile.html?${params.toString()}`;
+    }
+
+    function setupLauncherMode() {
+      if (new URLSearchParams(window.location.search).has('jars')) {
+        return;
+      }
+
+      document.body.classList.add('launcher-mode');
+      const launcherGrid = document.getElementById('launcherGrid');
+      if (!launcherGrid) {
+        return;
+      }
+
+      launcherGrid.innerHTML = '';
+      for (const game of testGames) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = game.label;
+        button.addEventListener('click', () => {
+          playTestGame(game.jar, game.className, game.canvasSize);
+        });
+        launcherGrid.appendChild(button);
+      }
+    }
+
+    function scaleGame() {
+      const display = document.getElementById("display-container");
+      const canvas = document.getElementById("canvas");
+      if (!display || !canvas) return;
+
+      let gameW = canvas.width;
+      let gameH = canvas.height;
+      const rotate = new URLSearchParams(window.location.search).get('rotate');
+      const rotateRight = rotate === '90';
+      const rotateLeft = rotate === '270' || rotate === '-90';
+      const isRotated = rotateRight || rotateLeft;
+
+      if (gameW === 0 || gameW === 300) return;
+
+      display.style.width = gameW + "px";
+      display.style.height = gameH + "px";
+
+      const visualW = isRotated ? gameH : gameW;
+      const visualH = isRotated ? gameW : gameH;
+      const scale = Math.min(
+        window.innerWidth / visualW,
+        window.innerHeight / visualH
+      );
+
+      const left = (window.innerWidth - (visualW * scale)) / 2;
+      const top = (window.innerHeight - (visualH * scale)) / 2;
+
+      display.style.position = "absolute";
+      display.style.left = left + "px";
+      display.style.top = top + "px";
+      display.style.transformOrigin = "top left";
+      if (rotateRight) {
+        display.style.transform = `scale(${scale}) rotate(90deg) translate(0, -${gameH}px)`;
+      } else if (rotateLeft) {
+        display.style.transform = `scale(${scale}) rotate(-90deg) translate(-${gameW}px, 0)`;
+      } else {
+        display.style.transform = `scale(${scale})`;
+      }
+    }
+
+    window.addEventListener("resize", scaleGame);
+    window.addEventListener("orientationchange", () => setTimeout(scaleGame, 100));
+
+    window.addEventListener("load", () => {
+      setupLauncherMode();
+      if (document.body.classList.contains('launcher-mode')) {
+        return;
+      }
+
+      const checkReady = setInterval(() => {
+        const canvas = document.getElementById("canvas");
+        if (canvas && canvas.width !== 300 && canvas.width > 0) {
+          scaleGame();
+          clearInterval(checkReady);
+        }
+      }, 100);
+    });
+  </script>
+
+</head>
+
+<body>
+  <section class="launcher-screen">
+    <div class="launcher-inner">
+      <h1>Test Games</h1>
+      <p>Select a game to launch it directly in the mobile player.</p>
+      <div id="launcherGrid" class="launcher-grid"></div>
+    </div>
+  </section>
+
+  <!-- Top Back Button -->
+  <button class="top-back-btn" onclick="history.back()">
+    <span>&lsaquo;</span> EXIT
+  </button>
+
+  <!-- Top Help Button -->
+  <button class="top-help-btn" onclick="openHelpModal()">
+    <span>&#63;</span> HELP
+  </button>
+
+  <!-- In-Game Help Modal (Mobile) -->
+  <div id="igHelpModal" class="ig-modal-overlay">
+    <div class="ig-modal">
+      <div class="ig-modal-header">
+        <h2>&#127918; How to Play</h2>
+        <button class="ig-modal-close" onclick="closeHelpModal()">&#x2715;</button>
+      </div>
+      <div class="ig-modal-body">
+
+        <p class="ig-section-label">&#128241; Mobile Touch Controls</p>
+        <div class="ig-key-grid">
+          <div class="ig-key-item"><span class="ig-key-chip">D-pad</span><span class="ig-key-desc">Move / Navigate</span></div>
+          <div class="ig-key-item"><span class="ig-key-chip">OK button</span><span class="ig-key-desc">Confirm / Select</span></div>
+          <div class="ig-key-item"><span class="ig-key-chip">Tap screen</span><span class="ig-key-desc">Interact (touch games)</span></div>
+          <div class="ig-key-item"><span class="ig-key-chip">Swipe</span><span class="ig-key-desc">Scroll / Drag</span></div>
+        </div>
+
+        <p class="ig-section-label">&#9995; L &amp; R Soft Key Buttons</p>
+        <div class="ig-key-grid">
+          <div class="ig-key-item"><span class="ig-key-chip">L button</span><span class="ig-key-desc">Left menu / options</span></div>
+          <div class="ig-key-item"><span class="ig-key-chip">R button</span><span class="ig-key-desc">Right back / action</span></div>
+          <div class="ig-key-item"><span class="ig-key-chip">Hold &amp; Drag</span><span class="ig-key-desc">Reposition button</span></div>
+        </div>
+
+        <p class="ig-note">
+          &#128161; The L and R buttons float on the edges of the screen. Hold and drag them up or down to find your preferred position. For touch-screen games, tap or swipe directly on the game area.
+        </p>
+
+      </div>
+      <div class="ig-modal-footer">
+        <button class="ig-close-btn" onclick="closeHelpModal()">Got it &mdash; Back to Game</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    function triggerGamepadBtn(label) {
+      const btns = document.querySelectorAll('#gamepad button');
+      for (const btn of btns) {
+        if (btn.textContent.trim() === label) {
+          btn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+          setTimeout(() => btn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true })), 80);
+          btn.click();
+          break;
+        }
+      }
+    }
+
+    // === In-game Help Modal ===
+    function openHelpModal() {
+      const modal = document.getElementById('igHelpModal');
+      if (modal) modal.classList.add('show');
+    }
+
+    function closeHelpModal() {
+      const modal = document.getElementById('igHelpModal');
+      if (modal) modal.classList.remove('show');
+    }
+
+    document.getElementById('igHelpModal').addEventListener('click', function(e) {
+      if (e.target === this) closeHelpModal();
+    });
+  </script>
+
+  <input id="File" type="file" style="visibility: hidden;display:none;" />
+  <div id="pageContainer" style="display: none !important;">
+    <pre id="consoleContainer"></pre>
+    <div id="profilerContainer">
+      <div id="profilerToolbar">
+        <div class="toolbarLabel">Profiler <span id="profilerMessage" class="toolbarMessage">6 Seconds</span></div>
+        <div id="profilerButtons">
+          <div id="profilerStartStop">Start</div>
+          <div id="profilerAdjustHeight">Height</div>
+        </div>
+      </div>
+      <div id="profiler">
+        <div id="profileList">
+        </div>
+        <div id="profilePanel">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- The raw console is used for unit tests, so it's not visible by default: -->
+  <pre id="raw-console" style="display: none"></pre>
+
+  <div id="display-container">
+    <div id="display">
+      <section id="sidebar" data-type="sidebar" style="display:none">
+        <header>
+          <h1>Menu</h1>
+        </header>
+        <nav>
+          <ul>
+          </ul>
+        </nav>
+      </section>
+      <section id="drawer" role="region">
+        <header style="display:none">
+          <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
+          <a id="header-drawer-button" href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
+          <menu id="header-ok-button" type="toolbar" style="display:none"><button>√</button></menu>
+          <h1 id="display_title"></h1>
+        </header>
+        <div id="main" role="main">
+          <canvas id="canvas"></canvas>
+          <input id="password-editor" class="text-editor" type="password">
+          <input id="tel-editor" class="text-editor" type="tel">
+          <input id="number-editor" class="text-editor" type="number">
+          <input id="email-editor" class="text-editor" type="email">
+          <input id="url-editor" class="text-editor" type="url">
+          <div id="textarea-editor" class="text-editor" contenteditable="true"></div>
+          <!-- The hidden textarea editor is used to measure the content height -->
+          <div id="hidden-textarea-editor" class="text-editor"></div>
+        </div>
+      </section>
+
+
+
+      <div id="download-screen" class="screen">
+        <h1 class="title">Downloading midlet…</h1>
+        <div class="download-progress-container">
+          <progress class="pack-activity" id="download-bar" value="0" max="100"></progress>
+        </div>
+      </div>
+
+      <div id="splash-screen" class="screen">
+        <h1 class="title">Starting midlet…</h1>
+        <div class="splash-progress-container">
+          <progress></progress>
+        </div>
+      </div>
+
+      <div id="exit-screen" class="screen">
+      </div>
+
+      <div id="background-screen">
+      </div>
+
+      <form role="dialog" data-type="confirm" class="lcdui-alert" id="lcdui-alert" style="display: none">
+        <section>
+          <h1 class="title"></h1>
+          <p class="text"></p>
+          <p style="border-top: 0"><progress style="display: none"></progress></p>
+        </section>
+        <menu>
+          <button class="button0" style="display: none"></button>
+          <button class="button1" style="display: none"></button>
+        </menu>
+      </form>
+
+      <form role="dialog" data-type="confirm" class="sms-listener-prompt" id="sms-listener-prompt"
+        style="display: none">
+        <section>
+          <h1>SMS Verification</h1>
+          <p class="verificationText"></p>
+          <input type="text" placeholder="Type SMS Here">
+          <p class="timeLeft"></p>
+          <progress class="timeLeftBar" value="0" max="100"></progress>
+        </section>
+        <menu>
+          <button class="cancel">Cancel</button>
+          <button class="recommend">Done</button>
+        </menu>
+      </form>
+
+      <form role="dialog" data-type="confirm" class="nokia-fileui-prompt" id="nokia-fileui-prompt"
+        style="display: none">
+        <section>
+          <h1>Select a file</h1>
+          <p><input type="file" name="nokia-fileui-file">
+        </section>
+        <menu>
+          <button class="cancel">Cancel</button>
+          <button class="recommend">Done</button>
+        </menu>
+      </form>
+
+      <form role="dialog" data-type="confirm" class="download-failure-dialog" id="download-failure-dialog"
+        style="display: none">
+        <section>
+          <h1 class="download-dialog-text">Download failure</h1>
+          <p>The download of midlet failed. Press <i>Retry</i> to try again.</p>
+        </section>
+        <menu>
+          <button class="recommend">Retry</button>
+        </menu>
+      </form>
+    <div id="settings" style="display: none !important;">
+      <section>
+        <table id="counters">
+          <tr>
+            <td>Bytecode:</td>
+            <td><span id="bytecodeCount"></span></td>
+          </tr>
+          <tr>
+            <td>Compiled:</td>
+            <td><span id="compiledCount"></span></td>
+          </tr>
+          <tr>
+            <td>Interpreter:</td>
+            <td><span id="interpreterCount"></span></td>
+          </tr>
+          <tr>
+            <td>OSR:</td>
+            <td><span id="onStackReplacementCount"></span></td>
+          </tr>
+          <tr>
+            <td>Unwind:</td>
+            <td><span id="unwindCount"></span></td>
+          </tr>
+          <tr>
+            <td>Preemption:</td>
+            <td><span id="preemptionCount"></span></td>
+          </tr>
+        </table>
+      </section>
+      <section>
+        <select id="loglevel">
+          <option value="0">Log Level: Trace
+          <option value="1">Log Level: Log
+          <option value="2">Log Level: Info
+          <option value="3">Log Level: Warn
+          <option value="4">Log Level: Error
+          <option value="5">Log Level: Silent
+        </select>
+        <input id="console-filter-input" type="text" placeholder="Filter Console Output" value="">
+        <button id="console-clear">Clear console</button>
+        <button id="console-save">Save console</button>
+        <label><input type="checkbox" id="perfWriter">Perf</label>
+      </section>
+      <section>
+        <button id="exportstorage">Export File System</button>
+        <div>Import File System:</div>
+        <input type="file" id="importstoragefile">
+        <input type="text" id="importstorageurl" placeholder="URL to FS backup">
+        <button id="importstorage">Import</button>
+        <button id="clearCompiledMethodCache">Clear Compiled Method Cache</button>
+        <button id="deleteDatabases">Delete IDB Databases</button>
+        <button id="printAllExceptions">Print all exceptions: OFF</button>
+        <button id="clearCounters">Clear Counters</button>
+        <button id="dumpCounters">Dump Counters</button>
+        <button id="sampleCounters1">One sample for 1s</button>
+        <button id="sampleCounters2">One sample for 100ms (2s)</button>
+        <select id="canvasSize">
+          <option value="" selected>Display size: 240x320</option>
+          <option value="size-320x240">Display size: 320x240</option>
+          <option value="size-320x480">Display size: 320x480</option>
+          <option value="size-480x320">Display size: 480x320</option>
+        </select>
+        <button id="start">Start</button>
+      </section>
+    </div>
+  </div>
+
+</body>
+</html>

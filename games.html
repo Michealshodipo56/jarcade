@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games - JARCADE</title>
+  <link rel="icon" type="image/png" href="images/icon.png">
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+  <style>
+    /* ===== STICKY HEADER ===== */
+    .games-sticky-header {
+      position: fixed;
+      top: 0;
+      left: 225px;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      animation: slideDown 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    .games-header-bar {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .games-search-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .games-search-wrap .home-search-input {
+      width: min(360px, 100%);
+    }
+
+    .games-main {
+      padding: 62px 14px 0;
+    }
+
+    .games-dropdown {
+      position: relative;
+    }
+
+    .games-dropbtn {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .games-dropbtn:hover {
+      border-color: rgba(255, 204, 0, 0.7);
+      background: rgba(255, 204, 0, 0.12);
+    }
+
+    .games-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      min-width: 170px;
+      background: rgba(20, 20, 28, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .games-dropdown-menu.show {
+      display: block;
+    }
+
+    .games-dropdown-menu button {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      color: #fff;
+      text-align: left;
+      padding: 9px 11px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    .games-dropdown-menu button:hover {
+      background: rgba(255, 204, 0, 0.16);
+      color: #ffcc00;
+    }
+
+    .games-category-section {
+      margin-bottom: 8px;
+    }
+
+    .games-category-section.hidden {
+      display: none;
+    }
+
+    .games-type {
+      margin: 0 0 6px;
+      text-align: left;
+    }
+
+    .games-type svg {
+      width: min(320px, 72vw);
+      height: auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 12px;
+    }
+
+    .cards-grid .game {
+      width: 100%;
+      margin: 0;
+      border-radius: 14px;
+    }
+
+    .cards-grid .game-card:first-child {
+      grid-column: span 2;
+    }
+
+    .cards-grid .game-card:first-child .game-img-div {
+      height: 132px;
+    }
+
+    .cards-grid .game .game-img-div {
+      height: 108px;
+    }
+
+    .cards-grid .game-text {
+      padding: 11px;
+      font-size: 0.78em;
+    }
+
+    .cards-grid .name {
+      font-size: 1em;
+      margin-bottom: 6px;
+    }
+
+    .cards-grid .game:hover:not(:has(.card-rating:hover)) {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+    }
+
+    .section-see-more-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0 4px;
+    }
+
+    .section-see-more-btn {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border-radius: 999px;
+      padding: 7px 18px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .section-see-more-btn:hover {
+      border-color: rgba(255, 204, 0, 0.85);
+      color: #ffcc00;
+      transform: translateY(-1px);
+    }
+
+    .section-see-more-btn.hidden,
+    .section-see-less-btn.hidden {
+      display: none;
+    }
+
+    .section-see-less-btn {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.65);
+      border-radius: 999px;
+      padding: 7px 18px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .section-see-less-btn:hover {
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .sc.active.games-link::after {
+      display: none;
+    }
+
+    .games-section-line {
+      margin: 14px 0 18px;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .games-main .site-footer {
+      margin: 24px -14px 0;
+      width: calc(100% + 28px);
+    }
+
+    .back-to-top-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0 28px;
+    }
+
+    .back-to-top-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+
+    .back-to-top-btn:hover {
+      border-color: rgba(255, 204, 0, 0.8);
+      background: rgba(255, 204, 0, 0.12);
+      color: #ffcc00;
+      transform: translateY(-2px);
+    }
+
+    .back-to-top-btn i {
+      font-size: 0.9em;
+    }
+
+    @media only screen and (max-width: 850px) {
+      /* Sticky header: bar (with bg) + search (no bg) stacked */
+      .games-sticky-header {
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+        gap: 0;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-bottom: none;
+      }
+
+      .games-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 9px 14px 9px 58px; /* 58px left keeps clear of .menu button */
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .games-search-wrap {
+        padding: 10px 14px 12px;
+        background: transparent;
+        justify-content: stretch;
+      }
+
+      .games-search-wrap .home-search-input {
+        width: 100%;
+        max-width: none;
+      }
+
+      /* main needs extra top padding: bar (~50px) + search row (~58px) */
+      .games-main {
+        padding-top: 118px;
+        padding-left: 10px;
+        padding-right: 10px;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        width: 100%;
+      }
+
+      .games-main .site-footer {
+        margin-left: -10px;
+        margin-right: -10px;
+        width: calc(100% + 20px);
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      }
+
+      .cards-grid .game-card:first-child {
+        grid-column: span 1;
+      }
+
+      .cards-grid .game-card:first-child .game-img-div {
+        height: 108px;
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      .games-main {
+        padding-left: 8px;
+        padding-right: 8px;
+        overflow-x: hidden;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 8px;
+      }
+
+      .games-main .site-footer {
+        margin-left: -8px;
+        margin-right: -8px;
+        width: calc(100% + 16px);
+      }
+    }
+
+    @media only screen and (max-width: 360px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="menu" id="menuBtn"><i class="fa-solid fa-bars"></i></div>
+  <div id="notification" class="notification"></div>
+
+  <!-- Sticky games header -->
+  <header class="games-sticky-header">
+    <div class="games-header-bar">
+      <div class="games-dropdown">
+        <button type="button" id="categoryBtn" class="games-dropbtn">
+          Categories <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>
+        </button>
+        <div id="categoryMenu" class="games-dropdown-menu"></div>
+      </div>
+    </div>
+    <div class="games-search-wrap">
+      <input id="gameSearch" class="home-search-input" placeholder="Search games" type="search" aria-label="Search games">
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="side-div">
+      <div class="side-bar" id="sidebar">
+        <div class="line"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+        <div class="remove" id="removeBtn">&times;</div>
+
+        <div class="logo">
+          <a href="index.html"><img src="images/logo.png" alt="Jarcade Logo" class="logo-img"></a>
+        </div>
+
+        <nav class="section">
+          <a href="index.html" class="sc"><i class="fa-solid fa-house"></i><span>Home</span></a>
+          <a href="games.html" class="sc active games-link"><i class="fa-solid fa-gamepad"></i><span>Games</span></a>
+          <a href="test.html" class="sc"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+          <a href="" class="sc"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+          <a href="try.html" class="sc"><i class="fa-solid fa-headset"></i><span>Support</span></a>
+        </nav>
+
+        <hr class="hr hr-bottom">
+        <nav class="section section-secondary">
+          <a target="_blank" href="https://www.facebook.com/profile.php?id=61577225696695" class="sc"><i class="fa-solid fa-users"></i><span>Community</span></a>
+          <a href="" class="sc"><i class="fa-solid fa-rss"></i><span>News</span></a>
+          <a href="" class="sc"><i class="fa-solid fa-share-nodes"></i><span>Social</span></a>
+        </nav>
+      </div>
+    </div>
+
+    <main class="main games-main">
+      <div id="gamesSections"></div>
+
+      <div class="back-to-top-wrap">
+        <button type="button" class="back-to-top-btn" id="backToTopBtn">
+          <i class="fa-solid fa-chevron-up"></i> Back to Top
+        </button>
+      </div>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-logo" aria-label="JARCADE Home">
+              <img src="images/logo.png" alt="JARCADE Logo" class="footer-logo-img">
+            </a>
+            <p class="footer-tagline">Classic Java games, reborn in your browser.</p>
+            <div class="footer-socials">
+              <a href="https://www.facebook.com/profile.php?id=61577225696695" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+              <a href="" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a href="" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+              <a href="" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+          </div>
+          <nav class="footer-nav" aria-label="Footer navigation">
+            <a href="games.html">All Games</a>
+            <a href="favourite.html">Favourites</a>
+            <a href="test.html">Help</a>
+            <a href="try.html">Support</a>
+            <a href="">Privacy Policy</a>
+            <a href="">Terms &amp; Conditions</a>
+          </nav>
+          <p class="footer-desc">
+            JARCADE is home to classic J2ME mobile games playable directly in your browser — no downloads, no installs required. From action and adventure to racing and strategy, rediscover the golden era of mobile gaming.
+          </p>
+          <div class="footer-bottom">
+            <span>&copy; 2026 JARCADE. All rights reserved.</span>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const GAME_CATEGORIES = [
+      {
+        key: "action",
+        label: "Action",
+        games: [
+          { name: "Gangstar Rio", img: "images/game2.png", desc: "Open-world missions in Rio.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Shadow Ops", img: "images/game4.webp", desc: "Stealth takedowns and combat.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Call of Duty 2", img: "images/game10.jpg", desc: "WWII missions and tactical shooting.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Thor: The Dark World", img: "images/game6.jpg", desc: "Wield the power of Mjolnir.", play: "openChoiceModal('thor_the_dark_world_320x240_253099.jar','GloftBANA','size-320x240')" },
+          { name: "Scarlotti's Mafia War", img: "images/game5.jpg", desc: "Rise through city crime factions.", play: "openChoiceModal('scarlottis_mafia_war_240x320_157342.jar','GloftBANA','size-240x320')" },
+          { name: "Plants vs Zombies", img: "images/game9.jpg", desc: "Defend your garden from zombies.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Ninja Strike", img: "images/game8.png", desc: "Quick slash combos and escapes.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Batman: Dark Knight", img: "images/game3.jpg", desc: "Save Gotham from the Joker.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Asphalt Wars", img: "images/game6.jpg", desc: "High-speed city combat racing.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Urban Assault", img: "images/game1.jpg", desc: "Fight through city streets block by block.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Strike Force", img: "images/game4.webp", desc: "Lead a squad through hostile zones.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Combat Zone", img: "images/game10.jpg", desc: "Fast-paced arena battles and missions.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" }
+        ]
+      },
+      {
+        key: "adventure",
+        label: "Adventure",
+        games: [
+          { name: "God of War: Betrayal", img: "images/game1.jpg", desc: "Epic mythic action adventure.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Batman: The Dark Knight", img: "images/game3.jpg", desc: "Save Gotham in fast missions.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Bounce Tales", img: "images/game7.jpg", desc: "Classic platform challenge.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Diamond Rush", img: "images/game9.jpg", desc: "Temple traps and treasure runs.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Prince Quest", img: "images/game4.webp", desc: "Dungeon runs and sword fights.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Lost Temple", img: "images/game10.jpg", desc: "Explore ruins and solve traps.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Thor: Quest", img: "images/game6.jpg", desc: "Battle through Norse realms.", play: "openChoiceModal('thor_the_dark_world_320x240_253099.jar','GloftBANA','size-320x240')" },
+          { name: "Spider Siege", img: "images/game2.png", desc: "Swing through danger zones.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Shadow Forest", img: "images/game4.webp", desc: "Sneak past monsters in dark woods.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Castle Run", img: "images/game5.jpg", desc: "Escape the collapsing fortress.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Jungle Strike", img: "images/game8.png", desc: "Survive deep in the wild.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Pirate Cove", img: "images/game10.jpg", desc: "Sail the seas and find treasure.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Dragon Keeper", img: "images/game7.jpg", desc: "Train your dragon and battle foes.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Mystic Lands", img: "images/game9.jpg", desc: "Uncover ancient mysteries.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" }
+        ]
+      },
+      {
+        key: "racing",
+        label: "Racing",
+        games: [
+          { name: "Asphalt 6: Adrenaline", img: "images/game6.jpg", desc: "Nitro racing at top speed.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Velocity Prime", img: "images/game10.jpg", desc: "Street circuit races with boosts.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Drift Night X", img: "images/game1.jpg", desc: "Precision drifting on neon tracks.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Turbo Moto GP", img: "images/game3.jpg", desc: "Motorbike racing on tight corners.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Retro Rally", img: "images/game5.jpg", desc: "Dust tracks and checkpoint laps.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "City Drift Pro", img: "images/game2.png", desc: "Customize cars and race at night.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Speed Runners", img: "images/game8.png", desc: "Sprint races across tight circuits.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Moto Blitz", img: "images/game5.jpg", desc: "Off-road bike racing action.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Neon Circuit", img: "images/game4.webp", desc: "Futuristic tracks and turbo boosts.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Dirt Rally X", img: "images/game9.jpg", desc: "Mud and gravel extreme racing.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Thunder Road", img: "images/game7.jpg", desc: "Storm through weather-hit tracks.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Kart Blasters", img: "images/game3.jpg", desc: "Fun kart racing with power-ups.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Superbike Rage", img: "images/game2.png", desc: "Weave through traffic at max speed.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Hill Climb Arena", img: "images/game10.jpg", desc: "Scale steep hills without crashing.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" }
+        ]
+      },
+      {
+        key: "puzzle",
+        label: "Puzzle",
+        games: [
+          { name: "Diamond Rush", img: "images/game9.jpg", desc: "Temple traps and treasure runs.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Logic Forge", img: "images/game8.png", desc: "Mind-bending puzzle stages.", play: "openChoiceModal('chess.jar','com.chess.Tmpmidlet','size-240x320')" },
+          { name: "Enigma Protocol", img: "images/game7.jpg", desc: "Decode patterns under pressure.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Block Master", img: "images/game4.webp", desc: "Stack and clear falling blocks.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Crystal Match", img: "images/game2.png", desc: "Match gems to unlock levels.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Mind Maze", img: "images/game1.jpg", desc: "Navigate tricky logic mazes.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Color Cascade", img: "images/game3.jpg", desc: "Match colors before time runs out.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Tower of Riddles", img: "images/game7.jpg", desc: "Solve riddles to climb floors.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Number Nexus", img: "images/game4.webp", desc: "Crack number sequences fast.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Pipe Dream", img: "images/game5.jpg", desc: "Connect pipes before water flows.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Shadow Grid", img: "images/game10.jpg", desc: "Fill the grid with light paths.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Word Storm", img: "images/game6.jpg", desc: "Build words under the clock.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Hex Breaker", img: "images/game2.png", desc: "Break hex chains to clear the board.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Ice Slide", img: "images/game8.png", desc: "Slide pieces into position.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" }
+        ]
+      },
+      {
+        key: "casual",
+        label: "Casual",
+        games: [
+          { name: "Bubble Pop", img: "images/game8.png", desc: "Pop coloured bubbles in chains.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Farm Frenzy", img: "images/game5.jpg", desc: "Grow crops and feed animals.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Jelly Smash", img: "images/game7.jpg", desc: "Tap jelly blocks before they pile up.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Tap Heroes", img: "images/game9.jpg", desc: "Tap your way to victory.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Cloud Catcher", img: "images/game2.png", desc: "Drift through skies collecting stars.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Cookie Crunch", img: "images/game3.jpg", desc: "Bake and serve treats at speed.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Flip Frog", img: "images/game1.jpg", desc: "Jump lily pads without falling.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Tiny Chef", img: "images/game4.webp", desc: "Cook orders as they come in.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Marble Roll", img: "images/game6.jpg", desc: "Guide a marble through tight tubes.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Pet Pals", img: "images/game10.jpg", desc: "Care for adorable digital pets.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" }
+        ]
+      },
+      {
+        key: "match3",
+        label: "Match-3",
+        games: [
+          { name: "Gem Burst", img: "images/game9.jpg", desc: "Match three gems to clear rows.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Candy Blast", img: "images/game8.png", desc: "Swap and match sweet treats.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Star Swipe", img: "images/game7.jpg", desc: "Swipe stars into matching sets.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Jewel Quest", img: "images/game2.png", desc: "Align jewels across ancient maps.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Fruit Fuse", img: "images/game5.jpg", desc: "Fuse fruits into higher combos.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Crystal Pop", img: "images/game3.jpg", desc: "Pop crystal chains for big scores.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Ice Gems", img: "images/game1.jpg", desc: "Melt ice by matching blue gems.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Bubble Galaxy", img: "images/game4.webp", desc: "Match bubbles across space levels.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Magic Tiles", img: "images/game6.jpg", desc: "Align magic tiles to unlock spells.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Ocean Drops", img: "images/game10.jpg", desc: "Match water drops deep undersea.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" }
+        ]
+      },
+      {
+        key: "runner",
+        label: "Runner",
+        games: [
+          { name: "Bounce Tales", img: "images/game7.jpg", desc: "Run and bounce past every obstacle.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Doodle Dash", img: "images/game8.png", desc: "Dash through doodle worlds endlessly.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Ninja Run", img: "images/game4.webp", desc: "Sprint and slice through enemies.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Space Sprint", img: "images/game2.png", desc: "Run through asteroid fields at warp.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Temple Dash", img: "images/game9.jpg", desc: "Dodge traps in ancient temples.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Road Runner", img: "images/game6.jpg", desc: "Dodge traffic at top speed.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Ice Runner", img: "images/game1.jpg", desc: "Slide across frozen paths fast.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Fire Trail", img: "images/game10.jpg", desc: "Outrun a blazing inferno.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Rooftop Rush", img: "images/game3.jpg", desc: "Leap across city rooftops at dusk.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Subway Surge", img: "images/game5.jpg", desc: "Dodge trains in underground tunnels.", play: "openChoiceModal('sim3.jar','GloftBANA')" }
+        ]
+      },
+      {
+        key: "shooting",
+        label: "Shooting",
+        games: [
+          { name: "Call of Duty 2", img: "images/game10.jpg", desc: "WWII tactical military missions.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Alien Blaster", img: "images/game2.png", desc: "Shoot down waves of alien ships.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Sniper Zone", img: "images/game4.webp", desc: "Long-range precision target shots.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Tank Strike", img: "images/game6.jpg", desc: "Command a tank through war zones.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Zombie Hunt", img: "images/game8.png", desc: "Mow down zombie hordes to survive.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Sky Gunner", img: "images/game7.jpg", desc: "Aerial dogfights above the clouds.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Crossfire", img: "images/game9.jpg", desc: "Urban combat through city blocks.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Laser Wars", img: "images/game1.jpg", desc: "Futuristic laser battles in space.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Commando X", img: "images/game3.jpg", desc: "Solo soldier behind enemy lines.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Desert Storm", img: "images/game5.jpg", desc: "Survive brutal desert firefights.", play: "openChoiceModal('sim3.jar','GloftBANA')" }
+        ]
+      },
+      {
+        key: "arcade",
+        label: "Arcade",
+        games: [
+          { name: "Pac Mania", img: "images/game8.png", desc: "Classic maze chase reborn.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Space Invaders X", img: "images/game2.png", desc: "Defend Earth from alien waves.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Frogger Jump", img: "images/game7.jpg", desc: "Cross busy roads and rivers safely.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Breakout Blitz", img: "images/game9.jpg", desc: "Bounce a ball to smash brick walls.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Galactic Dodge", img: "images/game6.jpg", desc: "Dodge asteroids in deep space.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Pinball Pro", img: "images/game1.jpg", desc: "Classic pinball with power-up bumpers.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Coin Rush", img: "images/game4.webp", desc: "Grab coins before time expires.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Neon Snake", img: "images/game10.jpg", desc: "Classic snake on a neon grid.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Block Smash", img: "images/game3.jpg", desc: "Smash rows of falling colour blocks.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Retro Racer", img: "images/game5.jpg", desc: "Top-down road racing classic.", play: "openChoiceModal('sim3.jar','GloftBANA')" }
+        ]
+      },
+      {
+        key: "sports",
+        label: "Sports",
+        games: [
+          { name: "Street Football", img: "images/game5.jpg", desc: "Quick five-a-side street matches.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Basketball Slam", img: "images/game6.jpg", desc: "Dunk from every angle to score.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Tennis Ace", img: "images/game7.jpg", desc: "Serve and volley your way to the top.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Hockey Rush", img: "images/game8.png", desc: "Fast-paced ice hockey arcade.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Boxing Champ", img: "images/game2.png", desc: "Punch combos to knock opponents out.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Golf Masters", img: "images/game1.jpg", desc: "Precise shots across scenic courses.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Skateboard Pro", img: "images/game4.webp", desc: "Land tricks on ramps and rails.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Volleyball Beach", img: "images/game9.jpg", desc: "Spike and block on the sand.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Cricket Legends", img: "images/game3.jpg", desc: "Hit sixes and take wickets.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Bowling Strike", img: "images/game10.jpg", desc: "Perfect your throw for a clean strike.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" }
+        ]
+      },
+      {
+        key: "strategy",
+        label: "Strategy",
+        games: [
+          { name: "City Builder", img: "images/game5.jpg", desc: "Build and manage a thriving city.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "War Council", img: "images/game10.jpg", desc: "Command armies across battle maps.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Kingdom Rise", img: "images/game1.jpg", desc: "Grow a medieval kingdom from scratch.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Fleet Command", img: "images/game6.jpg", desc: "Naval strategy on the open seas.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Tower Masters", img: "images/game9.jpg", desc: "Plan defences to stop every wave.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Galaxy Empire", img: "images/game2.png", desc: "Expand your empire across stars.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Chess Ultra", img: "images/game4.webp", desc: "Classic chess with power-up moves.", play: "openChoiceModal('chess.jar','com.chess.Tmpmidlet','size-240x320')" },
+          { name: "Dungeon Lord", img: "images/game7.jpg", desc: "Trap heroes and protect your dungeon.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Tribe Wars", img: "images/game3.jpg", desc: "Raid rivals and grow your tribe.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Conquest X", img: "images/game8.png", desc: "Capture territories on hex maps.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" }
+        ]
+      },
+      {
+        key: "rpg",
+        label: "RPG",
+        games: [
+          { name: "God of War: Betrayal", img: "images/game1.jpg", desc: "Legendary RPG action with Kratos.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Dark Realm", img: "images/game4.webp", desc: "Level up your hero in a dark world.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Dragon Age Zero", img: "images/game7.jpg", desc: "Forge alliances and battle dragons.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Mage's Path", img: "images/game8.png", desc: "Cast spells and explore dungeons.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Shadow Knight", img: "images/game2.png", desc: "Play as a cursed knight seeking redemption.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Elf Chronicles", img: "images/game9.jpg", desc: "Epic elven quests across enchanted lands.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Rune Warrior", img: "images/game6.jpg", desc: "Collect runes to power your warrior.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Soul Blade", img: "images/game10.jpg", desc: "A soul-bound blade with dark powers.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Realm of Kings", img: "images/game3.jpg", desc: "Fight your way to the throne.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Goblin Slayer", img: "images/game5.jpg", desc: "Hunt goblin dens for rare loot.", play: "openChoiceModal('sim3.jar','GloftBANA')" }
+        ]
+      },
+      {
+        key: "simulation",
+        label: "Simulation",
+        games: [
+          { name: "The Sims 3", img: "images/game5.jpg", desc: "Live your life in a virtual world.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Airport Tycoon", img: "images/game6.jpg", desc: "Build and manage a busy airport.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Farm Sim Pro", img: "images/game1.jpg", desc: "Grow crops and raise animals.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Truck Hauler", img: "images/game10.jpg", desc: "Deliver cargo across tough terrain.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Hospital Rush", img: "images/game9.jpg", desc: "Treat patients and manage wards.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Space Station", img: "images/game2.png", desc: "Manage life support in orbit.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Fishing Fever", img: "images/game7.jpg", desc: "Cast lines and reel in big catches.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Burger Bar", img: "images/game8.png", desc: "Run a fast food restaurant.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Train Driver", img: "images/game3.jpg", desc: "Pilot trains across scenic routes.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Zoo Keeper", img: "images/game4.webp", desc: "Care for exotic animals in your zoo.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" }
+        ]
+      },
+      {
+        key: "horror",
+        label: "Horror",
+        games: [
+          { name: "Shadow Asylum", img: "images/game4.webp", desc: "Escape a haunted asylum at midnight.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Dead Zone", img: "images/game10.jpg", desc: "Survive a zombie-infested city.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Night Terror", img: "images/game1.jpg", desc: "Face your nightmares and survive.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Cursed Manor", img: "images/game7.jpg", desc: "Uncover the secrets of an old manor.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Phantom Chase", img: "images/game9.jpg", desc: "Hunt ghosts through dark corridors.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Blood Moon", img: "images/game3.jpg", desc: "Survive a werewolf siege.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Crypt Crawler", img: "images/game8.png", desc: "Navigate pitch-black underground crypts.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Void Walker", img: "images/game2.png", desc: "Step into the void and return alive.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Demon Gate", img: "images/game6.jpg", desc: "Seal the demon gate before dawn.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "The Witch", img: "images/game5.jpg", desc: "Escape a dark forest haunted by evil.", play: "openChoiceModal('sim3.jar','GloftBANA')" }
+        ]
+      },
+      {
+        key: "logic",
+        label: "Logic",
+        games: [
+          { name: "Chess Ultra", img: "images/game4.webp", desc: "Classic chess refined for mobile.", play: "openChoiceModal('chess.jar','com.chess.Tmpmidlet','size-240x320')" },
+          { name: "Number Nexus", img: "images/game8.png", desc: "Crack number sequences fast.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Sudoku Master", img: "images/game5.jpg", desc: "Fill grids with perfect logic.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Circuit Breaker", img: "images/game9.jpg", desc: "Connect circuits to power the city.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Binary Rush", img: "images/game2.png", desc: "Flip bits to balance equations.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Bridge Build", img: "images/game6.jpg", desc: "Design bridges that hold under load.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Code Cracker", img: "images/game10.jpg", desc: "Decipher encrypted codes fast.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Path Finder", img: "images/game7.jpg", desc: "Draw the shortest route to exit.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Flow Grid", img: "images/game1.jpg", desc: "Connect colour dots without crossing.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Gear Works", img: "images/game3.jpg", desc: "Arrange gears to turn the mechanism.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" }
+        ]
+      },
+      {
+        key: "towerdef",
+        label: "Tower-Def",
+        games: [
+          { name: "Plants vs Zombies", img: "images/game9.jpg", desc: "Defend your garden from zombies.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Castle Guard", img: "images/game1.jpg", desc: "Place archers and mages to defend.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Jungle Defence", img: "images/game7.jpg", desc: "Stop invaders with jungle traps.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Space Sentinels", img: "images/game2.png", desc: "Build turrets to repel alien waves.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Frost Tower", img: "images/game6.jpg", desc: "Freeze enemies with ice towers.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Blaze Bastion", img: "images/game10.jpg", desc: "Fire cannons across blazing lanes.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Dragon Keep", img: "images/game8.png", desc: "Unleash dragons to stop invaders.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Void Sentries", img: "images/game4.webp", desc: "Dark sentries guard the portal.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Mech Wall", img: "images/game3.jpg", desc: "Deploy mechs along the defence line.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Arcane Spire", img: "images/game5.jpg", desc: "Enchanted towers with magical attacks.", play: "openChoiceModal('sim3.jar','GloftBANA')" }
+        ]
+      },
+      {
+        key: "escape",
+        label: "Escape",
+        games: [
+          { name: "Diamond Rush", img: "images/game9.jpg", desc: "Escape ancient traps for treasure.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Prison Break", img: "images/game4.webp", desc: "Sneak past guards to get free.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Lab Escape", img: "images/game2.png", desc: "Solve puzzles to exit the lab.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Haunted Halls", img: "images/game7.jpg", desc: "Find keys to unlock every door.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Submarine Escape", img: "images/game6.jpg", desc: "Surface before the hull breaks.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Vault Runner", img: "images/game1.jpg", desc: "Crack the vault before time expires.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Maze Master", img: "images/game8.png", desc: "Find the exit through deadly mazes.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Island Escape", img: "images/game3.jpg", desc: "Build a raft and sail to freedom.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Bomb Defuser", img: "images/game5.jpg", desc: "Cut the right wire before it blows.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Tomb Escape", img: "images/game10.jpg", desc: "Dodge traps inside an ancient tomb.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" }
+        ]
+      },
+      {
+        key: "clicker",
+        label: "Clicker",
+        games: [
+          { name: "Cookie Empire", img: "images/game5.jpg", desc: "Click cookies to build your empire.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Gold Mine Tap", img: "images/game9.jpg", desc: "Tap to dig for gold and gems.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Star Tapper", img: "images/game1.jpg", desc: "Tap falling stars to collect energy.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Farm Clicks", img: "images/game8.png", desc: "Grow a farm one click at a time.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Idle Kingdom", img: "images/game3.jpg", desc: "Build a kingdom while you idle.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Click Warriors", img: "images/game2.png", desc: "Tap to train and upgrade your army.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Robot Factory", img: "images/game6.jpg", desc: "Click parts together to build bots.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Space Tycoon", img: "images/game10.jpg", desc: "Tap to launch rockets and colonise.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Noodle Shop", img: "images/game4.webp", desc: "Click orders to grow your restaurant.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Dragon Egg", img: "images/game7.jpg", desc: "Tap to hatch and evolve your dragon.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" }
+        ]
+      },
+      {
+        key: "board",
+        label: "Board",
+        games: [
+          { name: "Chess Ultra", img: "images/game4.webp", desc: "Classic chess with smooth controls.", play: "openChoiceModal('chess.jar','com.chess.Tmpmidlet','size-240x320')" },
+          { name: "Ludo King", img: "images/game5.jpg", desc: "Race your tokens home first.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Scrabble Rush", img: "images/game8.png", desc: "Build words and outscore opponents.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Checkers Pro", img: "images/game3.jpg", desc: "Classic draughts with smart AI.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Battleship X", img: "images/game6.jpg", desc: "Sink the fleet before yours sinks.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Monopoly Go", img: "images/game1.jpg", desc: "Buy properties and bankrupt rivals.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Reversi Wars", img: "images/game9.jpg", desc: "Flip tiles to claim the board.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Backgammon", img: "images/game2.png", desc: "Race pieces off the board to win.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Dominoes", img: "images/game10.jpg", desc: "Match tiles and block opponents.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Mahjong Legends", img: "images/game7.jpg", desc: "Clear matching tiles from the stack.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" }
+        ]
+      },
+      {
+        key: "music",
+        label: "Music",
+        games: [
+          { name: "Beat Drop", img: "images/game6.jpg", desc: "Tap in time with the beat.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Piano Tiles", img: "images/game8.png", desc: "Don't hit the white tile.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Rhythm Road", img: "images/game1.jpg", desc: "Race to the rhythm of the track.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "DJ Hero", img: "images/game10.jpg", desc: "Mix and scratch to crowd cheers.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Guitar Flash", img: "images/game5.jpg", desc: "Hit frets to rock the stage.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Drum Smash", img: "images/game3.jpg", desc: "Hit drums in perfect rhythm.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Karaoke Star", img: "images/game7.jpg", desc: "Sing your way to the top chart.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Bass Drop", img: "images/game2.png", desc: "Drop the bass at the right moment.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Melody Maker", img: "images/game9.jpg", desc: "Compose and perform your own songs.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Sound Blaster", img: "images/game4.webp", desc: "Match sounds before the echo fades.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" }
+        ]
+      },
+      {
+        key: "dressup",
+        label: "Dress-up",
+        games: [
+          { name: "Fashion Queen", img: "images/game7.jpg", desc: "Style outfits for the runway show.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Glam Studio", img: "images/game9.jpg", desc: "Design looks for celebrity clients.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Wardrobe Wars", img: "images/game5.jpg", desc: "Compete with rivals in fashion duels.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Prom Night", img: "images/game3.jpg", desc: "Pick the perfect prom outfit.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Street Style", img: "images/game2.png", desc: "Rock urban fashion on city streets.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Makeover Magic", img: "images/game6.jpg", desc: "Transform looks with makeup tools.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Catwalk Queen", img: "images/game1.jpg", desc: "Strut the catwalk in designer wear.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Costume Craze", img: "images/game8.png", desc: "Build wild costumes for the party.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Jewel Dress", img: "images/game4.webp", desc: "Gem-studded gowns for the gala.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Style Battle", img: "images/game10.jpg", desc: "Votes decide the best outfit.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" }
+        ]
+      },
+      {
+        key: "party",
+        label: "Party",
+        games: [
+          { name: "Mini Games Pack", img: "images/game8.png", desc: "A collection of wild mini games.", play: "openChoiceModal('pvz.jar','Game','size-320x240')" },
+          { name: "Balloon Pop Bash", img: "images/game7.jpg", desc: "Pop balloons before rivals do.", play: "openChoiceModal('BounceTales.jar','RMIDlet')" },
+          { name: "Quiz Showdown", img: "images/game9.jpg", desc: "Answer trivia faster than friends.", play: "openChoiceModal('diamond_rush_key.jar','GloftDIRU','size-240x320')" },
+          { name: "Dance Off", img: "images/game6.jpg", desc: "Hit the beats and outshine others.", play: "openChoiceModal('kybc6.jar','GloftASP6')" },
+          { name: "Food Fight", img: "images/game5.jpg", desc: "Throw food and dodge incoming items.", play: "openChoiceModal('sim3.jar','GloftBANA')" },
+          { name: "Board Bash", img: "images/game3.jpg", desc: "Roll dice and bash opponents off.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" },
+          { name: "Laugh Track", img: "images/game2.png", desc: "Complete silly challenges for points.", play: "openChoiceModal('gangstar_rio_320x240.jar','GloftGRIO','size-320x240')" },
+          { name: "Race to Finish", img: "images/game1.jpg", desc: "Beat friends in a variety of races.", play: "openChoiceModal('godofwar2.jar','GOWMIDlet','size-240x320')" },
+          { name: "Card Battle", img: "images/game10.jpg", desc: "Play hand after hand to eliminate foes.", play: "openChoiceModal('call_of_duty_2_240x320-9173.jar','CODII','size-240x320')" },
+          { name: "Bingo Blitz", img: "images/game4.webp", desc: "Dab numbers to complete your card.", play: "openChoiceModal('batmannoki_8Qi8Psx7.jar','GloftBANA','size-240x320')" }
+        ]
+      }
+    ];
+
+    const INITIAL_ROWS = 3;
+    const LOAD_MORE_ROWS = 3;
+    const sectionState = {};
+
+    function getColumnsInGrid(grid) {
+      const style = window.getComputedStyle(grid);
+      const cols = style.getPropertyValue("grid-template-columns").split(" ").length;
+      return Math.max(cols, 1);
+    }
+
+    function getBaseVisibleCount(grid, category) {
+      const cols = getColumnsInGrid(grid);
+      const firstCardSpansTwo = window.matchMedia("(min-width: 851px)").matches;
+      const targetCount = firstCardSpansTwo
+        ? (cols - 1) + cols * (INITIAL_ROWS - 1)
+        : cols * INITIAL_ROWS;
+      return Math.min(targetCount, category.games.length);
+    }
+
+    function getLoadMoreCount(grid) {
+      return getColumnsInGrid(grid) * LOAD_MORE_ROWS;
+    }
+
+    function syncSectionBase(category, resetVisible = false) {
+      const sectionEl = document.querySelector('[data-category-section="' + category.key + '"]');
+      if (!sectionEl) return;
+
+      const grid = sectionEl.querySelector(".cards-grid");
+      const state = sectionState[category.key];
+      if (!state || !grid) return;
+
+      const base = getBaseVisibleCount(grid, category);
+      state.base = base;
+
+      if (resetVisible || state.visibleCount <= base) {
+        state.visibleCount = base;
+      }
+
+      renderCategorySection(category);
+    }
+
+    function getTitleSvg(category) {
+      const gradId = "grad-" + category.key;
+      return `
+        <div class="games-type">
+          <svg width="350" height="90" viewBox="0 0 350 90" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#ffcc00;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <text x="50%" y="60" text-anchor="middle" font-family="'Dynamix', sans-serif" font-size="38"
+              fill="url(#${gradId})" style="letter-spacing: 2px; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));">
+              ${category.label.toUpperCase()}
+            </text>
+          </svg>
+        </div>
+      `;
+    }
+
+    function createGameCard(game, categoryKey) {
+      const card = document.createElement("article");
+      card.className = "game game-card";
+      card.dataset.category = categoryKey;
+      card.dataset.name = game.name;
+
+      card.innerHTML = `
+        <div class="game-img-div"><img src="${game.img}" alt="${game.name}"></div>
+        <div class="game-text">
+          <div class="name">${game.name}</div>
+          ${game.desc}
+        </div>
+      `;
+
+      card.addEventListener("click", () => {
+        if (typeof openChoiceModal === "function" && game.play) {
+          try {
+            eval(game.play);
+          } catch (e) {
+            if (typeof showNotification === "function") {
+              showNotification("Game launch is unavailable for this card.");
+            }
+          }
+        }
+      });
+
+      return card;
+    }
+
+    function renderCategorySection(category) {
+      const state = sectionState[category.key];
+      const sectionEl = document.querySelector('[data-category-section="' + category.key + '"]');
+      const grid = sectionEl.querySelector(".cards-grid");
+      const moreBtn = sectionEl.querySelector(".section-see-more-btn");
+      const lessBtn = sectionEl.querySelector(".section-see-less-btn");
+
+      grid.innerHTML = "";
+      const visibleGames = category.games.slice(0, state.visibleCount);
+      visibleGames.forEach((game) => grid.appendChild(createGameCard(game, category.key)));
+
+      const isExpanded = state.visibleCount > state.base;
+      const hasMore = state.visibleCount < category.games.length;
+
+      moreBtn.classList.toggle("hidden", !hasMore);
+      lessBtn.classList.toggle("hidden", !isExpanded);
+
+      if (typeof initializeGameVotes === "function") initializeGameVotes();
+    }
+
+    function buildCategorySections() {
+      const container = document.getElementById("gamesSections");
+      const menu = document.getElementById("categoryMenu");
+
+      const allOption = document.createElement("button");
+      allOption.dataset.filter = "all";
+      allOption.textContent = "All";
+      menu.appendChild(allOption);
+
+      GAME_CATEGORIES.forEach((category) => {
+        const menuOption = document.createElement("button");
+        menuOption.dataset.filter = category.key;
+        menuOption.textContent = category.label;
+        menu.appendChild(menuOption);
+
+        const sectionEl = document.createElement("section");
+        sectionEl.className = "games-category-section";
+        sectionEl.dataset.categorySection = category.key;
+        sectionEl.id = "section-" + category.key;
+        sectionEl.innerHTML = `
+          ${getTitleSvg(category)}
+          <div class="cards-grid"></div>
+          <div class="section-see-more-wrap">
+            <button type="button" class="section-see-more-btn hidden">See more</button>
+            <button type="button" class="section-see-less-btn hidden">See less</button>
+          </div>
+          <hr class="games-section-line">
+        `;
+        container.appendChild(sectionEl);
+
+        const grid = sectionEl.querySelector(".cards-grid");
+
+        sectionEl.querySelector(".section-see-more-btn").addEventListener("click", () => {
+          sectionState[category.key].visibleCount = Math.min(
+            sectionState[category.key].visibleCount + getLoadMoreCount(grid),
+            category.games.length
+          );
+          renderCategorySection(category);
+        });
+
+        sectionEl.querySelector(".section-see-less-btn").addEventListener("click", () => {
+          sectionState[category.key].visibleCount = sectionState[category.key].base;
+          renderCategorySection(category);
+          sectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        sectionState[category.key] = { visibleCount: 0, base: 0 };
+      });
+
+      requestAnimationFrame(() => {
+        GAME_CATEGORIES.forEach((category) => syncSectionBase(category, true));
+      });
+
+      window.addEventListener("resize", () => {
+        GAME_CATEGORIES.forEach((category) => syncSectionBase(category));
+      });
+    }
+
+    function applySearch() {
+      const term = (document.getElementById("gameSearch").value || "").trim().toLowerCase();
+      const activeFilter = document.querySelector(".games-dropdown-menu button.active-filter")?.dataset.filter || "all";
+
+      document.querySelectorAll(".games-category-section").forEach((section) => {
+        const key = section.dataset.categorySection;
+        const categoryMatch = activeFilter === "all" || key === activeFilter;
+
+        if (!categoryMatch) {
+          section.classList.add("hidden");
+          return;
+        }
+
+        const cards = section.querySelectorAll(".game-card");
+        let visibleInSection = 0;
+
+        cards.forEach((card) => {
+          const name = (card.dataset.name || "").toLowerCase();
+          const text = card.querySelector(".game-text")?.textContent.toLowerCase() || "";
+          const show = !term || name.includes(term) || text.includes(term);
+          card.style.display = show ? "" : "none";
+          if (show) visibleInSection += 1;
+        });
+
+        section.classList.toggle("hidden", visibleInSection === 0);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const menuBtn = document.getElementById("menuBtn");
+      const sidebar = document.getElementById("sidebar");
+      const removeBtn = document.getElementById("removeBtn");
+      if (menuBtn) menuBtn.addEventListener("click", () => sidebar.classList.add("visible"));
+      if (removeBtn) removeBtn.addEventListener("click", () => sidebar.classList.remove("visible"));
+
+      buildCategorySections();
+
+      const categoryBtn = document.getElementById("categoryBtn");
+      const categoryMenu = document.getElementById("categoryMenu");
+      const searchInput = document.getElementById("gameSearch");
+
+      categoryBtn.addEventListener("click", () => categoryMenu.classList.toggle("show"));
+
+      categoryMenu.addEventListener("click", (event) => {
+        const option = event.target.closest("button");
+        if (!option) return;
+
+        categoryMenu.querySelectorAll("button").forEach((btn) => btn.classList.remove("active-filter"));
+        option.classList.add("active-filter");
+
+        const filter = option.dataset.filter;
+        categoryBtn.innerHTML = option.textContent + ' <i class="fa-solid fa-chevron-down" style="font-size: 0.8em;"></i>';
+        categoryMenu.classList.remove("show");
+
+        // When a specific category is selected, expand it to show all its games
+        if (filter !== "all") {
+          const cat = GAME_CATEGORIES.find((c) => c.key === filter);
+          if (cat) {
+            sectionState[filter].visibleCount = cat.games.length;
+            renderCategorySection(cat);
+          }
+        } else {
+          GAME_CATEGORIES.forEach((cat) => {
+            if (sectionState[cat.key].visibleCount > sectionState[cat.key].base) {
+              syncSectionBase(cat, true);
+            }
+          });
+        }
+
+        applySearch();
+
+        if (filter !== "all") {
+          const target = document.getElementById("section-" + filter);
+          if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+        }
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".games-dropdown")) categoryMenu.classList.remove("show");
+      });
+
+      categoryMenu.querySelector('[data-filter="all"]').classList.add("active-filter");
+      searchInput.addEventListener("input", applySearch);
+
+      const backToTopBtn = document.getElementById("backToTopBtn");
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      // Scroll to the section specified in the URL hash (e.g. games.html#section-action)
+      const hash = window.location.hash;
+      if (hash && hash.startsWith("#section-")) {
+        const key = hash.slice("#section-".length);
+        const target = document.getElementById("section-" + key);
+        if (target) {
+          // Small delay so the page has finished laying out before scrolling
+          setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+        }
+      }
+    });
+  </script>
+  <!-- Platform Selection Modal -->
+  <div id="choiceModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">READY TO PLAY?</div>
+      <div class="modal-subtitle">CHOOSE YOUR PLATFORM</div>
+      <div class="platform-options">
+        <div class="platform-card" onclick="selectPlatform('mobile')">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span>MOBILE</span>
+        </div>
+        <div class="platform-card" onclick="selectPlatform('desktop')">
+          <i class="fa-solid fa-laptop"></i>
+          <span>DESKTOP</span>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closeChoiceModal()">MAYBE LATER</button>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal">
+    <div class="modal-content info-modal-content">
+      <button class="info-close-btn" onclick="closeInfoModal()" aria-label="Close">&#x2715;</button>
+
+      <div class="info-body">
+        <!-- LEFT COLUMN -->
+        <div class="info-left-col">
+          <div class="info-game-img-wrap">
+            <img id="infoThumb" src="" alt="" class="info-game-img">
+          </div>
+          <div class="info-sysreqs">
+            <div class="info-sysreqs-label">
+              <i class="fa-solid fa-microchip"></i> SYS_REQS
+            </div>
+            <div class="info-sysreqs-row">
+              <span class="info-sysreqs-key">Language</span>
+              <span class="info-sysreqs-val" id="infoLangLabel">English</span>
+            </div>
+            <div class="info-sysreqs-row">
+              <span class="info-sysreqs-key">Developer</span>
+              <span class="info-sysreqs-val" id="infoCompanyLabel">Unknown</span>
+            </div>
+            <div class="info-sysreqs-row info-sysreqs-row--compat" id="infoPlatformBadge">
+              <span class="info-sysreqs-key">Compatibility</span>
+              <span class="info-sysreqs-val" id="infoPlatformLabel">Desktop Only</span>
+            </div>
+            <div class="info-sysreqs-row" id="infoTouchBadge">
+              <span class="info-sysreqs-key">Touch Support</span>
+              <span class="info-sysreqs-val info-touch-val" id="infoTouchVal">
+                <i id="infoTouchIcon" class="fa-solid fa-keyboard"></i>
+                <span id="infoTouchLabel">No (KB/M Req.)</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="info-right-col">
+          <div class="info-top-badges">
+            <span class="info-genre-badge" id="infoGenreBadge">ACTION</span>
+            <span class="info-platform-pill" id="infoVersionBadge">DESKTOP</span>
+          </div>
+          <h2 class="info-title" id="infoTitle">Game Title</h2>
+          <p class="info-desc" id="infoText">Description...</p>
+          <div class="info-controls-section">
+            <div class="info-controls-header">
+              <i class="fa-solid fa-gamepad"></i>
+              <span id="infoControlsTitle">INPUT_MATRIX</span>
+            </div>
+            <div id="infoKeyGrid" class="info-key-grid"></div>
+            <p id="infoControlsNote" class="info-controls-note"></p>
+          </div>
+          <button class="info-play-btn" onclick="startActualGame()">
+            <i class="fa-solid fa-play"></i> PLAY NOW
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

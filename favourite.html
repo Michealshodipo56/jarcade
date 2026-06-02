@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favourites - JARCADE</title>
+  <link rel="website icon" type="png" href="images/My logo.png">
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js" defer></script>
+  <style>
+    .fav-title {
+      font-size: 2em;
+      margin: 1em;
+      text-align: center;
+      color: #007bff;
+    }
+    .game-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+    .no-favs {
+      text-align: center;
+      font-size: 1.2em;
+      margin-top: 50px;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="menu">
+    <i class="fa-solid fa-bars" style="color: rgb(255, 255, 255);"></i>
+  </div>
+
+  <!-- Notification Popup -->
+  <div id="notification" class="notification"></div>
+
+  <div class="container">
+    <div class="side-div">
+      <div class="side-bar">
+        <div class="line"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+        <div class="remove">&times;</div>
+        <div class="logo">
+          <a href="#">
+            <img src="images/logo.png" alt="Jarcade Logo" class="logo-img">
+          </a>
+        </div>
+        <nav class="section">
+          <a href="index.html" class="sc">
+            <i class="fa-solid fa-house"></i> <span>Home</span>
+          </a>
+          <a href="games.html" class="sc">
+            <i class="fa-solid fa-gamepad"></i> <span>Games</span>
+          </a>
+          <a href="favourite.html" class="sc active">
+            <i class="fa-solid fa-heart"></i> <span>Favourite</span>
+          </a>
+          <a href="test.html" class="sc">
+            <i class="fa-solid fa-circle-question"></i> <span>Help</span>
+          </a>
+        </nav>
+
+        <nav class="section section-secondary">
+          <a target="_blank" href="https://www.facebook.com/profile.php?id=61577225696695" class="sc">
+            <i class="fa-solid fa-users"></i> <span>Community</span>
+          </a>
+          <a href="" class="sc">
+            <i class="fa-solid fa-rss"></i> <span>News</span>
+          </a>
+          <a href="" class="sc">
+            <i class="fa-solid fa-share-nodes"></i> <span>Social</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="fav-title">Your Favourite Games</div>
+      <div id="favourite-list" class="game-grid">
+        <!-- Favourites will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFavourites();
+    });
+
+    function renderFavourites() {
+      const favList = document.getElementById('favourite-list');
+      const favourites = getFavourites();
+
+      if (favourites.length === 0) {
+        favList.innerHTML = '<div class="no-favs">You haven\'t added any games to your favourites yet!</div>';
+        return;
+      }
+
+      favList.innerHTML = '';
+
+      favourites.forEach(game => {
+        const gameDiv = document.createElement('div');
+        gameDiv.className = 'game';
+        gameDiv.dataset.gameName = game.name;
+        gameDiv.innerHTML = `
+          <div class="game-img-div">
+            <img src="${game.img}" alt="${game.name}">
+            <div onclick="${game.onclick}" class="play-overlay"><i class="fa-solid fa-gamepad"></i></div>
+          </div>
+          <div class="game-text">
+            <div class="name">${game.name}</div>
+            <div class="star">
+               <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-solid fa-heart favourite-icon active"></i>
+            </div>
+          </div>
+        `;
+
+        const heart = gameDiv.querySelector('.favourite-icon');
+        heart.addEventListener('click', (event) => {
+          event.stopPropagation();
+          removeFromFavs(game.name, gameDiv, heart);
+        });
+
+        favList.appendChild(gameDiv);
+      });
+
+      initializeGameVotes();
+    }
+
+    function removeFromFavs(name, gameCard, heart) {
+      let favourites = getFavourites();
+      favourites = favourites.filter(f => f.name !== name);
+      saveFavourites(favourites);
+
+      setFavouriteState(heart, false);
+      gameCard.style.opacity = '0';
+      gameCard.style.transform = 'scale(0.8)';
+
+      setTimeout(() => {
+        renderFavourites();
+      }, 300);
+
+      showNotification(`Removed ${name} from favourites!`);
+    }
+  </script>
+  <!-- Platform Selection Modal -->
+  <div id="choiceModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">READY TO PLAY?</div>
+      <div class="modal-subtitle">CHOOSE YOUR PLATFORM</div>
+      <div class="platform-options">
+        <div class="platform-card" onclick="selectPlatform('mobile')">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span>MOBILE</span>
+        </div>
+        <div class="platform-card" onclick="selectPlatform('desktop')">
+          <i class="fa-solid fa-laptop"></i>
+          <span>DESKTOP</span>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closeChoiceModal()">MAYBE LATER</button>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal">
+    <div class="modal-content info-modal-content">
+      <button class="info-close-btn" onclick="closeInfoModal()" aria-label="Close">&#x2715;</button>
+
+      <div class="info-body">
+        <!-- LEFT COLUMN -->
+        <div class="info-left-col">
+          <div class="info-game-img-wrap">
+            <img id="infoThumb" src="" alt="" class="info-game-img">
+          </div>
+          <div class="info-sysreqs">
+            <div class="info-sysreqs-label">
+              <i class="fa-solid fa-microchip"></i> SYS_REQS
+            </div>
+            <div class="info-sysreqs-row">
+              <span class="info-sysreqs-key">Language</span>
+              <span class="info-sysreqs-val" id="infoLangLabel">English</span>
+            </div>
+            <div class="info-sysreqs-row">
+              <span class="info-sysreqs-key">Developer</span>
+              <span class="info-sysreqs-val" id="infoCompanyLabel">Unknown</span>
+            </div>
+            <div class="info-sysreqs-row info-sysreqs-row--compat" id="infoPlatformBadge">
+              <span class="info-sysreqs-key">Compatibility</span>
+              <span class="info-sysreqs-val" id="infoPlatformLabel">Desktop Only</span>
+            </div>
+            <div class="info-sysreqs-row" id="infoTouchBadge">
+              <span class="info-sysreqs-key">Touch Support</span>
+              <span class="info-sysreqs-val info-touch-val" id="infoTouchVal">
+                <i id="infoTouchIcon" class="fa-solid fa-keyboard"></i>
+                <span id="infoTouchLabel">No (KB/M Req.)</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="info-right-col">
+          <div class="info-top-badges">
+            <span class="info-genre-badge" id="infoGenreBadge">ACTION</span>
+            <span class="info-platform-pill" id="infoVersionBadge">DESKTOP</span>
+          </div>
+          <h2 class="info-title" id="infoTitle">Game Title</h2>
+          <p class="info-desc" id="infoText">Description...</p>
+          <div class="info-controls-section">
+            <div class="info-controls-header">
+              <i class="fa-solid fa-gamepad"></i>
+              <span id="infoControlsTitle">INPUT_MATRIX</span>
+            </div>
+            <div id="infoKeyGrid" class="info-key-grid"></div>
+            <p id="infoControlsNote" class="info-controls-note"></p>
+          </div>
+          <button class="info-play-btn" onclick="startActualGame()">
+            <i class="fa-solid fa-play"></i> PLAY NOW
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

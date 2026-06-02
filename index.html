@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARCADE - Pro Gaming</title>
+  <link rel="icon" type="image/png" href="images/icon.png">
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <script src="slideshow.js" defer></script>
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+
+  <!-- Mobile Menu Toggle -->
+  <div class="menu" id="menuBtn">
+    <i class="fa-solid fa-bars"></i>
+  </div>
+
+  <!-- Slideshow top navigation -->
+  <div class="top-text">
+    <div class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn" onclick="toggleDropdown()">
+        <li>Categories <i class="fa-solid fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i></li>
+      </a>
+      <div id="categoryDropdown" class="dropdown-content">
+        <a href="#trending">Trending</a>
+        <a href="#new">New</a>
+        <a href="#action">Action</a>
+        <a href="#adventure">Adventure</a>
+        <a href="#racing">Racing</a>
+        <a href="#sports">Sports</a>
+        <a href="#casino">Casino</a>
+        <a href="#arcade">Arcade</a>
+        <a href="#strategy">Strategy</a>
+        <a href="#mindgames">Mind Games</a>
+      </div>
+    </div>
+    <a href="favourite.html">
+      <li>Favourite</li>
+    </a>
+  </div>
+
+  <!-- Notification Popup -->
+  <div id="notification" class="notification"></div>
+
+  <div class="container">
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="side-div">
+      <div class="side-bar" id="sidebar">
+
+        <!-- Decorative background lines -->
+        <div class="line"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+
+        <!-- Close button (mobile) -->
+        <div class="remove" id="removeBtn">&times;</div>
+
+        <!-- Logo -->
+        <div class="logo">
+          <a href="index.html">
+            <img src="images/logo.png" alt="Jarcade Logo" class="logo-img">
+          </a>
+        </div>
+
+        <!-- Primary Nav -->
+        <nav class="section">
+          <a href="index.html" class="sc active home-link">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </a>
+          <a href="games.html" class="sc">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>Games</span>
+          </a>
+          <a href="test.html" class="sc">
+            <i class="fa-solid fa-circle-question"></i>
+            <span>Help</span>
+          </a>
+          <a href="" class="sc">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+          </a>
+          <a href="try.html" class="sc">
+            <i class="fa-solid fa-headset"></i>
+            <span>Support</span>
+          </a>
+        </nav>
+
+          <hr class="hr hr-bottom">
+        <!-- Secondary Nav (bottom) -->
+        <nav class="section section-secondary">
+          <a target="_blank" href="https://www.facebook.com/profile.php?id=61577225696695" class="sc">
+            <i class="fa-solid fa-users"></i>
+            <span>Community</span>
+          </a>
+          <a href="" class="sc">
+            <i class="fa-solid fa-rss"></i>
+            <span>News</span>
+          </a>
+          <a href="" class="sc">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>Social</span>
+          </a>
+        </nav>
+
+      </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main">
+
+      <!-- Slideshow -->
+      <div class="slideshow-container">
+        <div class="mySlides"><img src="images/game1.jpg" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game2.png" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game3.jpg" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game4.webp" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game5.jpg" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game6.jpg" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game7.jpg" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game8.png" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game9.jpg" style="width:100%"></div>
+        <div class="mySlides"><img src="images/game10.jpg" style="width:100%"></div>
+        
+
+        <!-- Decorative slide accents -->
+        <div class="slide-line-one"></div>
+        <div class="slide-line-two"></div>
+
+        <!-- Slideshow Progress Bars -->
+        <div class="slideshow-progress">
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+          <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+        </div>
+
+        <!-- Help Button -->
+        <button class="help-btn" onclick="showHelp()">
+          <i class="fa-solid fa-circle-question"></i> Help
+        </button>
+
+      </div>
+
+      <div class="home-search-row">
+        <input class="home-search-input" placeholder="Search games" type="search" aria-label="Search games">
+      </div>
+
+      <br>
+
+      <!-- ===== TRENDING ===== -->
+      <div id="trending" class="type">
+        <svg width="350" height="90" viewBox="0 0 350 90" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="jarcadeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#ffcc00;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
+            </linearGradient>
+            <filter id="neonGlow">
+              <feGaussianBlur stdDeviation="1.5" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          <text x="50%" y="60" text-anchor="middle" font-family="'Dynamix', sans-serif" font-size="42" fill="url(#jarcadeGradient)" style="letter-spacing: 2px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));">
+            TRENDING
+          </text>
+        </svg>
+      </div>
+      <div class="scroll trending-scroll">
+
+        <!-- God of War -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="https://i.ytimg.com/vi/Lu4tU-phRtQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAOKftHsKRXybQ4JtWlNtNbmCffTA" alt="God of War: Betrayal">
+            <div onclick="openChoiceModal('godofwar2.jar', 'GOWMIDlet', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">1.2K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">God of War: Betrayal</div>
+            Epic Norse adventure with Kratos in this classic J2ME action game.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gangstar Rio -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="https://upload.wikimedia.org/wikipedia/en/7/75/Gangstar_Rio_City_of_Saints.png" alt="Gangstar Rio">
+            <div onclick="openChoiceModal('gangstar_rio_320x240.jar', 'GloftGRIO', 'size-320x240', 'gangstar_rio_city_touch_480x800.jar', 'GloftGRIO', 'size-480x800')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">850</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Gangstar Rio</div>
+            Explore the city of Rio de Janeiro in this open-world crime adventure.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Batman -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="https://townsquare.media/site/442/files/2012/05/tdk-poster-1.jpg?w=780&q=75" alt="Batman">
+            <div onclick="openChoiceModal('batmannoki_8Qi8Psx7.jar', 'GloftBANA', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">2.1K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Batman: The Dark Knight</div>
+            Become the Caped Crusader and save Gotham from the Joker.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plants vs Zombies -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="https://assets.nintendo.com/image/upload/c_limit,f_auto,h_300,q_auto,w_500/v1/store/software/switch/70010000098368/Video/posters/a07acfb2fcf0eb8476b258bdb349595b95eb4920d1fa61f40ae992cb96dc30be" alt="Plants vs Zombies">
+            <div onclick="openChoiceModal('pvz.jar', 'Game', 'size-320x240')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">3.4K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Plants vs Zombies</div>
+            Defend your garden from waves of fun-loving zombies!
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scarlotti's Mafia War -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="https://ps2media.ign.com/ps2/image/object/757/757154/MafiaWarsScarlotti.jpg" alt="Scarlotti's Mafia War">
+            <div onclick="openChoiceModal('scarlottis_mafia_war_240x320_157342.jar', 'GloftBANA', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">640</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Scarlotti's Mafia War</div>
+            Rise through the ranks of the underworld in this gritty action game.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thor -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="https://i.ytimg.com/vi/cPxmGLk52z4/maxresdefault.jpg" alt="Thor">
+            <div onclick="openChoiceModal('thor_the_dark_world_320x240_253099.jar', 'GloftBANA', 'size-320x240', 'thor_the_dark_world_480x800_touch_192928.jar', 'GloftGRIO', 'size-480x800')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">1.8K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Thor: The Dark World</div>
+            Wield the power of Mjolnir as the God of Thunder.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <a href="games.html" class="see-more-card">
+          <div class="see-more-icon"><i class="fa-solid fa-angles-right"></i></div>
+          <span>Browse All</span>
+        </a>
+      </div>
+
+      <!-- ===== FEATURED HITS ===== -->
+      <section class="featured-hits">
+        <button class="nav-btn prev" id="prevFeaturedBtn" aria-label="Scroll featured left">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="nav-btn next" id="nextFeaturedBtn" aria-label="Scroll featured right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div class="featured-track-container">
+          <div class="featured-grid" id="featuredGrid">
+            <!-- Group 1 -->
+            <div class="f-card f-large">
+              <img src="images/game1.jpg" alt="Featured">
+              <div class="hot-badge">Hot</div>
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game2.png" alt="Featured">
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game3.jpg" alt="Featured">
+              <div class="hot-badge">Hot</div>
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game4.webp" alt="Featured">
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game8.png" alt="Featured">
+            </div>
+            
+            <!-- Group 2 -->
+            <div class="f-card f-large">
+              <img src="images/game6.jpg" alt="Featured">
+              <div class="hot-badge">Hot</div>
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game7.jpg" alt="Featured">
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game9.jpg" alt="Featured">
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game10.jpg" alt="Featured">
+              <div class="hot-badge">Hot</div>
+            </div>
+            <div class="f-card f-small">
+              <img src="images/game5.jpg" alt="Featured">
+            </div>
+          </div>
+          
+        </div>
+        
+        <div class="pagination-dots">
+          <span class="p-dot active"></span>
+          <span class="p-dot"></span>
+        </div>
+      </section>
+
+      <div class="categories-wrapper">
+        <button class="categories-scroll-btn prev" id="prevCategoryBtn" aria-label="Scroll categories left">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="categories-container">
+          <a href="games.html#section-casual" class="category-item"><i class="fa-solid fa-gamepad"></i><span>Casual</span></a>
+          <a href="games.html#section-action" class="category-item"><i class="fa-solid fa-bolt-lightning"></i><span>Action</span></a>
+          <a href="games.html#section-puzzle" class="category-item"><i class="fa-solid fa-puzzle-piece"></i><span>Puzzle</span></a>
+          <a href="games.html#section-match3" class="category-item"><i class="fa-solid fa-shapes"></i><span>Match-3</span></a>
+          <a href="games.html#section-runner" class="category-item"><i class="fa-solid fa-person-running"></i><span>Runner</span></a>
+          <a href="games.html#section-shooting" class="category-item"><i class="fa-solid fa-crosshairs"></i><span>Shooting</span></a>
+          <a href="games.html#section-dressup" class="category-item"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Dress-up</span></a>
+          <a href="games.html#section-arcade" class="category-item"><i class="fa-solid fa-ghost"></i><span>Arcade</span></a>
+          <a href="games.html#section-party" class="category-item"><i class="fa-solid fa-dice"></i><span>Party</span></a>
+          <a href="games.html#section-sports" class="category-item"><i class="fa-solid fa-trophy"></i><span>Sports</span></a>
+          <a href="games.html#section-escape" class="category-item"><i class="fa-solid fa-key"></i><span>Escape</span></a>
+          <a href="games.html#section-adventure" class="category-item"><i class="fa-solid fa-compass"></i><span>Adventure</span></a>
+          <a href="games.html#section-clicker" class="category-item"><i class="fa-solid fa-hand-pointer"></i><span>Clicker</span></a>
+          <a href="games.html#section-towerdef" class="category-item"><i class="fa-solid fa-chess-rook"></i><span>Tower-Def</span></a>
+          <a href="games.html#section-racing" class="category-item"><i class="fa-solid fa-car"></i><span>Racing</span></a>
+          <a href="games.html#section-simulation" class="category-item"><i class="fa-solid fa-vr-cardboard"></i><span>Simulation</span></a>
+          <a href="games.html#section-board" class="category-item"><i class="fa-solid fa-diamond"></i><span>Board</span></a>
+          <a href="games.html#section-strategy" class="category-item"><i class="fa-solid fa-chess-king"></i><span>Strategy</span></a>
+          <a href="games.html#section-rpg" class="category-item"><i class="fa-solid fa-hat-wizard"></i><span>RPG</span></a>
+          <a href="games.html#section-logic" class="category-item"><i class="fa-solid fa-brain"></i><span>Logic</span></a>
+          <a href="games.html#section-music" class="category-item"><i class="fa-solid fa-music"></i><span>Music</span></a>
+          <a href="games.html#section-horror" class="category-item"><i class="fa-solid fa-skull"></i><span>Horror</span></a>
+        </div>
+        <button class="categories-scroll-btn next" id="nextCategoryBtn" aria-label="Scroll categories right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <br>
+
+      <!-- ===== CLASSIC ADVENTURES ===== -->
+      <div id="adventure" class="type">
+        <svg width="400" height="90" viewBox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
+          <text x="50%" y="60" text-anchor="middle" font-family="'Dynamix', sans-serif" font-size="38" fill="url(#jarcadeGradient)" style="letter-spacing: 2px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));">
+            ADVENTURE
+          </text>
+        </svg>
+      </div>
+      <div class="scroll-wrapper">
+        <div class="scroll" id="adventureScroll">
+
+        <!-- Bounce Tales -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="images/game7.jpg" alt="Bounce Tales">
+            <div onclick="openChoiceModal('BounceTales.jar', 'RMIDlet')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">1.5K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Bounce Tales</div>
+            The legendary red ball is back! Help Bounce save the world from gloom.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doodle Jump -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="images/game8.png" alt="Doodle Jump">
+            <div onclick="openChoiceModal('chess.jar', 'com.chess.Tmpmidlet', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">900</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Doodle Jump</div>
+            Jump as high as you can in this endlessly addictive classic.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diamond Rush -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="images/game9.jpg" alt="Diamond Rush">
+            <div onclick="openChoiceModal('diamond_rush_key.jar', 'GloftDIRU', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">2.2K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Diamond Rush</div>
+            Solve puzzles and collect diamonds in ancient temples and scary jungles.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <a href="games.html" class="see-more-card">
+          <div class="see-more-icon"><i class="fa-solid fa-angles-right"></i></div>
+          <span>Browse All</span>
+        </a>
+      </div>
+      </div>
+
+      <br>
+
+      <!-- ===== ACTION & RACING ===== -->
+      <div id="action" class="type">
+        <svg width="350" height="90" viewBox="0 0 350 90" xmlns="http://www.w3.org/2000/svg">
+          <text x="50%" y="60" text-anchor="middle" font-family="'Dynamix', sans-serif" font-size="38" fill="url(#jarcadeGradient)" style="letter-spacing: 2px; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));">
+            ACTION
+          </text>
+        </svg>
+      </div>
+      <div class="scroll-wrapper">
+        <div class="scroll" id="actionScroll">
+
+        <!-- Call of Duty -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="images/game10.jpg" alt="Call of Duty">
+            <div onclick="openChoiceModal('call_of_duty_2_240x320-9173.jar', 'CODII', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">4.1K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Call of Duty 2</div>
+            Intense WWII shooter adapted for classic mobile devices.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Sims 3 -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="images/game5.jpg" alt="The Sims 3">
+            <div onclick="openChoiceModal('sim3.jar', 'GloftBANA')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">3.7K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">The Sims 3</div>
+            Live your life and build your dreams in the palm of your hand.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asphalt 6 -->
+        <div class="game">
+          <div class="game-img-div">
+            <img src="images/game6.jpg" alt="Asphalt 6: Adrenaline">
+            <div onclick="openChoiceModal('kybc6.jar', 'GloftASP6')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">5.5K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Asphalt 6: Adrenaline</div>
+            The ultimate racing game for mobile returns with more speed!
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <a href="games.html" class="see-more-card">
+          <div class="see-more-icon"><i class="fa-solid fa-angles-right"></i></div>
+          <span>Browse All</span>
+        </a>
+      </div>
+      </div>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-logo" aria-label="JARCADE Home">
+              <img src="images/logo.png" alt="JARCADE Logo" class="footer-logo-img">
+            </a>
+            <p class="footer-tagline">Classic Java games, reborn in your browser.</p>
+            <div class="footer-socials">
+              <a href="https://www.facebook.com/profile.php?id=61577225696695" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+              <a href="" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a href="" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+              <a href="" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+          </div>
+          <nav class="footer-nav" aria-label="Footer navigation">
+            <a href="games.html">All Games</a>
+            <a href="favourite.html">Favourites</a>
+            <a href="test.html">Help</a>
+            <a href="try.html">Support</a>
+            <a href="">Privacy Policy</a>
+            <a href="">Terms &amp; Conditions</a>
+          </nav>
+          <p class="footer-desc">
+            JARCADE is home to classic J2ME mobile games playable directly in your browser — no downloads, no installs required. From action and adventure to racing and strategy, rediscover the golden era of mobile gaming.
+          </p>
+          <div class="footer-bottom">
+            <span>&copy; 2026 JARCADE. All rights reserved.</span>
+          </div>
+        </div>
+      </footer>
+
+  </div><!-- end .main -->
+  </div><!-- end .container -->
+
+  <!-- Platform Selection Modal -->
+  <div id="choiceModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">READY TO PLAY?</div>
+      <div class="modal-subtitle">CHOOSE YOUR PLATFORM</div>
+      <div class="platform-options">
+        <div class="platform-card" onclick="selectPlatform('mobile')">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span>MOBILE</span>
+        </div>
+        <div class="platform-card" onclick="selectPlatform('desktop')">
+          <i class="fa-solid fa-laptop"></i>
+          <span>DESKTOP</span>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closeChoiceModal()">MAYBE LATER</button>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal">
+    <div class="modal-content info-modal-content">
+      <button class="info-close-btn" onclick="closeInfoModal()" aria-label="Close">&#x2715;</button>
+
+      <div class="info-body">
+        <!-- LEFT COLUMN -->
+        <div class="info-left-col">
+          <div class="info-game-img-wrap">
+            <img id="infoThumb" src="" alt="" class="info-game-img">
+          </div>
+          <div class="info-sysreqs">
+            <div class="info-sysreqs-label">
+              <i class="fa-solid fa-microchip"></i> SYS_REQS
+            </div>
+            <div class="info-sysreqs-row">
+              <span class="info-sysreqs-key">Language</span>
+              <span class="info-sysreqs-val" id="infoLangLabel">English</span>
+            </div>
+            <div class="info-sysreqs-row">
+              <span class="info-sysreqs-key">Developer</span>
+              <span class="info-sysreqs-val" id="infoCompanyLabel">Unknown</span>
+            </div>
+            <div class="info-sysreqs-row info-sysreqs-row--compat" id="infoPlatformBadge">
+              <span class="info-sysreqs-key">Compatibility</span>
+              <span class="info-sysreqs-val" id="infoPlatformLabel">Desktop Only</span>
+            </div>
+            <div class="info-sysreqs-row" id="infoTouchBadge">
+              <span class="info-sysreqs-key">Touch Support</span>
+              <span class="info-sysreqs-val info-touch-val" id="infoTouchVal">
+                <i id="infoTouchIcon" class="fa-solid fa-keyboard"></i>
+                <span id="infoTouchLabel">No (KB/M Req.)</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="info-right-col">
+          <div class="info-top-badges">
+            <span class="info-genre-badge" id="infoGenreBadge">ACTION</span>
+            <span class="info-platform-pill" id="infoVersionBadge">DESKTOP</span>
+          </div>
+          <h2 class="info-title" id="infoTitle">Game Title</h2>
+          <p class="info-desc" id="infoText">Description...</p>
+          <div class="info-controls-section">
+            <div class="info-controls-header">
+              <i class="fa-solid fa-gamepad"></i>
+              <span id="infoControlsTitle">INPUT_MATRIX</span>
+            </div>
+            <div id="infoKeyGrid" class="info-key-grid"></div>
+            <p id="infoControlsNote" class="info-controls-note"></p>
+          </div>
+          <button class="info-play-btn" onclick="startActualGame()">
+            <i class="fa-solid fa-play"></i> PLAY NOW
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Sync favourites heart state on load -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Mobile sidebar
+      const menuBtn = document.getElementById('menuBtn');
+      const sidebar = document.getElementById('sidebar');
+      const removeBtn = document.getElementById('removeBtn');
+      if (menuBtn) menuBtn.addEventListener('click', () => sidebar.classList.add('visible'));
+      if (removeBtn) removeBtn.addEventListener('click', () => sidebar.classList.remove('visible'));
+
+      // Sync heart state from localStorage
+      const favourites = JSON.parse(localStorage.getItem('favourites')) || [];
+      document.querySelectorAll('.game').forEach(card => {
+        const name = card.querySelector('.name')?.innerText;
+        if (name && favourites.find(f => f.name === name)) {
+          const heart = card.querySelector('.favourite-icon');
+          if (heart) {
+            heart.classList.remove('fa-regular');
+            heart.classList.add('fa-solid', 'active');
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

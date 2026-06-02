@@ -1,0 +1,98 @@
+# Implementation Plan: Game Renaming and Search Functionality
+
+## Goal
+Replace placeholder game names ("Name here") with actual game titles and implement a working search feature in [games.html](file:///home/dell/game%20website/games.html) that filters games by name.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Game Names Needed**: I cannot view the actual images ([game1.jpg](file:///home/dell/game%20website/images/game1.jpg) through [game10.jpg](file:///home/dell/game%20website/images/game10.jpg)) to identify which games they represent. Please provide the actual game names for each image file, or I can use generic popular game names as placeholders.
+
+**Please confirm:**
+- What are the actual names for [game1.jpg](file:///home/dell/game%20website/images/game1.jpg), `game2.jpg`, ... [game10.jpg](file:///home/dell/game%20website/images/game10.jpg)?
+- OR should I use generic popular game names (e.g., "God of War Ragnarök", "Elden Ring", "Minecraft", etc.)?
+
+---
+
+## Proposed Changes
+
+### 1. Update Game Names
+
+#### [MODIFY] [index.html](file:///home/dell/game%20website/index.html)
+
+**Changes:**
+- Replace all instances of `<div class="name">Name here</div>` with actual game names
+- Two "Adventure" sections exist (lines ~502-733, lines ~735-966)
+- Total: 12 game cards need renaming (6 in first section, 6 in second section)
+- Images used: [game1.jpg](file:///home/dell/game%20website/images/game1.jpg) through [game6.jpg](file:///home/dell/game%20website/images/game6.jpg) (repeated twice)
+
+---
+
+#### [MODIFY] [games.html](file:///home/dell/game%20website/games.html)
+
+**Changes:**
+- Replace all instances of `<div class="name">Name here</div>` with actual game names
+- One "Adventure" section exists (lines ~367-597)
+- Total: 6 game cards need renaming
+- Images used: [game1.jpg](file:///home/dell/game%20website/images/game1.jpg) through [game6.jpg](file:///home/dell/game%20website/images/game6.jpg)
+
+---
+
+### 2. Implement Search Functionality
+
+#### [MODIFY] [games.html](file:///home/dell/game%20website/games.html)
+
+**Add JavaScript at the end of the file (before `</body>`):**
+
+```javascript
+// Search functionality
+const searchInput = document.querySelector('.search');
+const gameCards = document.querySelectorAll('.game');
+
+searchInput.addEventListener('input', (e) => {
+  const searchTerm = e.target.value.toLowerCase().trim();
+  
+  gameCards.forEach(card => {
+    const gameName = card.querySelector('.name').textContent.toLowerCase();
+    
+    if (gameName.includes(searchTerm)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+```
+
+**Logic:**
+- Listen to the search input field in real-time (`input` event)
+- Get the search term and convert to lowercase for case-insensitive matching
+- Loop through all game cards
+- Show cards where the game name includes the search term
+- Hide cards that don't match
+
+**No changes to:**
+- Search bar UI (already exists)
+- CSS styling
+- Layout structure
+- Any other functionality
+
+---
+
+## Verification Plan
+
+### Manual Testing
+1. Open [games.html](file:///home/dell/game%20website/games.html) in browser
+2. Verify all 6 games show correct names instead of "Name here"
+3. Type various search queries:
+   - Full game name → should show only that game
+   - Partial name → should show matching games
+   - Non-matching text → should show no games
+   - Empty search → should show all games
+4. Open [index.html](file:///home/dell/game%20website/index.html) and verify 12 game cards show correct names
+
+### Edge Cases
+- Case insensitivity (e.g., "MINECRAFT" should find "Minecraft")
+- Partial matches (e.g., "war" should find "God of War")
+- Special characters in game names
+- Empty/whitespace-only search input
