@@ -516,7 +516,7 @@ function openChoiceModal(jar, className, canvasSize, mobileJar = null, mobileCla
     mobileCanvasSize,
     title: 'Awesome Game',
     desc: 'Get ready to play this amazing classic game!',
-    img: 'images/logo.png'
+    img: 'images/logo.webp'
   };
   
   const e = window.event;
