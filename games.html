@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Games - JARCADE</title>
   <link rel="icon" type="image/webp" href="images/icon.webp">
-  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -264,8 +264,9 @@
     }
 
     @media only screen and (max-width: 850px) {
-      /* Sticky header: bar (with bg) + search (no bg) stacked */
+      /* Non-sticky search container on mobile */
       .games-sticky-header {
+        position: static;
         left: 0;
         right: 0;
         flex-direction: column;
@@ -278,21 +279,30 @@
         border-bottom: none;
       }
 
+      /* Fixed category/menu bar at the very top */
       .games-header-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
         display: flex;
         align-items: center;
         justify-content: flex-end;
         padding: 9px 14px 9px 58px; /* 58px left keeps clear of .menu button */
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.65);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
+      /* Search wrap flows with page but clears the fixed header-bar */
       .games-search-wrap {
+        margin-top: 50px;
         padding: 10px 14px 12px;
         background: transparent;
         justify-content: stretch;
+        position: relative;
       }
 
       .games-search-wrap .home-search-input {
@@ -300,9 +310,9 @@
         max-width: none;
       }
 
-      /* main needs extra top padding: bar (~50px) + search row (~58px) */
+      /* main sits naturally below static search-wrap */
       .games-main {
-        padding-top: 118px;
+        padding-top: 10px;
         padding-left: 10px;
         padding-right: 10px;
         overflow-x: hidden;
@@ -326,6 +336,51 @@
 
       .cards-grid .game-card:first-child .game-img-div {
         height: 108px;
+      }
+
+      /* Round floating back to top button on mobile */
+      .back-to-top-wrap {
+        display: none;
+      }
+
+      .back-to-top-btn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 999;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        background: rgba(18, 18, 18, 0.9);
+        border: 2px solid #ffcc00;
+        color: #ffcc00;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.8);
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .back-to-top-btn.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+      }
+
+      .back-to-top-btn:hover {
+        background: #ffcc00;
+        color: #000;
+        transform: scale(1.1);
+      }
+
+      .back-to-top-btn .back-to-top-text {
+        display: none;
       }
     }
 
@@ -409,7 +464,7 @@
 
       <div class="back-to-top-wrap">
         <button type="button" class="back-to-top-btn" id="backToTopBtn">
-          <i class="fa-solid fa-chevron-up"></i> Back to Top
+          <i class="fa-solid fa-chevron-up"></i> <span class="back-to-top-text">Back to Top</span>
         </button>
       </div>
 
@@ -884,7 +939,7 @@
       card.dataset.name = game.name;
 
       card.innerHTML = `
-        <div class="game-img-div"><img src="${game.img}" alt="${game.name}"></div>
+        <div class="game-img-div"><img loading="lazy" src="${game.img}" alt="${game.name}"></div>
         <div class="game-text">
           <div class="name">${game.name}</div>
           ${game.desc}
@@ -1073,6 +1128,19 @@
         backToTopBtn.addEventListener("click", () => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
+
+        // Toggle visibility on scroll for mobile floating button
+        window.addEventListener("scroll", () => {
+          if (window.innerWidth <= 850) {
+            if (window.scrollY > 300) {
+              backToTopBtn.classList.add("visible");
+            } else {
+              backToTopBtn.classList.remove("visible");
+            }
+          } else {
+            backToTopBtn.classList.remove("visible");
+          }
+        });
       }
 
       // Scroll to the section specified in the URL hash (e.g. games.html#section-action)
@@ -1115,7 +1183,7 @@
         <!-- LEFT COLUMN -->
         <div class="info-left-col">
           <div class="info-game-img-wrap">
-            <img id="infoThumb" src="" alt="" class="info-game-img">
+            <img loading="lazy" id="infoThumb" src="" alt="" class="info-game-img">
           </div>
           <div class="info-sysreqs">
             <div class="info-sysreqs-label">
@@ -1166,6 +1234,50 @@
       </div>
 
     </div>
+  </div>
+
+
+  <!-- Ghost Game Loader Overlay -->
+  <div id="game-loader-overlay">
+    <div id="ghost">
+      <div id="red">
+        <div id="pupil"></div>
+        <div id="pupil1"></div>
+        <div id="eye"></div>
+        <div id="eye1"></div>
+        <div id="top0"></div>
+        <div id="top1"></div>
+        <div id="top2"></div>
+        <div id="top3"></div>
+        <div id="top4"></div>
+        <div id="st0"></div>
+        <div id="st1"></div>
+        <div id="st2"></div>
+        <div id="st3"></div>
+        <div id="st4"></div>
+        <div id="st5"></div>
+        <div id="an1"></div>
+        <div id="an2"></div>
+        <div id="an3"></div>
+        <div id="an4"></div>
+        <div id="an5"></div>
+        <div id="an6"></div>
+        <div id="an7"></div>
+        <div id="an8"></div>
+        <div id="an9"></div>
+        <div id="an10"></div>
+        <div id="an11"></div>
+        <div id="an12"></div>
+        <div id="an13"></div>
+        <div id="an14"></div>
+        <div id="an15"></div>
+        <div id="an16"></div>
+        <div id="an17"></div>
+        <div id="an18"></div>
+      </div>
+      <div id="shadow"></div>
+    </div>
+    <span class="loader-label">Loading Game...</span>
   </div>
 
 </body>

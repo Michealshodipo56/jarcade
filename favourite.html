@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Favourites - JARCADE</title>
   <link rel="icon" type="image/webp" href="images/icon.webp">
-  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -114,7 +114,7 @@
         gameDiv.dataset.gameName = game.name;
         gameDiv.innerHTML = `
           <div class="game-img-div">
-            <img src="${game.img}" alt="${game.name}">
+            <img loading="lazy" src="${game.img}" alt="${game.name}">
             <div onclick="${game.onclick}" class="play-overlay"><i class="fa-solid fa-gamepad"></i></div>
           </div>
           <div class="game-text">
@@ -189,7 +189,7 @@
         <!-- LEFT COLUMN -->
         <div class="info-left-col">
           <div class="info-game-img-wrap">
-            <img id="infoThumb" src="" alt="" class="info-game-img">
+            <img loading="lazy" id="infoThumb" src="" alt="" class="info-game-img">
           </div>
           <div class="info-sysreqs">
             <div class="info-sysreqs-label">
@@ -240,6 +240,50 @@
       </div>
 
     </div>
+  </div>
+
+
+  <!-- Ghost Game Loader Overlay -->
+  <div id="game-loader-overlay">
+    <div id="ghost">
+      <div id="red">
+        <div id="pupil"></div>
+        <div id="pupil1"></div>
+        <div id="eye"></div>
+        <div id="eye1"></div>
+        <div id="top0"></div>
+        <div id="top1"></div>
+        <div id="top2"></div>
+        <div id="top3"></div>
+        <div id="top4"></div>
+        <div id="st0"></div>
+        <div id="st1"></div>
+        <div id="st2"></div>
+        <div id="st3"></div>
+        <div id="st4"></div>
+        <div id="st5"></div>
+        <div id="an1"></div>
+        <div id="an2"></div>
+        <div id="an3"></div>
+        <div id="an4"></div>
+        <div id="an5"></div>
+        <div id="an6"></div>
+        <div id="an7"></div>
+        <div id="an8"></div>
+        <div id="an9"></div>
+        <div id="an10"></div>
+        <div id="an11"></div>
+        <div id="an12"></div>
+        <div id="an13"></div>
+        <div id="an14"></div>
+        <div id="an15"></div>
+        <div id="an16"></div>
+        <div id="an17"></div>
+        <div id="an18"></div>
+      </div>
+      <div id="shadow"></div>
+    </div>
+    <span class="loader-label">Loading Game...</span>
   </div>
 
 </body>

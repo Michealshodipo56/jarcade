@@ -11756,7 +11756,7 @@ function CloseWebPage() {
 function showExitScreen() {
   document.getElementById("exit-screen").style.display = "block";
   myflushAll();
-  window.location.href = "index.html";
+  window.location.href = "../index.html";
   //CloseWebPage();
 }
 

@@ -1,4 +1,8 @@
 function playGame(jar, className, canvasSize = 'size-no', platform = 'desktop') {
+  // Show the ghost loader overlay immediately, covering all page content
+  const overlay = document.getElementById('game-loader-overlay');
+  if (overlay) overlay.classList.add('active');
+
   const isMobile = platform === 'mobile';
   const baseUrl = isMobile ? 'java/mobile.html' : 'java/main.html';
   let url = `${baseUrl}?jars=jar/${jar}`;
@@ -124,7 +128,6 @@ function showHelp() {
 
 window.addEventListener('load', () => {
   initCategoryAutoscroll();
-  initCategoryHoverButtons();
   initHorizontalScrolls();
 });
 
@@ -267,32 +270,67 @@ function incrementVote(element) {
 
 function initCategoryAutoscroll() {
   const container = document.querySelector('.categories-container');
+  const nextBtn = document.getElementById('nextCategoryBtn');
+  const prevBtn = document.getElementById('prevCategoryBtn');
+
   if (!container) return;
 
-  // Clone items for seamless looping using a more robust method
   const originalItems = Array.from(container.children);
   originalItems.forEach(item => {
     const clone = item.cloneNode(true);
     container.appendChild(clone);
   });
 
-  let scrollSpeed = 0.6; // Slightly faster to avoid rounding issues in some browsers
+  let baseSpeed = 0.4;
+  let fastSpeed = 6;
+  let currentSpeed = baseSpeed;
+  let direction = 1;
   let isHovered = false;
+  let actualScrollLeft = container.scrollLeft;
 
   container.addEventListener('mouseenter', () => isHovered = true);
   container.addEventListener('mouseleave', () => isHovered = false);
-  container.addEventListener('touchstart', () => isHovered = true);
+  container.addEventListener('touchstart', () => isHovered = true, { passive: true });
   container.addEventListener('touchend', () => isHovered = false);
 
+  if (nextBtn) {
+    const startFastRight = () => { isHovered = false; currentSpeed = fastSpeed; direction = 1; };
+    const stopFast = () => { currentSpeed = baseSpeed; direction = 1; };
+    nextBtn.addEventListener('mouseenter', startFastRight);
+    nextBtn.addEventListener('mouseleave', stopFast);
+    nextBtn.addEventListener('mousedown', startFastRight);
+    nextBtn.addEventListener('mouseup', stopFast);
+    nextBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startFastRight(); }, { passive: false });
+    nextBtn.addEventListener('touchend', stopFast);
+  }
+
+  if (prevBtn) {
+    const startFastLeft = () => { isHovered = false; currentSpeed = fastSpeed; direction = -1; };
+    const stopFast = () => { currentSpeed = baseSpeed; direction = 1; };
+    prevBtn.addEventListener('mouseenter', startFastLeft);
+    prevBtn.addEventListener('mouseleave', stopFast);
+    prevBtn.addEventListener('mousedown', startFastLeft);
+    prevBtn.addEventListener('mouseup', stopFast);
+    prevBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startFastLeft(); }, { passive: false });
+    prevBtn.addEventListener('touchend', stopFast);
+  }
+
   function animate() {
-    if (!isHovered) {
-      container.scrollLeft += scrollSpeed;
-      
-      // Infinite loop check: when we reach the original content length
-      const halfWidth = Math.floor(container.scrollWidth / 2);
-      if (container.scrollLeft >= halfWidth) {
-        container.scrollLeft -= halfWidth; 
+    if (!isHovered || currentSpeed > baseSpeed) {
+      if (Math.abs(actualScrollLeft - container.scrollLeft) > 2) {
+        actualScrollLeft = container.scrollLeft;
       }
+
+      actualScrollLeft += direction * currentSpeed;
+      const halfWidth = Math.floor(container.scrollWidth / 2);
+
+      if (direction === 1 && actualScrollLeft >= halfWidth) {
+        actualScrollLeft -= halfWidth; 
+      } else if (direction === -1 && actualScrollLeft <= 0) {
+        actualScrollLeft += halfWidth;
+      }
+      
+      container.scrollLeft = actualScrollLeft;
     }
     requestAnimationFrame(animate);
   }
@@ -323,51 +361,7 @@ function initHorizontalScrolls() {
   });
 }
 
-function initCategoryHoverButtons() {
-  const container = document.querySelector('.categories-container');
-  const nextBtn = document.getElementById('nextCategoryBtn');
-  const prevBtn = document.getElementById('prevCategoryBtn');
 
-  if (!container || !nextBtn || !prevBtn) {
-    return;
-  }
-
-  let rafId = null;
-  let direction = 0;
-
-  function step() {
-    container.scrollLeft += direction * 10;
-    rafId = requestAnimationFrame(step);
-  }
-
-  function start(dir) {
-    direction = dir;
-    if (!rafId) {
-      rafId = requestAnimationFrame(step);
-    }
-  }
-
-  function stop() {
-    direction = 0;
-    if (rafId) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-    }
-  }
-
-  nextBtn.addEventListener('mouseenter', () => start(1));
-  prevBtn.addEventListener('mouseenter', () => start(-1));
-  nextBtn.addEventListener('mouseleave', stop);
-  prevBtn.addEventListener('mouseleave', stop);
-  nextBtn.addEventListener('mousedown', () => start(1));
-  prevBtn.addEventListener('mousedown', () => start(-1));
-  nextBtn.addEventListener('mouseup', stop);
-  prevBtn.addEventListener('mouseup', stop);
-  nextBtn.addEventListener('touchstart', (event) => { event.preventDefault(); start(1); }, { passive: false });
-  prevBtn.addEventListener('touchstart', (event) => { event.preventDefault(); start(-1); }, { passive: false });
-  nextBtn.addEventListener('touchend', stop);
-  prevBtn.addEventListener('touchend', stop);
-}
 
 function setupScrollContainer(track, nextBtn, prevBtn, dots) {
   let scrollRaf = null;

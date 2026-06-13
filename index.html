@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JARCADE - Pro Gaming</title>
   <link rel="icon" type="image/webp" href="images/icon.webp">
-  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -119,16 +119,16 @@
 
       <!-- Slideshow -->
       <div class="slideshow-container">
-        <div class="mySlides"><img src="images/game1.jpg" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game2.png" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game3.jpg" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game4.webp" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game5.jpg" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game6.jpg" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game7.jpg" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game8.png" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game9.jpg" style="width:100%"></div>
-        <div class="mySlides"><img src="images/game10.jpg" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game1.jpg" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game2.png" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game3.jpg" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game4.webp" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game5.jpg" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game6.jpg" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game7.jpg" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game8.png" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game9.jpg" style="width:100%"></div>
+        <div class="mySlides"><img loading="lazy" src="images/game10.jpg" style="width:100%"></div>
         
 
         <!-- Decorative slide accents -->
@@ -185,7 +185,7 @@
         <!-- God of War -->
         <div class="game">
           <div class="game-img-div">
-            <img src="https://i.ytimg.com/vi/Lu4tU-phRtQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAOKftHsKRXybQ4JtWlNtNbmCffTA" alt="God of War: Betrayal">
+            <img loading="lazy" src="https://i.ytimg.com/vi/Lu4tU-phRtQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAOKftHsKRXybQ4JtWlNtNbmCffTA" alt="God of War: Betrayal">
             <div onclick="openChoiceModal('godofwar2.jar', 'GOWMIDlet', 'size-240x320')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
@@ -213,7 +213,7 @@
         <!-- Gangstar Rio -->
         <div class="game">
           <div class="game-img-div">
-            <img src="https://upload.wikimedia.org/wikipedia/en/7/75/Gangstar_Rio_City_of_Saints.png" alt="Gangstar Rio">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/7/75/Gangstar_Rio_City_of_Saints.png" alt="Gangstar Rio">
             <div onclick="openChoiceModal('gangstar_rio_320x240.jar', 'GloftGRIO', 'size-320x240', 'gangstar_rio_city_touch_480x800.jar', 'GloftGRIO', 'size-480x800')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
@@ -241,8 +241,8 @@
         <!-- Batman -->
         <div class="game">
           <div class="game-img-div">
-            <img src="https://townsquare.media/site/442/files/2012/05/tdk-poster-1.jpg?w=780&q=75" alt="Batman">
-            <div onclick="openChoiceModal('batmannoki_8Qi8Psx7.jar', 'GloftBANA', 'size-240x320')" class="play-overlay">
+            <img loading="lazy" src="https://townsquare.media/site/442/files/2012/05/tdk-poster-1.jpg?w=780&q=75" alt="Batman">
+            <div onclick="openChoiceModal('batmannoki_8Qi8Psx7.jar', 'GloftTDKM', 'size-240x320')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
@@ -266,21 +266,21 @@
           </div>
         </div>
 
-        <!-- Plants vs Zombies -->
+        <!-- PES 2020 -->
         <div class="game">
           <div class="game-img-div">
-            <img src="https://assets.nintendo.com/image/upload/c_limit,f_auto,h_300,q_auto,w_500/v1/store/software/switch/70010000098368/Video/posters/a07acfb2fcf0eb8476b258bdb349595b95eb4920d1fa61f40ae992cb96dc30be" alt="Plants vs Zombies">
-            <div onclick="openChoiceModal('pvz.jar', 'Game', 'size-320x240')" class="play-overlay">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/a/a3/eFootball_PES_2020_cover.jpg" alt="Pro Evolution Soccer 2020">
+            <div onclick="openChoiceModal('pes2020.jar', 'a', 'size-240x320')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
               <i class="fa-regular fa-star"></i>
-              <span class="count">3.4K</span>
+              <span class="count">1.4K</span>
             </div>
           </div>
           <div class="game-text">
-            <div class="name">Plants vs Zombies</div>
-            Defend your garden from waves of fun-loving zombies!
+            <div class="name">PES 2020</div>
+            Experience realistic soccer gameplay and controls in PES mobile.
             <div class="star">
               <div class="stars-group">
                 <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
@@ -294,21 +294,21 @@
           </div>
         </div>
 
-        <!-- Scarlotti's Mafia War -->
+        <!-- Asphalt 6 -->
         <div class="game">
           <div class="game-img-div">
-            <img src="https://ps2media.ign.com/ps2/image/object/757/757154/MafiaWarsScarlotti.jpg" alt="Scarlotti's Mafia War">
-            <div onclick="openChoiceModal('scarlottis_mafia_war_240x320_157342.jar', 'GloftBANA', 'size-240x320')" class="play-overlay">
+            <img loading="lazy" src="images/game6.jpg" alt="Asphalt 6: Adrenaline">
+            <div onclick="openChoiceModal('Asphalt6.jar', 'GloftASP6', 'size-320x240')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
               <i class="fa-regular fa-star"></i>
-              <span class="count">640</span>
+              <span class="count">5.5K</span>
             </div>
           </div>
           <div class="game-text">
-            <div class="name">Scarlotti's Mafia War</div>
-            Rise through the ranks of the underworld in this gritty action game.
+            <div class="name">Asphalt 6: Adrenaline</div>
+            The ultimate racing game for mobile returns with more speed!
             <div class="star">
               <div class="stars-group">
                 <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
@@ -322,21 +322,21 @@
           </div>
         </div>
 
-        <!-- Thor -->
+        <!-- Black Myth: Wukong -->
         <div class="game">
           <div class="game-img-div">
-            <img src="https://i.ytimg.com/vi/cPxmGLk52z4/maxresdefault.jpg" alt="Thor">
-            <div onclick="openChoiceModal('thor_the_dark_world_320x240_253099.jar', 'GloftBANA', 'size-320x240', 'thor_the_dark_world_480x800_touch_192928.jar', 'GloftGRIO', 'size-480x800')" class="play-overlay">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/c/c5/Black_Myth_Wukong_cover_art.jpg" alt="Black Myth: Wukong">
+            <div onclick="openChoiceModal('wukong.jar', 'CMIDlet', 'size-240x320')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
               <i class="fa-regular fa-star"></i>
-              <span class="count">1.8K</span>
+              <span class="count">980</span>
             </div>
           </div>
           <div class="game-text">
-            <div class="name">Thor: The Dark World</div>
-            Wield the power of Mjolnir as the God of Thunder.
+            <div class="name">Black Myth: Wukong</div>
+            Retro 8-bit action adventure inspired by the legendary Sun Wukong.
             <div class="star">
               <div class="stars-group">
                 <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
@@ -368,40 +368,40 @@
           <div class="featured-grid" id="featuredGrid">
             <!-- Group 1 -->
             <div class="f-card f-large">
-              <img src="images/game1.jpg" alt="Featured">
+              <img loading="lazy" src="images/game1.jpg" alt="Featured">
               <div class="hot-badge">Hot</div>
             </div>
             <div class="f-card f-small">
-              <img src="images/game2.png" alt="Featured">
+              <img loading="lazy" src="images/game2.png" alt="Featured">
             </div>
             <div class="f-card f-small">
-              <img src="images/game3.jpg" alt="Featured">
+              <img loading="lazy" src="images/game3.jpg" alt="Featured">
               <div class="hot-badge">Hot</div>
             </div>
             <div class="f-card f-small">
-              <img src="images/game4.webp" alt="Featured">
+              <img loading="lazy" src="images/game4.webp" alt="Featured">
             </div>
             <div class="f-card f-small">
-              <img src="images/game8.png" alt="Featured">
+              <img loading="lazy" src="images/game8.png" alt="Featured">
             </div>
             
             <!-- Group 2 -->
             <div class="f-card f-large">
-              <img src="images/game6.jpg" alt="Featured">
+              <img loading="lazy" src="images/game6.jpg" alt="Featured">
               <div class="hot-badge">Hot</div>
             </div>
             <div class="f-card f-small">
-              <img src="images/game7.jpg" alt="Featured">
+              <img loading="lazy" src="images/game7.jpg" alt="Featured">
             </div>
             <div class="f-card f-small">
-              <img src="images/game9.jpg" alt="Featured">
+              <img loading="lazy" src="images/game9.jpg" alt="Featured">
             </div>
             <div class="f-card f-small">
-              <img src="images/game10.jpg" alt="Featured">
+              <img loading="lazy" src="images/game10.jpg" alt="Featured">
               <div class="hot-badge">Hot</div>
             </div>
             <div class="f-card f-small">
-              <img src="images/game5.jpg" alt="Featured">
+              <img loading="lazy" src="images/game5.jpg" alt="Featured">
             </div>
           </div>
           
@@ -462,8 +462,8 @@
         <!-- Bounce Tales -->
         <div class="game">
           <div class="game-img-div">
-            <img src="images/game7.jpg" alt="Bounce Tales">
-            <div onclick="openChoiceModal('BounceTales.jar', 'RMIDlet')" class="play-overlay">
+            <img loading="lazy" src="images/game7.jpg" alt="Bounce Tales">
+            <div onclick="openChoiceModal('BounceTales_both.jar', 'RMIDlet', 'size-no')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
@@ -487,21 +487,21 @@
           </div>
         </div>
 
-        <!-- Doodle Jump -->
+        <!-- Diamond Rush -->
         <div class="game">
           <div class="game-img-div">
-            <img src="images/game8.png" alt="Doodle Jump">
-            <div onclick="openChoiceModal('chess.jar', 'com.chess.Tmpmidlet', 'size-240x320')" class="play-overlay">
+            <img loading="lazy" src="images/game9.jpg" alt="Diamond Rush">
+            <div onclick="openChoiceModal('diamond_rush_key.jar', 'GloftDIRU', 'size-240x320')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
               <i class="fa-regular fa-star"></i>
-              <span class="count">900</span>
+              <span class="count">2.2K</span>
             </div>
           </div>
           <div class="game-text">
-            <div class="name">Doodle Jump</div>
-            Jump as high as you can in this endlessly addictive classic.
+            <div class="name">Diamond Rush</div>
+            Solve puzzles and collect diamonds in ancient temples and scary jungles.
             <div class="star">
               <div class="stars-group">
                 <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
@@ -515,21 +515,133 @@
           </div>
         </div>
 
-        <!-- Diamond Rush -->
+        <!-- Assassin's Creed: Brotherhood -->
         <div class="game">
           <div class="game-img-div">
-            <img src="images/game9.jpg" alt="Diamond Rush">
-            <div onclick="openChoiceModal('diamond_rush_key.jar', 'GloftDIRU', 'size-240x320')" class="play-overlay">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/b/b5/Assassins_Creed_Brotherhood_Box_Art.jpg" alt="Assassin's Creed: Brotherhood">
+            <div onclick="openChoiceModal('assasin_s_creed_brot_360x640_139036.jar', 'GloftASBR', 'size-360x640', 'assassins_creed_br_259290_480x800.jar', 'GloftASBR', 'size-480x800')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
               <i class="fa-regular fa-star"></i>
-              <span class="count">2.2K</span>
+              <span class="count">1.8K</span>
             </div>
           </div>
           <div class="game-text">
-            <div class="name">Diamond Rush</div>
-            Solve puzzles and collect diamonds in ancient temples and scary jungles.
+            <div class="name">Assassin's Creed: Brotherhood</div>
+            Join Ezio and lead the brotherhood in this legendary historical adventure.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- High School Hook Ups -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/f/f6/High_School_Hook_Ups_logo.png" alt="High School Hook Ups">
+            <div onclick="openChoiceModal('high_school_hook_ups_480x800_touch_258928.jar', 'GloftHUHS', 'size-480x800')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">920</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">High School Hook Ups</div>
+            Navigate teen dramas, make friends, and find love in high school.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Time Cherry Scroll -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="java/img/sgyhc.png" alt="Time Cherry Scroll">
+            <div onclick="openChoiceModal('sgyhc.jar', 'Secrit_II', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">670</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Time Cherry Scroll</div>
+            Embark on an interactive fantasy visual novel adventure.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Double Dance Mania -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="java/img/sldwm.png" alt="Double Dance Mania">
+            <div onclick="openChoiceModal('sldwm.jar', 'dedron.game.ClientMIDlet', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">540</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Double Dance Mania</div>
+            Feel the rhythm and master steps in this anime style dance game.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Club Tycoon -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="https://images.igdb.com/igdb/image/upload/t_cover_big/co5qvy.webp" alt="Club Tycoon">
+            <div onclick="openChoiceModal('club_tycoon_260837.jar', 'phone.Midlet', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">1.1K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Club Tycoon</div>
+            Manage and design your own mega nightclub empire.
             <div class="star">
               <div class="stars-group">
                 <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
@@ -563,10 +675,10 @@
       <div class="scroll-wrapper">
         <div class="scroll" id="actionScroll">
 
-        <!-- Call of Duty -->
+        <!-- Call of Duty 2 -->
         <div class="game">
           <div class="game-img-div">
-            <img src="images/game10.jpg" alt="Call of Duty">
+            <img loading="lazy" src="images/game10.jpg" alt="Call of Duty 2">
             <div onclick="openChoiceModal('call_of_duty_2_240x320-9173.jar', 'CODII', 'size-240x320')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
@@ -591,21 +703,21 @@
           </div>
         </div>
 
-        <!-- The Sims 3 -->
+        <!-- The Avengers Mobile -->
         <div class="game">
           <div class="game-img-div">
-            <img src="images/game5.jpg" alt="The Sims 3">
-            <div onclick="openChoiceModal('sim3.jar', 'GloftBANA')" class="play-overlay">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/8/8a/The_Avengers_%282012_film%29_poster.jpg" alt="The Avengers Mobile">
+            <div onclick="openChoiceModal('the_avengers_touch_480x800_259321.jar', 'GloftAVEN', 'size-480x800')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
               <i class="fa-regular fa-star"></i>
-              <span class="count">3.7K</span>
+              <span class="count">3.2K</span>
             </div>
           </div>
           <div class="game-text">
-            <div class="name">The Sims 3</div>
-            Live your life and build your dreams in the palm of your hand.
+            <div class="name">The Avengers Mobile</div>
+            Play as Earth's mightiest heroes and stop Loki's invasion.
             <div class="star">
               <div class="stars-group">
                 <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
@@ -619,21 +731,133 @@
           </div>
         </div>
 
-        <!-- Asphalt 6 -->
+        <!-- Thor: The Dark World -->
         <div class="game">
           <div class="game-img-div">
-            <img src="images/game6.jpg" alt="Asphalt 6: Adrenaline">
-            <div onclick="openChoiceModal('kybc6.jar', 'GloftASP6')" class="play-overlay">
+            <img loading="lazy" src="https://m.media-amazon.com/images/I/91e-uBynkTL._AC_UF894,1000_QL80_.jpg" alt="Thor: The Dark World">
+            <div onclick="openChoiceModal('thor_the_dark_world_320x240_253099.jar', 'GloftTR2M', 'size-320x240', 'thor_the_dark_world_480x800_touch_192928.jar', 'GloftTR2M', 'size-480x800')" class="play-overlay">
               <i class="fa-solid fa-gamepad"></i>
             </div>
             <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
               <i class="fa-regular fa-star"></i>
-              <span class="count">5.5K</span>
+              <span class="count">1.8K</span>
             </div>
           </div>
           <div class="game-text">
-            <div class="name">Asphalt 6: Adrenaline</div>
-            The ultimate racing game for mobile returns with more speed!
+            <div class="name">Thor: The Dark World</div>
+            Wield Mjolnir as Thor and battle across the Nine Realms.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Super Bomberman -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/b/be/Super_Bomberman_box_front.jpg" alt="Super Bomberman">
+            <div onclick="openChoiceModal('super_bomberman_240x320-117069.jar', 'SB', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">940</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Super Bomberman</div>
+            Plant bombs strategically to clear blocks and blow up enemies.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mafia Driver NY -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="https://m.media-amazon.com/images/I/81xU+cQ65QL._AC_UF1000,1000_QL80_.jpg" alt="Mafia Driver: NY">
+            <div onclick="openChoiceModal('mafiadrive.jar', 'ParkingGameMidlet', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">810</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Mafia Driver: NY</div>
+            Test your precision driving and parking skills in the city.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scarlotti's Mafia War -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="https://ps2media.ign.com/ps2/image/object/757/757154/MafiaWarsScarlotti.jpg" alt="Scarlotti's Mafia War">
+            <div onclick="openChoiceModal('scarlottis_mafia_war_240x320_157342.jar', 'Family', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">640</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">Scarlotti's Mafia War</div>
+            Rise through the ranks of the underworld in this gritty action game.
+            <div class="star">
+              <div class="stars-group">
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
+              </div>
+              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- GTA 5 Mobile -->
+        <div class="game">
+          <div class="game-img-div">
+            <img loading="lazy" src="java/img/gta.png" alt="GTA 5 Mobile">
+            <div onclick="openChoiceModal('gta.jar', 'SaintsRow2', 'size-240x320')" class="play-overlay">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+              <i class="fa-regular fa-star"></i>
+              <span class="count">1.6K</span>
+            </div>
+          </div>
+          <div class="game-text">
+            <div class="name">GTA 5 Mobile (SR2)</div>
+            Explore massive open streets, hijack cars and complete missions.
             <div class="star">
               <div class="stars-group">
                 <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
@@ -717,7 +941,7 @@
         <!-- LEFT COLUMN -->
         <div class="info-left-col">
           <div class="info-game-img-wrap">
-            <img id="infoThumb" src="" alt="" class="info-game-img">
+            <img loading="lazy" id="infoThumb" src="" alt="" class="info-game-img">
           </div>
           <div class="info-sysreqs">
             <div class="info-sysreqs-label">
@@ -794,6 +1018,50 @@
       });
     });
   </script>
+
+
+  <!-- Ghost Game Loader Overlay -->
+  <div id="game-loader-overlay">
+    <div id="ghost">
+      <div id="red">
+        <div id="pupil"></div>
+        <div id="pupil1"></div>
+        <div id="eye"></div>
+        <div id="eye1"></div>
+        <div id="top0"></div>
+        <div id="top1"></div>
+        <div id="top2"></div>
+        <div id="top3"></div>
+        <div id="top4"></div>
+        <div id="st0"></div>
+        <div id="st1"></div>
+        <div id="st2"></div>
+        <div id="st3"></div>
+        <div id="st4"></div>
+        <div id="st5"></div>
+        <div id="an1"></div>
+        <div id="an2"></div>
+        <div id="an3"></div>
+        <div id="an4"></div>
+        <div id="an5"></div>
+        <div id="an6"></div>
+        <div id="an7"></div>
+        <div id="an8"></div>
+        <div id="an9"></div>
+        <div id="an10"></div>
+        <div id="an11"></div>
+        <div id="an12"></div>
+        <div id="an13"></div>
+        <div id="an14"></div>
+        <div id="an15"></div>
+        <div id="an16"></div>
+        <div id="an17"></div>
+        <div id="an18"></div>
+      </div>
+      <div id="shadow"></div>
+    </div>
+    <span class="loader-label">Loading Game...</span>
+  </div>
 
 </body>
 </html>
