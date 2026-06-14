@@ -126,6 +126,16 @@ function showHelp() {
   showNotification("Help & Tutorials coming soon! Stay tuned.");
 }
 
+function toggleLogin() {
+  const isLogged = document.body.getAttribute('data-logged-in') === 'true';
+  document.body.setAttribute('data-logged-in', !isLogged);
+  if (!isLogged) {
+    showNotification("Successfully logged in!");
+  } else {
+    showNotification("Logged out successfully.");
+  }
+}
+
 window.addEventListener('load', () => {
   initCategoryAutoscroll();
   initHorizontalScrolls();
@@ -151,6 +161,51 @@ document.addEventListener('DOMContentLoaded', () => {
       const matches = !searchTerm || name.includes(searchTerm) || details.includes(searchTerm);
 
       card.style.display = matches ? '' : 'none';
+    });
+  });
+
+
+
+  // --- HEADER SEARCH TOGGLE (Mobile) ---
+  const searchToggle = document.getElementById('headerSearchToggle');
+  const searchWrap = document.getElementById('headerSearchWrap');
+  if (searchToggle && searchWrap) {
+    searchToggle.addEventListener('click', () => {
+      searchWrap.classList.toggle('expanded');
+      if (searchWrap.classList.contains('expanded')) {
+        const input = searchWrap.querySelector('input');
+        if (input) input.focus();
+      }
+    });
+    
+    // Close search when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchWrap.contains(e.target) && !searchToggle.contains(e.target)) {
+        searchWrap.classList.remove('expanded');
+      }
+    });
+  }
+
+  // --- CARD RIPPLE EFFECT ---
+  document.querySelectorAll('.game').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.target.closest('.card-rating') || e.target.closest('.favourite-icon')) return;
+      
+      const ripple = document.createElement('div');
+      ripple.classList.add('ripple');
+      
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      
+      this.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 500);
     });
   });
 });

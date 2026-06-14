@@ -5,7 +5,7 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   background: #000000;
   color: white;
   position: relative;
@@ -238,10 +238,15 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('images/background.webp') no-repeat center center fixed;
+  /* Removed background-attachment:fixed — it forces a full-page repaint on every scroll tick.
+     position:fixed on the element achieves the same visual with zero scroll cost. */
+  background: url('images/background.webp') no-repeat center center;
   background-size: cover;
-  opacity: 0.1; /* Optimized for visual clarity while providing a rich aesthetic */
+  opacity: 0.1;
   z-index: -1;
+  /* Own compositor layer — never repaints during scroll */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 
@@ -366,8 +371,8 @@ button {
   transition: all 0.2s ease;
 }
 
-.menu i{
-  font-size: 2em;
+.menu i {
+  font-size: 1.15em;
 }
 
 .modal-close-btn:hover {
@@ -872,8 +877,8 @@ button {
 }
 
 .sc:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  transform: translateX(5px);
+  /* fill handled by ::before raising animation in ui-enhancements.css */
+  transform: translateX(4px);
 }
 
 .sc.active {
@@ -1021,11 +1026,11 @@ button {
   clip-path: polygon(100% 0, 100% 0, 100% 100%, 0 100%, 0 100%);
 }
 
-/* top navigation */
+/* top navigation — restored per user request */
 .top-text {
-  position: fixed;
+  position: absolute;
   top: 12px;
-  left: 245px;
+  right: 12px;
   display: flex;
   text-decoration: none;
   list-style-type: none;
@@ -1036,22 +1041,6 @@ button {
   background: rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(10px);
   animation: slideDown 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-.top-text a {
-  text-decoration: none;
-  color: white;
-}
-
-.top-text li {
-  padding: 0.5em 1em;
-  background-color: rgba(100, 98, 98, 0.562);
-  border-radius: 5px;
-  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.1);
-}
-
-.top-text li:hover {
-  background: -webkit-linear-gradient(left top, yellow, blue);
 }
 
 /* Dropdown Menu Styles */
@@ -1276,8 +1265,7 @@ html {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(15, 15, 25, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(15, 15, 25, 0.95); /* Slightly more solid background instead of expensive filter */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 5px 8px;
@@ -1326,8 +1314,7 @@ html {
 .game {
   width: 16em;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(15px);
+  background: rgba(18, 18, 26, 0.75); /* Slightly darker/more solid background instead of expensive filter */
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   margin-bottom: 2em;
@@ -1518,29 +1505,13 @@ html {
     z-index: 60;
     cursor: pointer;
     padding: 7px 10px;
-    position: fixed;
-    top: 10px;
-    left: 14px;
+    margin-right: 10px;
   }
 
-  .top-text {
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    justify-content: flex-end;
-    padding: 0.42em 0.42em 0.42em 56px;
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .top-text li {
-    padding: 0.4em 0.6em;
-  }
+  /* .top-text replaced by #site-header */
 
   .main {
-    padding-top: 62px;
+    padding-top: 0;
   }
 
   .game {
@@ -1552,11 +1523,7 @@ html {
   }
 
   .home-search-row {
-    padding: 0.9rem 0.75rem 0;
-  }
-
-  .home-search-input {
-    width: min(260px, 100%);
+    display: none;
   }
 }
 
@@ -1566,11 +1533,6 @@ html {
   }
 }
 
-@media only screen and (max-width: 300px) {
-  .menu {
-    left: 10px;
-  }
-}
 
 /* See More / Browse All Card */
 .see-more-card {

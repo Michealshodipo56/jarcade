@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARCADE — Enter the Arena</title>
+  <link rel="icon" type="image/webp" href="images/icon.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous" defer></script>
+  <!-- GSAP for premium animation sequencing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <!-- ── PARTICLE CANVAS ── -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- ── AMBIENT GRID ── -->
+  <div class="grid-overlay"></div>
+
+  <!-- ── AMBIENT LIGHT ORBS ── -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ── FORM CONSTRUCTION CANVAS (SVG outline trace) ── -->
+  <svg id="constructSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <filter id="neonGlow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- rect path injected by JS once panel dimensions are known -->
+    <rect id="constructRect" rx="20" ry="20" fill="none"
+          stroke="url(#traceGrad)" stroke-width="2.5" filter="url(#neonGlow)"/>
+    <linearGradient id="traceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#ffcc00"/>
+      <stop offset="50%"  stop-color="#00c8ff"/>
+      <stop offset="100%" stop-color="#7b2fff"/>
+    </linearGradient>
+    <!-- shockwave ring -->
+    <circle id="shockwave" cx="50%" cy="50%" r="0" fill="none"
+            stroke="#00c8ff" stroke-width="1.5" opacity="0"/>
+    <circle id="shockwave2" cx="50%" cy="50%" r="0" fill="none"
+            stroke="#ffcc00" stroke-width="0.8" opacity="0"/>
+  </svg>
+
+  <!-- ── MAIN PANEL ── -->
+  <div class="scene" id="scene">
+    <div class="panel" id="panel">
+
+      <!-- Logo -->
+      <div class="panel-logo" id="elLogo">
+        <a href="index.html">
+          <img src="images/logo.webp" alt="JarCade" class="logo-img">
+        </a>
+        <div class="logo-tagline">ENTER THE ARENA</div>
+      </div>
+
+      <!-- ── SLIDER WRAPPER ── -->
+      <div class="slider-clip">
+        <div class="slider-wrap" id="sliderWrap">
+
+        <!-- ── LOGIN PANEL ── -->
+        <div class="form-face" id="loginFace">
+          <h2 class="form-heading" id="elHeading">
+            <span class="heading-sub">WELCOME BACK, PLAYER</span>
+          </h2>
+
+          <form class="auth-form" id="loginForm" novalidate autocomplete="off">
+
+            <div class="field-group" id="elField1">
+              <label class="field-label" for="loginEmail">
+                <i class="fa-solid fa-user"></i> Username / Email
+              </label>
+              <div class="field-wrap">
+                <input type="text" id="loginEmail" class="field-input"
+                       placeholder="Enter your username or email" autocomplete="username">
+                <span class="field-line"></span>
+              </div>
+            </div>
+
+            <div class="field-group" id="elField2">
+              <label class="field-label" for="loginPassword">
+                <i class="fa-solid fa-lock"></i> Password
+              </label>
+              <div class="field-wrap">
+                <input type="password" id="loginPassword" class="field-input"
+                       placeholder="••••••••••••" autocomplete="current-password">
+                <button type="button" class="eye-toggle" aria-label="Show password"
+                        onclick="togglePassword('loginPassword', this)">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+                <span class="field-line"></span>
+              </div>
+            </div>
+
+            <div class="form-options" id="elOptions">
+              <label class="remember-label">
+                <input type="checkbox" class="remember-check" id="rememberMe">
+                <span class="custom-check"></span>
+                <span>Remember me</span>
+              </label>
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="cta-btn" id="elBtn"
+                    onclick="window.location.href='index.html'; return false;">
+              <span class="btn-bg"></span>
+              <span class="btn-content">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Enter JArcade</span>
+              </span>
+              <span class="btn-shine"></span>
+            </button>
+
+          </form>
+
+          <p class="switch-text" id="elSwitch">
+            New to the arena?
+            <button type="button" class="switch-btn" onclick="switchToSignup()">Create Account</button>
+          </p>
+        </div>
+
+        <!-- ── SIGN UP PANEL ── -->
+        <div class="form-face form-face--signup" id="signupFace">
+          <h2 class="form-heading">
+            <span class="heading-sub">JOIN THE ARENA</span>
+          </h2>
+
+          <form class="auth-form" id="signupForm" novalidate autocomplete="off">
+
+            <div class="field-group">
+              <label class="field-label" for="signupUsername">
+                <i class="fa-solid fa-user"></i> Username
+              </label>
+              <div class="field-wrap">
+                <input type="text" id="signupUsername" class="field-input"
+                       placeholder="Choose a username" autocomplete="username">
+                <span class="field-line"></span>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="signupEmail">
+                <i class="fa-solid fa-envelope"></i> Email
+              </label>
+              <div class="field-wrap">
+                <input type="email" id="signupEmail" class="field-input"
+                       placeholder="your@email.com" autocomplete="email">
+                <span class="field-line"></span>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="signupPassword">
+                <i class="fa-solid fa-lock"></i> Password
+              </label>
+              <div class="field-wrap">
+                <input type="password" id="signupPassword" class="field-input"
+                       placeholder="••••••••••••" autocomplete="new-password">
+                <button type="button" class="eye-toggle" aria-label="Show password"
+                        onclick="togglePassword('signupPassword', this)">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+                <span class="field-line"></span>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="signupConfirm">
+                <i class="fa-solid fa-shield-halved"></i> Confirm Password
+              </label>
+              <div class="field-wrap">
+                <input type="password" id="signupConfirm" class="field-input"
+                       placeholder="••••••••••••" autocomplete="new-password">
+                <button type="button" class="eye-toggle" aria-label="Show password"
+                        onclick="togglePassword('signupConfirm', this)">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+                <span class="field-line"></span>
+              </div>
+            </div>
+
+            <button type="submit" class="cta-btn"
+                    onclick="window.location.href='index.html'; return false;">
+              <span class="btn-bg"></span>
+              <span class="btn-content">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Create Account</span>
+              </span>
+              <span class="btn-shine"></span>
+            </button>
+
+          </form>
+
+          <p class="switch-text">
+            Already a player?
+            <button type="button" class="switch-btn" onclick="switchToLogin()">Sign In</button>
+          </p>
+        </div>
+
+      </div><!-- /slider-wrap -->
+      </div><!-- /slider-clip -->
+
+    </div><!-- /panel -->
+  </div><!-- /scene -->
+
+  <script src="login.js"></script>
+</body>
+</html>

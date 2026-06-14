@@ -1,0 +1,668 @@
+/* ============================================================
+   JARCADE — UI ENHANCEMENTS
+   Premium gaming header, cursor, animations & nav polish
+   ============================================================ */
+
+/* =============================================
+   GOOGLE FONTS — Orbitron for gaming flair
+   ============================================= */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+/* Cursor removed per user request */
+
+/* =============================================
+   PAGE ENTRANCE ANIMATION
+   ============================================= */
+@keyframes pageEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main {
+  animation: pageEntrance 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* =============================================
+   SITE HEADER (new, replaces .top-text)
+   ============================================= */
+#site-header {
+  position: fixed;
+  top: 0;
+  left: 225px; /* sidebar width */
+  right: 0;
+  z-index: 150;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  background: rgba(6, 6, 12, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow:
+    0 1px 0 0 rgba(255, 204, 0, 0.18),
+    0 1px 0 0 rgba(0, 123, 255, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.6);
+  animation: slideDown 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+  transition: background 0.3s ease;
+}
+
+#site-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 204, 0, 0.5) 30%,
+    rgba(0, 123, 255, 0.4) 70%,
+    transparent 100%);
+  pointer-events: none;
+}
+
+/* Mobile: header starts at left:0 */
+@media only screen and (max-width: 850px) {
+  #site-header {
+    left: 0;
+    height: 56px;
+  }
+}
+
+
+/* ---- Search bar in header ---- */
+.header-search-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+  background: rgba(17, 17, 17, 0.9); /* Blend as one with the box inside it */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 0 16px;
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.header-search-wrap:focus-within {
+  background: #1a1a1a;
+  border-color: #ffcc00;
+  box-shadow:
+    0 0 20px rgba(255, 204, 0, 0.15),
+    inset 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.header-search-icon {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.85em;
+  pointer-events: none;
+  transition: color 0.3s ease;
+  margin-right: 8px;
+}
+
+.header-search-wrap:focus-within .header-search-icon {
+  color: #ffcc00;
+}
+
+.header-search-input {
+  width: 100%;
+  background: transparent !important;
+  border: none !important;
+  padding: 9px 0 !important;
+  color: white;
+  font-size: 0.875rem;
+  font-family: 'Inter', Arial, sans-serif;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.header-search-wrap .home-search-input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 9px 0 !important;
+  border-radius: 0 !important;
+  max-width: none !important;
+  transform: none !important;
+}
+
+.header-search-wrap .home-search-input:focus {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Mobile: search expands full-width */
+@media only screen and (max-width: 850px) {
+  .header-search-wrap {
+    max-width: none;
+    flex: 1;
+    margin: 0;
+  }
+}
+
+/* Collapse search to icon on very small screens */
+@media only screen and (max-width: 430px) {
+  .header-search-wrap {
+    display: none;
+  }
+  .header-search-wrap.expanded {
+    display: flex;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    padding: 8px 12px;
+    background: rgba(6, 6, 12, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 204, 0, 0.2);
+    z-index: 200;
+  }
+}
+
+/* ---- Header actions (right side) ---- */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Notification bell */
+.header-notif-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0;
+}
+
+.header-notif-btn:hover {
+  background: rgba(255, 204, 0, 0.12);
+  border-color: rgba(255, 204, 0, 0.5);
+  color: #ffcc00;
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(255, 204, 0, 0.2);
+}
+
+.header-notif-btn .notif-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff4444;
+  border: 1.5px solid #06060c;
+  animation: pulseBadge 1.8s ease-in-out infinite;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.6); }
+  50% { box-shadow: 0 0 0 4px rgba(255, 68, 68, 0); }
+}
+
+/* Search toggle on mobile (< 430px) */
+.header-search-toggle {
+  display: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.88em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0;
+}
+
+@media only screen and (max-width: 430px) {
+  .header-search-toggle {
+    display: flex;
+  }
+}
+
+/* Login button */
+.header-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ffcc00, #ff8800);
+  border: none;
+  color: #000;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.header-login-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.header-login-btn:hover::before {
+  opacity: 1;
+}
+
+.header-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 204, 0, 0.45);
+}
+
+.header-login-btn:active {
+  transform: scale(0.96);
+}
+
+/* Logged-in state: profile avatar circle */
+.header-avatar {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #007bff, #00c8a8);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.88em;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  text-transform: uppercase;
+}
+
+.header-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+/* Login state toggling */
+body[data-logged-in="true"] .header-login-btn { display: none; }
+body[data-logged-in="true"] .header-avatar { display: flex; }
+body:not([data-logged-in="true"]) .header-avatar { display: none; }
+body:not([data-logged-in="true"]) .header-notif-btn { display: none; }
+
+/* ---- Sidebar Login Link ---- */
+.sidebar-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 12px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  background: none;
+  border: none;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.sidebar-login-btn i {
+  font-size: 1.1em;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar-login-btn span {
+  font-size: 0.95em;
+}
+
+.sidebar-login-btn:hover {
+  background: linear-gradient(90deg, rgba(255, 204, 0, 0.15), rgba(0, 123, 255, 0.1));
+  transform: translateX(5px);
+  color: #ffcc00;
+}
+
+/* Login vs logout visibility */
+.sidebar-logout-btn { display: none; }
+body[data-logged-in="true"] .sidebar-login-link { display: none; }
+body[data-logged-in="true"] .sidebar-logout-btn { display: flex; }
+
+/* Push .main down to account for fixed header */
+.main-with-header {
+  padding-top: 60px;
+}
+
+@media only screen and (max-width: 850px) {
+  .main-with-header {
+    padding-top: 56px;
+  }
+}
+
+/* =============================================
+   SIDEBAR NAVIGATION ENHANCEMENTS
+   ============================================= */
+
+/* Returned to default */
+
+/* Stagger entrance animation for nav items on mobile open */
+.side-bar.visible .sc {
+  animation: navItemEntrance 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.side-bar.visible .sc:nth-child(1) { animation-delay: 0.04s; }
+.side-bar.visible .sc:nth-child(2) { animation-delay: 0.08s; }
+.side-bar.visible .sc:nth-child(3) { animation-delay: 0.12s; }
+.side-bar.visible .sc:nth-child(4) { animation-delay: 0.16s; }
+.side-bar.visible .sc:nth-child(5) { animation-delay: 0.20s; }
+
+@keyframes navItemEntrance {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* =============================================
+   HAMBURGER / MENU BUTTON — Reduced size
+   ============================================= */
+.menu {
+  width: 44px;
+  height: 44px;
+}
+
+.menu i {
+  font-size: 1.15em !important;
+}
+
+/* =============================================
+   GAME CARD — Enhanced animations
+   ============================================= */
+@keyframes cardGlowPulse {
+  0%, 100% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 rgba(255, 204, 0, 0); }
+  50% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 18px rgba(255, 204, 0, 0.18); }
+}
+
+.game:hover:not(:has(.card-rating:hover)) {
+  animation: cardGlowPulse 1.8s ease-in-out infinite;
+}
+
+/* Click ripple on game cards */
+.game {
+  position: relative;
+  overflow: hidden;
+}
+
+.game .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 204, 0, 0.22);
+  transform: scale(0);
+  animation: rippleEffect 0.5s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* =============================================
+   GLITCH PLAY BUTTON
+   ============================================= */
+.info-play-btn {
+  width: 100%;
+  background: #ffcc00;
+  color: #000;
+  font-weight: 900;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: auto;
+  flex-shrink: 0;
+  position: relative;
+  overflow: visible;
+}
+
+.info-play-btn::after {
+  --move1: inset(50% 50% 50% 50%);
+  --move2: inset(31% 0 40% 0);
+  --move3: inset(39% 0 15% 0);
+  --move4: inset(45% 0 40% 0);
+  --move5: inset(45% 0 6% 0);
+  --move6: inset(14% 0 61% 0);
+  clip-path: var(--move1);
+  content: 'PLAY NOW';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: white;
+  pointer-events: none;
+}
+
+.info-play-btn:hover {
+  background: transparent !important;
+  color: transparent !important;
+  border: 1px solid rgb(0, 255, 213);
+  box-shadow: 0px 10px 10px -10px rgb(0, 255, 213);
+}
+
+.info-play-btn:hover i {
+  color: transparent !important;
+}
+
+.info-play-btn:hover::after {
+  animation: glitch_4011 1s;
+  animation-timing-function: steps(2, end);
+  text-shadow: -3px -3px 0px #1df2f0, 3px 3px 0px #E94BE8;
+  border: 3px solid rgb(0, 255, 213);
+  border-radius: 8px;
+}
+
+@keyframes glitch_4011 {
+  0% { clip-path: var(--move1); transform: translate(0px,-10px); }
+  10% { clip-path: var(--move2); transform: translate(-10px,10px); }
+  20% { clip-path: var(--move3); transform: translate(10px,0px); }
+  30% { clip-path: var(--move4); transform: translate(-10px,10px); }
+  40% { clip-path: var(--move5); transform: translate(10px,-10px); }
+  50% { clip-path: var(--move6); transform: translate(-10px,10px); }
+  60% { clip-path: var(--move1); transform: translate(10px,-10px); }
+  70% { clip-path: var(--move3); transform: translate(-10px,10px); }
+  80% { clip-path: var(--move2); transform: translate(10px,-10px); }
+  90% { clip-path: var(--move4); transform: translate(-10px,10px); }
+  100% { clip-path: var(--move1); transform: translate(0); }
+}
+
+/* Platform card enhanced glow */
+.platform-card:hover {
+  border-color: #ffcc00 !important;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 204, 0, 0.25),
+    inset 0 0 20px rgba(255, 204, 0, 0.05) !important;
+}
+
+/* =============================================
+   SEARCH BAR FOCUS ANIMATIONS
+   ============================================= */
+.home-search-input:focus {
+  transform: scale(1.02);
+  box-shadow:
+    0 0 0 3px rgba(255, 204, 0, 0.15),
+    0 0 30px rgba(255, 204, 0, 0.12),
+    inset 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* =============================================
+   CATEGORY ITEM FLOAT ON AUTOSCROLL
+   ============================================= */
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* =============================================
+   HERO SLIDESHOW ENTRANCE
+   ============================================= */
+@keyframes slideshowFadeIn {
+  from { opacity: 0; filter: brightness(0.6); }
+  to { opacity: 1; filter: brightness(1); }
+}
+
+.slideshow-container {
+  animation: slideshowFadeIn 0.8s ease both;
+}
+
+/* Removed neon flicker per user request */
+
+/* =============================================
+   SMOOTH PAGE TRANSITIONS (anchor links)
+   ============================================= */
+html {
+  scroll-behavior: smooth;
+}
+
+/* =============================================
+   FOOTER ENHANCEMENT
+   ============================================= */
+.site-footer {
+  border-top: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.3), rgba(0, 123, 255, 0.3), transparent);
+  pointer-events: none;
+}
+
+/* =============================================
+   BACK TO TOP BUTTON — Enhanced
+   ============================================= */
+.back-to-top-btn:hover {
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* =============================================
+   MODAL OPEN BODY LOCK
+   ============================================= */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* =============================================
+   RESPONSIVE — Max-width for ultra-wide monitors
+   ============================================= */
+@media only screen and (min-width: 1600px) {
+  .header-search-wrap {
+    max-width: 640px;
+  }
+}
+
+/* =============================================
+   FAVOURITE STAR — Enhanced micro-interaction
+   ============================================= */
+.favourite-icon:hover {
+  filter: drop-shadow(0 0 6px rgba(0, 123, 255, 0.6));
+}
+
+/* =============================================
+   NOTIFICATION — brand colour tweak
+   ============================================= */
+.notification {
+  background: linear-gradient(135deg, #1a1a2e, #007bff);
+  border: 1px solid rgba(0, 123, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+}
+
+/* =============================================
+   SIDEBAR — RESTORED GRADIENT + HOVER FILL
+   ============================================= */
+.side-bar {
+  background: linear-gradient(to bottom, #f5e800, #1a00c8) !important;
+  border-right: none;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Raising-fill animation on sidebar nav buttons */
+.sc {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.sc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.sc:hover::before {
+  transform: translateY(0);
+}
+
+/* Keep the active state on top of the fill */
+.sc.active::before {
+  display: none;
+}

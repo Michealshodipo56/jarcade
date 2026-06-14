@@ -9,15 +9,22 @@
   <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="ui-enhancements.css">
   <script src="main.js" defer></script>
   <style>
     .fav-title {
       font-size: 2em;
-      margin: 1em;
+      margin: 1.2em 0 0.5em;
       text-align: center;
-      color: #007bff;
+      background: linear-gradient(135deg, #ffcc00, #007bff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
     .game-grid {
       display: flex;
@@ -36,9 +43,41 @@
 </head>
 
 <body>
-  <div class="menu">
-    <i class="fa-solid fa-bars" style="color: rgb(255, 255, 255);"></i>
-  </div>
+
+
+  <!-- ===== SITE HEADER ===== -->
+  <header id="site-header">
+    <div class="menu" id="menuBtn">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    <div class="header-search-wrap" id="headerSearchWrap">
+      <i class="fa-solid fa-magnifying-glass header-search-icon"></i>
+      <input
+        id="headerSearchInput"
+        class="header-search-input home-search-input"
+        type="search"
+        placeholder="Search games..."
+        aria-label="Search games"
+        autocomplete="off"
+      >
+    </div>
+    <div class="header-actions">
+      <button class="header-search-toggle" id="headerSearchToggle" aria-label="Toggle search" type="button">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <button class="header-notif-btn" id="headerNotifBtn" aria-label="Notifications" type="button">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-badge"></span>
+      </button>
+      <button class="header-login-btn" id="headerLoginBtn" onclick="toggleLogin()" type="button" aria-label="Login">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span>Login</span>
+      </button>
+      <div class="header-avatar" id="headerAvatar" onclick="toggleLogin()" role="button" aria-label="Logout" tabindex="0" title="Click to logout">
+        <span>JA</span>
+      </div>
+    </div>
+  </header>
 
   <!-- Notification Popup -->
   <div id="notification" class="notification"></div>
@@ -62,14 +101,17 @@
           <a href="games.html" class="sc">
             <i class="fa-solid fa-gamepad"></i> <span>Games</span>
           </a>
-          <a href="favourite.html" class="sc active">
-            <i class="fa-solid fa-heart"></i> <span>Favourite</span>
-          </a>
           <a href="test.html" class="sc">
             <i class="fa-solid fa-circle-question"></i> <span>Help</span>
           </a>
+          <a href="" class="sc">
+            <i class="fa-solid fa-gear"></i> <span>Settings</span>
+          </a>
+          <a href="try.html" class="sc">
+            <i class="fa-solid fa-upload"></i> <span>Upload Game</span>
+          </a>
         </nav>
-
+        <hr class="hr hr-bottom">
         <nav class="section section-secondary">
           <a target="_blank" href="https://www.facebook.com/profile.php?id=61577225696695" class="sc">
             <i class="fa-solid fa-users"></i> <span>Community</span>
@@ -77,14 +119,18 @@
           <a href="" class="sc">
             <i class="fa-solid fa-rss"></i> <span>News</span>
           </a>
-          <a href="" class="sc">
-            <i class="fa-solid fa-share-nodes"></i> <span>Social</span>
-          </a>
+          <!-- Login/Logout in sidebar -->
+          <button class="sidebar-login-btn sidebar-login-link sc" onclick="toggleLogin()" type="button" aria-label="Login">
+            <i class="fa-solid fa-right-to-bracket"></i> <span>Login</span>
+          </button>
+          <button class="sidebar-login-btn sidebar-logout-btn sc" onclick="toggleLogin()" type="button" aria-label="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+          </button>
         </nav>
       </div>
     </div>
 
-    <div class="main">
+    <div class="main main-with-header">
       <div class="fav-title">Your Favourite Games</div>
       <div id="favourite-list" class="game-grid">
         <!-- Favourites will be loaded here -->

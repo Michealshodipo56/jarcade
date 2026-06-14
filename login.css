@@ -1,0 +1,537 @@
+/* ============================================================
+   JARCADE LOGIN — login.css
+   ============================================================ */
+
+@font-face {
+  font-family: 'Dynamix';
+  src: url('dynamix/Dynamix.ttf') format('truetype');
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold:   #ffcc00;
+  --blue:   #007bff;
+  --cyan:   #00c8ff;
+  --purple: #7b2fff;
+  --green:  #00ff9d;
+  --bg:     #03030a;
+  --panel-bg: rgba(8, 8, 20, 0.82);
+  --panel-border: rgba(0, 200, 255, 0.18);
+  --radius: 20px;
+  --panel-w: 460px;
+}
+
+/* ── BASE ── */
+html { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── PARTICLE CANVAS ── */
+#particleCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── GRID OVERLAY ── */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* ── AMBIENT ORBS ── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(80px);
+  will-change: transform;
+  transform: translateZ(0);
+}
+.orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,204,0,0.12) 0%, transparent 70%);
+  top: -150px; left: -150px;
+  animation: orbFloat 12s ease-in-out infinite;
+}
+.orb-2 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,123,255,0.1) 0%, transparent 70%);
+  bottom: -200px; right: -200px;
+  animation: orbFloat 16s ease-in-out infinite reverse;
+}
+.orb-3 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(123,47,255,0.09) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) translateZ(0);
+  animation: orbPulse 8s ease-in-out infinite;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) translateZ(0); }
+  50%       { transform: translate(30px, 20px) translateZ(0); }
+}
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1) translateZ(0); }
+  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.15) translateZ(0); }
+}
+
+/* ── CONSTRUCT SVG ── */
+#constructSvg {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+#constructRect {
+  stroke-dasharray: 0;
+  stroke-dashoffset: 0;
+}
+
+/* ── SCENE / 3D TILT ── */
+.scene {
+  position: relative;
+  z-index: 20;
+  perspective: 1200px;
+  width: var(--panel-w);
+  max-width: 96vw;
+}
+
+/* ── PANEL ── */
+.panel {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 28px 36px 24px;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(0deg);
+  transition: box-shadow 0.4s ease;
+  will-change: transform;
+  opacity: 0;
+  /* overflow clipped per-section via .slider-clip, not here,
+     so corner accents ::before/::after aren't cut off */
+  overflow: hidden;
+
+  box-shadow:
+    0 0 0 1px rgba(0,200,255,0.08),
+    0 30px 80px rgba(0,0,0,0.7),
+    0 0 60px rgba(0,123,255,0.08);
+}
+
+/* Animated corner accents */
+.panel::before,
+.panel::after {
+  content: '';
+  position: absolute;
+  width: 28px; height: 28px;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.panel::before {
+  top: -1px; left: -1px;
+  border-top: 2px solid var(--gold);
+  border-left: 2px solid var(--gold);
+  border-radius: var(--radius) 0 0 0;
+  box-shadow: -2px -2px 8px rgba(255,204,0,0.4);
+}
+.panel::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 2px solid var(--cyan);
+  border-right: 2px solid var(--cyan);
+  border-radius: 0 0 var(--radius) 0;
+  box-shadow: 2px 2px 8px rgba(0,200,255,0.4);
+}
+
+/* Floating animation removed per user request */
+
+/* ── LOGO ── */
+.panel-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 14px;
+  opacity: 0; /* animated in by GSAP */
+}
+.panel-logo a {
+  display: block;
+  text-decoration: none;
+}
+.logo-img {
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(255,204,0,0.35));
+  transition: filter 0.3s ease;
+}
+.logo-img:hover {
+  filter: drop-shadow(0 0 20px rgba(255,204,0,0.65));
+}
+.logo-tagline {
+  margin-top: 4px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+}
+
+/* ── SLIDER ── */
+.slider-clip {
+  overflow: hidden;
+  width: 100%;
+}
+
+.slider-wrap {
+  display: flex;
+  width: 200%;
+  transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.slider-wrap.show-signup {
+  transform: translateX(-50%);
+}
+
+.form-face {
+  width: 50%;
+  flex-shrink: 0;
+  min-width: 0; /* prevent bleed */
+}
+
+/* ── FORM HEADING ── */
+.form-heading {
+  text-align: center;
+  margin-bottom: 16px;
+  opacity: 0;
+}
+.heading-sub {
+  display: block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 3.5px;
+  color: var(--cyan);
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0,200,255,0.5);
+}
+
+/* ── FIELD GROUP ── */
+.field-group {
+  margin-bottom: 14px;
+  opacity: 0;
+}
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+  transition: color 0.3s;
+}
+.field-label i {
+  font-size: 0.8em;
+  color: var(--cyan);
+}
+.field-wrap {
+  position: relative;
+}
+.field-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 13px 46px 13px 16px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.field-input::placeholder { color: rgba(255,255,255,0.2); }
+.field-input:focus {
+  background: rgba(0,200,255,0.05);
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(0,200,255,0.1), 0 0 20px rgba(0,200,255,0.08);
+}
+.field-group:focus-within .field-label {
+  color: var(--cyan);
+}
+
+/* Animated bottom line */
+.field-line {
+  position: absolute;
+  bottom: 0; left: 8px; right: 8px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), var(--cyan));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  border-radius: 1px;
+  pointer-events: none;
+}
+.field-input:focus ~ .field-line {
+  transform: scaleX(1);
+}
+
+/* Eye toggle */
+.eye-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.95em;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.eye-toggle:hover { color: var(--cyan); }
+
+/* ── OPTIONS ROW ── */
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  opacity: 0;
+}
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  user-select: none;
+}
+.remember-check { display: none; }
+.custom-check {
+  width: 16px; height: 16px;
+  border: 1.5px solid rgba(0,200,255,0.4);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+.remember-check:checked + .custom-check {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 8px rgba(0,200,255,0.4);
+}
+.remember-check:checked + .custom-check::after {
+  content: '';
+  width: 5px; height: 9px;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  transform: rotate(45deg) translate(-1px,-1px);
+  display: block;
+}
+.forgot-link {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  transition: color 0.2s;
+  letter-spacing: 0.3px;
+}
+.forgot-link:hover { color: var(--gold); }
+
+/* ── CTA BUTTON ── */
+.cta-btn {
+  position: relative;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 24px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #000;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  /* GPU layer */
+  will-change: transform;
+  transform: translateZ(0);
+}
+.btn-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--gold) 0%, #ff9900 50%, var(--gold) 100%);
+  background-size: 200% 200%;
+  transition: background-position 0.4s ease;
+}
+.cta-btn:hover .btn-bg {
+  background-position: 100% 100%;
+}
+.btn-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-content i { font-size: 1.05em; }
+.btn-shine {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+  transform: skewX(-20deg);
+  transition: left 0s;
+  pointer-events: none;
+}
+.cta-btn:hover .btn-shine {
+  left: 150%;
+  transition: left 0.55s ease;
+}
+.cta-btn:hover {
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 0 8px 28px rgba(255,204,0,0.45), 0 2px 8px rgba(0,0,0,0.4);
+}
+.cta-btn:active {
+  transform: scale(0.97) translateZ(0);
+}
+
+/* ── SWITCH TEXT ── */
+.switch-text {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.35);
+  opacity: 0;
+}
+.switch-btn {
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color 0.2s, text-shadow 0.2s;
+  font-family: inherit;
+}
+.switch-btn:hover {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255,204,0,0.6);
+}
+
+/* ── SIGNUP FACE — hidden until switch animation ── */
+.form-face--signup .field-group,
+.form-face--signup .form-heading,
+.form-face--signup .cta-btn,
+.form-face--signup .switch-text {
+  opacity: 0;
+}
+
+/* ── SIGNUP FACE extra spacing for 4 fields ── */
+.form-face--signup .field-group {
+  margin-bottom: 14px;
+}
+.form-face--signup .auth-form {
+  margin-bottom: 0;
+}
+
+/* ── SCROLLABLE SIGNUP on small screens ── */
+@media (max-height: 750px) {
+  .panel { padding: 20px 28px 18px; }
+  .panel-logo { margin-bottom: 10px; }
+  .logo-img { width: 110px; }
+  .form-heading { margin-bottom: 12px; }
+  .field-group { margin-bottom: 10px; }
+  .form-options { margin-bottom: 12px; }
+  .field-input { padding: 10px 44px 10px 14px; }
+  .cta-btn { padding: 12px 20px; }
+  .switch-text { margin-top: 10px; }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 520px) {
+  :root { --panel-w: 100vw; }
+
+  html, body {
+    height: auto;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .scene {
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+  }
+
+  .panel {
+    padding: 28px 20px 24px;
+    border-radius: 18px;
+    width: calc(100vw - 32px);
+    margin: 0 auto;
+    /* Neon glow border fallback — replaces SVG trace on mobile */
+    border: 1px solid rgba(0,200,255,0.5);
+    box-shadow:
+      0 0 0 1px rgba(0,200,255,0.15),
+      0 0 20px rgba(0,200,255,0.25),
+      0 0 40px rgba(0,200,255,0.1),
+      0 20px 60px rgba(0,0,0,0.8);
+    animation: mobileNeonPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes mobileNeonPulse {
+    0%, 100% {
+      border-color: rgba(0,200,255,0.5);
+      box-shadow: 0 0 0 1px rgba(0,200,255,0.15), 0 0 20px rgba(0,200,255,0.25), 0 0 40px rgba(0,200,255,0.1), 0 20px 60px rgba(0,0,0,0.8);
+    }
+    50% {
+      border-color: rgba(255,204,0,0.5);
+      box-shadow: 0 0 0 1px rgba(255,204,0,0.15), 0 0 20px rgba(255,204,0,0.25), 0 0 40px rgba(255,204,0,0.1), 0 20px 60px rgba(0,0,0,0.8);
+    }
+  }
+
+  /* disable floating — conflicts with content-height layout */
+  .panel.floating { animation: mobileNeonPulse 3s ease-in-out infinite !important; }
+
+  .panel::before, .panel::after { display: none; }
+  #constructSvg { display: none; }
+  .field-input { padding: 12px 44px 12px 14px; font-size: 0.88rem; }
+  .cta-btn { padding: 13px 20px; }
+  .logo-img { width: 130px; }
+}
