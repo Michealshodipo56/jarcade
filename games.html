@@ -231,37 +231,52 @@
     }
 
     .back-to-top-wrap {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0 28px;
+      display: contents;
     }
 
     .back-to-top-btn {
-      display: inline-flex;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      padding: 0;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.06);
-      color: #fff;
-      border-radius: 999px;
-      padding: 10px 22px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      justify-content: center;
+      font-size: 1.35rem;
+      background: rgba(18, 18, 18, 0.9);
+      border: 2px solid #ffcc00;
+      color: #ffcc00;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
       cursor: pointer;
-      transition: all 0.22s ease;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.8);
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+    }
+
+    .back-to-top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
     }
 
     .back-to-top-btn:hover {
-      border-color: rgba(255, 204, 0, 0.8);
-      background: rgba(255, 204, 0, 0.12);
-      color: #ffcc00;
-      transform: translateY(-2px);
+      background: #ffcc00;
+      color: #000;
+      border-color: #ffcc00;
+      transform: scale(1.08);
     }
 
     .back-to-top-btn i {
-      font-size: 0.9em;
+      font-size: 1em;
+    }
+
+    .back-to-top-btn .back-to-top-text {
+      display: none;
     }
 
     @media only screen and (max-width: 850px) {
@@ -339,49 +354,12 @@
         height: 108px;
       }
 
-      /* Round floating back to top button on mobile */
-      .back-to-top-wrap {
-        display: none;
-      }
-
       .back-to-top-btn {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        z-index: 999;
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.35rem;
-        background: rgba(18, 18, 18, 0.9);
-        border: 2px solid #ffcc00;
-        color: #ffcc00;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-        cursor: pointer;
-        opacity: 0;
-        visibility: hidden;
-        transform: scale(0.8);
-        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-
-      .back-to-top-btn.visible {
-        opacity: 1;
-        visibility: visible;
-        transform: scale(1);
-      }
-
-      .back-to-top-btn:hover {
-        background: #ffcc00;
-        color: #000;
-        transform: scale(1.1);
-      }
-
-      .back-to-top-btn .back-to-top-text {
-        display: none;
+        bottom: 20px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
       }
     }
 
@@ -1179,18 +1157,16 @@
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
-        // Toggle visibility on scroll for mobile floating button
-        window.addEventListener("scroll", () => {
-          if (window.innerWidth <= 850) {
-            if (window.scrollY > 300) {
-              backToTopBtn.classList.add("visible");
-            } else {
-              backToTopBtn.classList.remove("visible");
-            }
+        const updateBackToTopVisibility = () => {
+          if (window.scrollY > 300) {
+            backToTopBtn.classList.add("visible");
           } else {
             backToTopBtn.classList.remove("visible");
           }
-        });
+        };
+
+        window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+        updateBackToTopVisibility();
       }
 
       // Scroll to the section specified in the URL hash (e.g. games.html#section-action)

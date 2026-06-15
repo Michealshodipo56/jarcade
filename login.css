@@ -166,6 +166,65 @@ body {
   box-shadow: 2px 2px 8px rgba(0,200,255,0.4);
 }
 
+/* ── ANIMATED NEON BORDER TRAIL ──
+   A thin glowing comet of light that loops smoothly around the card border.
+   The bright head fades into a trailing energy tail (via the conic-gradient
+   alpha falloff), while a slow hue shift cycles cyan → blue → purple.        */
+@property --trail-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 2px;                 /* ring thickness */
+  border-radius: var(--radius);
+  pointer-events: none;
+  /* Comet: crisp bright head leads (at 0deg/360deg wrap), fade trails BEHIND
+     it on the counter-clockwise side so it reads as a fading energy tail.    */
+  background: conic-gradient(from var(--trail-angle),
+      rgba(224, 255, 255, 0.95)   0deg,
+      rgba(0, 200, 255, 0.0)      6deg,
+      rgba(0, 123, 255, 0.0)    278deg,
+      rgba(123, 47, 255, 0.22)  318deg,
+      rgba(0, 200, 255, 0.55)   346deg,
+      rgba(224, 255, 255, 0.95) 360deg);
+  /* Carve the fill down to a thin border ring */
+  -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+          mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  /* Soft halo so the trail reads as glowing energy, not a hard line */
+  filter:
+      drop-shadow(0 0 4px rgba(0, 200, 255, 0.65))
+      drop-shadow(0 0 9px rgba(123, 47, 255, 0.40));
+  animation:
+      trailSpin 9s linear infinite,
+      trailHue 11s ease-in-out infinite alternate;
+  will-change: --trail-angle, filter;
+}
+
+@keyframes trailSpin {
+  to { --trail-angle: 360deg; }
+}
+
+/* Gentle oscillation keeps the glow within the cyan → blue → purple band */
+@keyframes trailHue {
+  0%   { filter: drop-shadow(0 0 4px rgba(0,200,255,0.65)) drop-shadow(0 0 9px rgba(123,47,255,0.40)) hue-rotate(-12deg); }
+  100% { filter: drop-shadow(0 0 4px rgba(0,200,255,0.65)) drop-shadow(0 0 9px rgba(123,47,255,0.40)) hue-rotate(64deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .border-trail { animation: none; }
+}
+
 /* Floating animation removed per user request */
 
 /* ── LOGO ── */
@@ -427,6 +486,73 @@ body {
   transform: scale(0.97) translateZ(0);
 }
 
+/* ── AUTH DIVIDER ── */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 12px;
+  opacity: 0;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+}
+.auth-divider span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+}
+
+/* ── GOOGLE BUTTON ── */
+.google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.88);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    color 0.25s ease;
+  opacity: 0;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.google-btn i {
+  font-size: 1rem;
+  color: #ea4335;
+}
+.google-btn:hover {
+  transform: translateY(-1px) translateZ(0);
+  border-color: rgba(0,200,255,0.35);
+  background: rgba(255,255,255,0.07);
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.35),
+    0 0 18px rgba(0,200,255,0.12);
+  color: #fff;
+}
+.google-btn:active {
+  transform: scale(0.98) translateZ(0);
+}
+
 /* ── SWITCH TEXT ── */
 .switch-text {
   text-align: center;
@@ -455,6 +581,8 @@ body {
 .form-face--signup .field-group,
 .form-face--signup .form-heading,
 .form-face--signup .cta-btn,
+.form-face--signup .auth-divider,
+.form-face--signup .google-btn,
 .form-face--signup .switch-text {
   opacity: 0;
 }

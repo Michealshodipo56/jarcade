@@ -23,6 +23,8 @@
   const elField2  = document.getElementById('elField2');
   const elOptions = document.getElementById('elOptions');
   const elBtn     = document.getElementById('elBtn');
+  const elDivider = document.getElementById('elDivider');
+  const elGoogleBtn = document.getElementById('elGoogleBtn');
   const elSwitch  = document.getElementById('elSwitch');
 
   /* ============================================================
@@ -106,7 +108,7 @@
     // Panel is already visible via CSS neon border — just make it opacity 1 fast
     const tl = gsap.timeline();
 
-    gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn], {
+    gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn, elDivider, elGoogleBtn], {
       y: 14,
       filter: 'blur(5px)'
     });
@@ -123,8 +125,10 @@
       .to(elOptions, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.28, ease: 'power2.out' }, '-=0.1')
       .to(elBtn, {
         opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.32, ease: 'back.out(1.4)',
-        onComplete: () => gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn], { clearProps: 'filter,y' })
+        onComplete: () => gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn, elDivider, elGoogleBtn], { clearProps: 'filter,y' })
       }, '-=0.08')
+      .to(elDivider, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.24, ease: 'power2.out' }, '-=0.12')
+      .to(elGoogleBtn, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.28, ease: 'power2.out' }, '-=0.18')
       .to(elSwitch, { opacity: 1, duration: 0.25, ease: 'power1.out' }, '-=0.05');
   }
 
@@ -154,13 +158,15 @@
       .to(elOptions, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.32, ease: 'power2.out' }, '-=0.1')
       .to(elBtn, {
         opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.38, ease: 'back.out(1.4)',
-        onComplete: () => gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn], { clearProps: 'filter,y' })
+        onComplete: () => gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn, elDivider, elGoogleBtn], { clearProps: 'filter,y' })
       }, '-=0.05')
+      .to(elDivider, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.28, ease: 'power2.out' }, '-=0.12')
+      .to(elGoogleBtn, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.32, ease: 'power2.out' }, '-=0.18')
       .to(elSwitch, { opacity: 1, duration: 0.3, ease: 'power1.out' }, '-=0.05')
       // Start floating animation on the panel — removed per user request
       .add(() => { initTiltEffect(); }, '+=0.1');
 
-    gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn], {
+    gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn, elDivider, elGoogleBtn], {
       y: 18, filter: 'blur(6px)'
     });
     gsap.set(elSwitch, { y: 0, filter: 'blur(0px)' });
@@ -233,7 +239,7 @@
 
     // Animate signup fields in
     const signupFace = document.getElementById('signupFace');
-    const fields = signupFace.querySelectorAll('.field-group, .form-heading, .cta-btn, .switch-text');
+    const fields = signupFace.querySelectorAll('.field-group, .form-heading, .cta-btn, .auth-divider, .google-btn, .switch-text');
     gsap.fromTo(fields,
       { opacity: 0, y: 14, filter: 'blur(4px)' },
       { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.4, stagger: 0.07, ease: 'power2.out', delay: 0.35 }
@@ -244,6 +250,10 @@
     if (!isSignup) return;
     isSignup = false;
     sliderWrap.classList.remove('show-signup');
+  };
+
+  window.signInWithGoogle = function () {
+    window.location.href = 'index.html';
   };
 
 

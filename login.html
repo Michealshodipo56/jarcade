@@ -53,6 +53,9 @@
   <div class="scene" id="scene">
     <div class="panel" id="panel">
 
+      <!-- ── ANIMATED NEON BORDER TRAIL ── -->
+      <div class="border-trail" aria-hidden="true"></div>
+
       <!-- Logo -->
       <div class="panel-logo" id="elLogo">
         <a href="index.html">
@@ -116,6 +119,16 @@
                 <span>Enter JArcade</span>
               </span>
               <span class="btn-shine"></span>
+            </button>
+
+            <div class="auth-divider" id="elDivider" aria-hidden="true">
+              <span>or</span>
+            </div>
+
+            <button type="button" class="google-btn" id="elGoogleBtn"
+                    onclick="signInWithGoogle(); return false;">
+              <i class="fa-brands fa-google" aria-hidden="true"></i>
+              <span>Sign in with Google</span>
             </button>
 
           </form>
@@ -194,6 +207,16 @@
                 <span>Create Account</span>
               </span>
               <span class="btn-shine"></span>
+            </button>
+
+            <div class="auth-divider" aria-hidden="true">
+              <span>or</span>
+            </div>
+
+            <button type="button" class="google-btn"
+                    onclick="signInWithGoogle(); return false;">
+              <i class="fa-brands fa-google" aria-hidden="true"></i>
+              <span>Sign up with Google</span>
             </button>
 
           </form>
