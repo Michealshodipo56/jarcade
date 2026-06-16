@@ -908,30 +908,78 @@
     }
 
     /* ── search ────────────────────────────────────────────── */
-    function applySearch() {
+    // Tracks whether we've started a full preload for search
+    let searchPreloadDone = false;
+
+    async function preloadAllCategories() {
+      if (searchPreloadDone) return;
+      searchPreloadDone = true;
+      await Promise.all(CATEGORY_META.map(m => loadCategory(m.key)));
+    }
+
+    async function applySearch() {
       const term = (document.getElementById("headerSearchInput").value || "").trim().toLowerCase();
       const activeFilter = document.querySelector(".games-dropdown-menu button.active-filter")?.dataset.filter || "all";
 
+      // No search term — restore normal lazy-loaded view
+      if (!term) {
+        document.querySelectorAll(".games-category-section").forEach(section => {
+          const key = section.dataset.categorySection;
+          const catMatch = activeFilter === "all" || key === activeFilter;
+          section.classList.toggle("hidden", !catMatch);
+          // Re-render sections that were in search mode (clear search-injected cards)
+          const state = sectionState[key];
+          if (state && catalogCache[key] && section.dataset.searchMode) {
+            delete section.dataset.searchMode;
+            // Restore to base view
+            const grid = section.querySelector(".cards-grid");
+            while (grid.childElementCount > state.visible) grid.lastElementChild.remove();
+            renderSection(CATEGORY_META.find(m => m.key === key), false);
+          }
+        });
+        return;
+      }
+
+      // Load all categories so search works across the full catalog
+      await preloadAllCategories();
+
       document.querySelectorAll(".games-category-section").forEach(section => {
         const key = section.dataset.categorySection;
+
+        // Category filter still applies
         if (activeFilter !== "all" && key !== activeFilter) {
           section.classList.add("hidden");
           return;
         }
-        section.classList.remove("hidden");
 
-        if (!term) {
-          section.querySelectorAll(".game-card").forEach(c => (c.style.display = ""));
+        const meta    = CATEGORY_META.find(m => m.key === key);
+        const allGames = catalogCache[key] || [];
+
+        // Filter full game list by search term
+        const matched = allGames.filter(g => g.n.toLowerCase().includes(term));
+
+        if (matched.length === 0) {
+          section.classList.add("hidden");
           return;
         }
 
-        let visible = 0;
-        section.querySelectorAll(".game-card").forEach(card => {
-          const match = (card.dataset.name || "").toLowerCase().includes(term);
-          card.style.display = match ? "" : "none";
-          if (match) visible++;
-        });
-        section.classList.toggle("hidden", visible === 0);
+        section.classList.remove("hidden");
+        section.dataset.searchMode = "1";
+
+        const grid = section.querySelector(".cards-grid");
+
+        // Replace grid contents with only matching cards (no animation, for speed)
+        grid.innerHTML = "";
+        matched.forEach(g => grid.appendChild(createCatalogCard(g, meta, false, 0)));
+
+        // Hide see-more / see-less while in search mode
+        section.querySelector(".section-see-more-btn").classList.add("hidden");
+        section.querySelector(".section-see-less-btn").classList.add("hidden");
+        section.querySelector(".no-more-label")?.remove();
+
+        // Update count label
+        const countEl = section.querySelector(".cat-count");
+        if (countEl) countEl.textContent = "(" + matched.length.toLocaleString() + " match" + (matched.length !== 1 ? "es" : "") + ")";
       });
     }
 
@@ -994,7 +1042,7 @@
             state.visible = (catalogCache[filter] || []).length;
             renderSection(meta, false);
           }
-          applySearch();
+          await applySearch();
           const target = document.getElementById("section-" + filter);
           if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
         } else {
@@ -1006,7 +1054,7 @@
               if (catalogCache[meta.key]) renderSection(meta, false);
             }
           });
-          applySearch();
+          await applySearch();
         }
       });
 
@@ -1015,7 +1063,7 @@
       });
 
       categoryMenu.querySelector('[data-filter="all"]').classList.add("active-filter");
-      searchInput.addEventListener("input", applySearch);
+      searchInput.addEventListener("input", () => applySearch());
 
       // back-to-top
       const backToTopBtn = document.getElementById("backToTopBtn");
