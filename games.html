@@ -79,12 +79,14 @@
       position: absolute;
       top: calc(100% + 6px);
       left: 0;
-      min-width: 170px;
-      background: rgba(20, 20, 28, 0.95);
+      min-width: 200px;
+      background: rgba(20, 20, 28, 0.97);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 10px;
       z-index: 100;
       overflow: hidden;
+      max-height: 70vh;
+      overflow-y: auto;
     }
 
     .games-dropdown-menu.show {
@@ -652,6 +654,17 @@
       return Math.min(cols * INITIAL_ROWS, totalGames);
     }
 
+    /** Fisher-Yates shuffle – returns a new array, keeps "general" pinned last */
+    function shuffleCategories(arr) {
+      const pinned = arr.filter(m => m.key === "general");
+      const rest   = arr.filter(m => m.key !== "general");
+      for (let i = rest.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rest[i], rest[j]] = [rest[j], rest[i]];
+      }
+      return [...rest, ...pinned];
+    }
+
     /* ── per-category short descriptions (cycled by game index) ── */
     const CAT_DESCS = {
       racing:     ["Burn rubber in this classic mobile racer.", "High-speed thrills from the J2ME era.", "Rev up and race on retro mobile hardware.", "Drift, boost, and overtake in this vintage racer.", "Classic mobile racing action."],
@@ -807,16 +820,22 @@
       const container = document.getElementById("gamesSections");
       const menu      = document.getElementById("categoryMenu");
 
+      // Shuffle category order on every page load; General always last
+      const ordered = shuffleCategories(CATEGORY_META);
+      // Reorder the CATEGORY_META array in-place so all other loops stay consistent
+      CATEGORY_META.length = 0;
+      ordered.forEach(m => CATEGORY_META.push(m));
+
       const allOpt = document.createElement("button");
       allOpt.dataset.filter = "all";
-      allOpt.textContent = "All";
+      allOpt.innerHTML = '<i class="fa-solid fa-grip" style="margin-right:7px;opacity:.7"></i>All Categories';
       menu.appendChild(allOpt);
 
       CATEGORY_META.forEach(meta => {
-        // Dropdown option
+        // Dropdown option with icon
         const opt = document.createElement("button");
         opt.dataset.filter = meta.key;
-        opt.textContent = meta.label;
+        opt.innerHTML = `<i class="fa-solid ${meta.icon}" style="margin-right:8px;color:${meta.color};opacity:.9;width:16px;text-align:center"></i>${meta.label}`;
         menu.appendChild(opt);
 
         // Section
@@ -1020,7 +1039,12 @@
         categoryMenu.querySelectorAll("button").forEach(b => b.classList.remove("active-filter"));
         opt.classList.add("active-filter");
         const filter = opt.dataset.filter;
-        categoryBtn.innerHTML = escHtml(opt.textContent) + ' <i class="fa-solid fa-chevron-down" style="font-size:0.8em;"></i>';
+        const meta = CATEGORY_META.find(m => m.key === filter);
+        if (meta) {
+          categoryBtn.innerHTML = `<i class="fa-solid ${meta.icon}" style="margin-right:6px;color:${meta.color}"></i>${meta.label} <i class="fa-solid fa-chevron-down" style="font-size:0.7em;margin-left:4px"></i>`;
+        } else {
+          categoryBtn.innerHTML = '<i class="fa-solid fa-grip" style="margin-right:6px;opacity:.7"></i>All <i class="fa-solid fa-chevron-down" style="font-size:0.7em;margin-left:4px"></i>';
+        }
         categoryMenu.classList.remove("show");
 
         // When a specific category is selected, eagerly load it and expand
