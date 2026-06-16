@@ -735,9 +735,7 @@
       const hasMore    = state.visible < games.length;
       const isExpanded = state.visible > state.base;
 
-      moreBtn.textContent = hasMore
-        ? `See more  (${(games.length - state.visible).toLocaleString()} remaining)`
-        : "";
+      moreBtn.textContent = hasMore ? "See more" : "";
       moreBtn.classList.toggle("hidden", !hasMore);
       lessBtn.classList.toggle("hidden", !isExpanded);
 
