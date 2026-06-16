@@ -652,6 +652,23 @@
       return Math.min(cols * INITIAL_ROWS, totalGames);
     }
 
+    /* ── per-category short descriptions (cycled by game index) ── */
+    const CAT_DESCS = {
+      racing:     ["Burn rubber in this classic mobile racer.", "High-speed thrills from the J2ME era.", "Rev up and race on retro mobile hardware.", "Drift, boost, and overtake in this vintage racer.", "Classic mobile racing action."],
+      sports:     ["Classic J2ME sports action.", "Step up and compete in this mobile sports title.", "Retro mobile athletics at its finest.", "Show your skills in this vintage sports game.", "Compete and win in classic mobile sport."],
+      action:     ["Fast-paced J2ME action adventure.", "Fight your way through this classic mobile game.", "Vintage mobile action packed with thrills.", "Classic combat from the J2ME golden era.", "Battle enemies in this retro mobile title."],
+      adventure:  ["Explore and quest in this J2ME classic.", "Classic mobile adventure awaits.", "Journey through dungeons and discover treasure.", "Unravel mysteries in this retro mobile game.", "Epic retro adventure on mobile hardware."],
+      puzzle:     ["Exercise your brain in this J2ME puzzler.", "Classic mobile puzzle challenge.", "Match, slide, and solve in retro style.", "Mind-bending fun from the J2ME era.", "Solve puzzles in this vintage mobile game."],
+      shooting:   ["Take aim in this classic mobile shooter.", "Shoot your way through this J2ME title.", "Precision shooting from the retro mobile era.", "Blast enemies in classic J2ME style.", "Vintage mobile shooting action."],
+      arcade:     ["Classic arcade fun on mobile.", "Retro J2ME arcade action.", "High scores and fast reflexes required.", "A beloved mobile arcade classic.", "Endless arcade gameplay in J2ME style."],
+      strategy:   ["Plan and conquer in this J2ME strategy title.", "Build, manage, and dominate.", "Classic mobile strategy gameplay.", "Outsmart your opponents in retro mobile style.", "Strategic depth from the J2ME era."],
+      rpg:        ["Level up your hero in this J2ME RPG.", "Classic mobile role-playing adventure.", "Explore dungeons and grow stronger.", "Epic RPG storytelling on vintage mobile.", "Battle monsters in this retro mobile RPG."],
+      horror:     ["Survive the terror in this J2ME classic.", "Classic mobile horror experience.", "Face your fears in retro mobile style.", "Dark and thrilling J2ME horror.", "Eerie atmosphere from the mobile gaming era."],
+      simulation: ["Manage and build in this J2ME sim.", "Classic mobile simulation gameplay.", "Run your world in retro mobile style.", "Life simulation from the J2ME era.", "Build, grow, and thrive in this mobile sim."],
+      casual:     ["Quick and fun J2ME casual gaming.", "Easy to pick up, hard to put down.", "Light-hearted fun from the mobile era.", "Classic casual gameplay on J2ME.", "Enjoy simple retro mobile fun."],
+      general:    ["A classic game from the J2ME era.", "Retro mobile gaming at its best.", "Vintage J2ME title worth playing.", "A gem from the golden age of mobile games.", "Classic mobile gameplay, rediscovered."],
+    };
+
     /* ── card factory ──────────────────────────────────────── */
     function createCatalogCard(game, meta, animate = false, animIndex = 0) {
       const card = document.createElement("article");
@@ -659,15 +676,33 @@
       card.dataset.category = meta.key;
       card.dataset.name = game.n;
 
+      const descs = CAT_DESCS[meta.key] || CAT_DESCS.general;
+      // pick description deterministically from game name so it stays stable
+      const descIdx = game.n.charCodeAt(0) % descs.length;
+      const desc = descs[descIdx];
+
+      const starsHtml = '<div class="stars-group">' +
+        '<i class="fa-solid fa-star" style="color:#ffcc00"></i>'.repeat(4) +
+        '<i class="fa-regular fa-star" style="color:#ffcc00"></i>' +
+        '</div>';
+
       card.innerHTML = `
         <div class="game-img-div">
           <div class="placeholder-thumb" style="--c1:${meta.color}">
             <i class="fa-solid ${meta.icon}" aria-hidden="true"></i>
           </div>
+          <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
+            <i class="fa-regular fa-star"></i>
+            <span class="count">0</span>
+          </div>
         </div>
         <div class="game-text">
           <div class="name">${escHtml(game.n)}</div>
-          <div class="catalog-tag">J2ME &middot; ${escHtml(meta.label)}</div>
+          ${escHtml(desc)}
+          <div class="star">
+            ${starsHtml}
+            <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
+          </div>
         </div>`;
 
       if (animate) {
