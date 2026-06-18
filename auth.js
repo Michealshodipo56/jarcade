@@ -1,6 +1,6 @@
 /**
  * JARCADE — client auth module
- * Talks to jarcade-backend API and keeps session in localStorage.
+ * Talks to the Go API and keeps session in localStorage.
  */
 (function () {
   'use strict';
@@ -18,11 +18,11 @@
 
     const host = window.location.hostname;
     if (host === 'localhost' || host === '127.0.0.1' || host === '') {
-      return 'http://localhost:3001/api';
+      return 'http://localhost:8080/api';
     }
 
     console.warn('[JARCADE] Set JARCADE_API_URL in config.js to your Render API URL.');
-    return 'http://localhost:3001/api';
+    return 'http://localhost:8080/api';
   }
 
   const API_BASE = detectApiBase();
@@ -37,6 +37,10 @@
     } catch {
       return null;
     }
+  }
+
+  function displayName(user) {
+    return user?.display || user?.email?.split('@')[0] || 'Player';
   }
 
   function isLoggedIn() {
@@ -55,7 +59,7 @@
 
     const sidebarLogin = document.querySelector('.sidebar-login-link span');
     if (sidebarLogin) {
-      sidebarLogin.textContent = loggedIn ? user.username : 'Login';
+      sidebarLogin.textContent = loggedIn ? displayName(user) : 'Login';
     }
   }
 
@@ -88,7 +92,7 @@
     try {
       res = await fetch(`${API_BASE}${path}`, { ...options, headers });
     } catch {
-      throw new Error('Cannot reach the server. Start the API with: npm run dev');
+      throw new Error('Cannot reach the server. Start the API with: go run ./cmd/server');
     }
 
     let data = {};
@@ -104,37 +108,22 @@
     return data;
   }
 
-  async function migrateLocalFavourites() {
-    if (!getToken()) return;
-
-    let local = [];
+  function readLocalFavourites() {
     try {
-      local = JSON.parse(localStorage.getItem(LOCAL_FAV_KEY) || '[]');
+      return JSON.parse(localStorage.getItem(LOCAL_FAV_KEY) || '[]');
     } catch {
-      local = [];
+      return [];
     }
+  }
 
-    if (!local.length) return;
-
-    await Promise.all(
-      local.map((f) =>
-        api('/favourites', {
-          method: 'POST',
-          body: JSON.stringify({
-            name: f.name,
-            img: f.img || '',
-            onclick: f.onclick || '',
-          }),
-        }).catch(() => null)
-      )
-    );
+  function writeLocalFavourites(list) {
+    localStorage.setItem(LOCAL_FAV_KEY, JSON.stringify(list));
   }
 
   async function setSession(user, token) {
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
     applyAuthUI(user);
-    await migrateLocalFavourites();
     if (typeof window.syncFavouritesFromServer === 'function') {
       await window.syncFavouritesFromServer();
     }
@@ -149,19 +138,19 @@
     }
   }
 
-  async function register({ username, email, password, confirmPassword }) {
-    const data = await api('/auth/register', {
+  async function signup({ email, password, confirmPassword }) {
+    const data = await api('/auth/signup', {
       method: 'POST',
-      body: JSON.stringify({ username, email, password, confirmPassword }),
+      body: JSON.stringify({ email, password, confirmPassword }),
     });
     await setSession(data.user, data.token);
     return data.user;
   }
 
-  async function login({ login, password, remember }) {
+  async function login({ email, password }) {
     const data = await api('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ login, password, remember: !!remember }),
+      body: JSON.stringify({ email, password }),
     });
     await setSession(data.user, data.token);
     return data.user;
@@ -197,23 +186,20 @@
   }
 
   async function fetchFavourites() {
-    const data = await api('/favourites');
-    return (data.favourites || []).map((f) => ({
-      name: f.name,
-      img: f.img,
-      onclick: f.onclick,
-    }));
+    return readLocalFavourites();
   }
 
   async function addFavourite({ name, img, onclick }) {
-    await api('/favourites', {
-      method: 'POST',
-      body: JSON.stringify({ name, img: img || '', onclick: onclick || '' }),
-    });
+    const list = readLocalFavourites();
+    const idx = list.findIndex((f) => f.name === name);
+    const item = { name, img: img || '', onclick: onclick || '' };
+    if (idx >= 0) list[idx] = item;
+    else list.push(item);
+    writeLocalFavourites(list);
   }
 
   async function removeFavourite(name) {
-    await api(`/favourites/${encodeURIComponent(name)}`, { method: 'DELETE' });
+    writeLocalFavourites(readLocalFavourites().filter((f) => f.name !== name));
   }
 
   function setButtonLoading(btn, loading, label) {
@@ -247,7 +233,7 @@
     getToken,
     getUser,
     isLoggedIn,
-    register,
+    signup,
     login,
     logout,
     restoreSession,
@@ -260,6 +246,9 @@
     showAuthSuccess,
     whenReady: null,
   };
+
+  // Back-compat alias for login page
+  JarcadeAuth.register = JarcadeAuth.signup;
 
   const authReady = (async () => {
     if (document.readyState === 'loading') {

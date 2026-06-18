@@ -272,13 +272,13 @@
       const remember = document.getElementById('rememberMe')?.checked;
 
       if (!login || !password) {
-        JarcadeAuth.showAuthError('Please enter your username/email and password.');
+        JarcadeAuth.showAuthError('Please enter your email and password.');
         return;
       }
 
       JarcadeAuth.setButtonLoading(btn, true, 'Entering…');
       try {
-        await JarcadeAuth.login({ login, password, remember });
+        await JarcadeAuth.login({ email: login, password });
         JarcadeAuth.showAuthSuccess('Welcome back, player!');
         setTimeout(() => { window.location.href = 'index.html'; }, 400);
       } catch (err) {
@@ -293,13 +293,12 @@
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('signupBtn');
-      const username = document.getElementById('signupUsername').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
       const confirmPassword = document.getElementById('signupConfirm').value;
 
-      if (!username || !email || !password) {
-        JarcadeAuth.showAuthError('Please fill in all fields.');
+      if (!email || !password) {
+        JarcadeAuth.showAuthError('Please fill in email and password.');
         return;
       }
 
@@ -310,7 +309,7 @@
 
       JarcadeAuth.setButtonLoading(btn, true, 'Creating…');
       try {
-        await JarcadeAuth.register({ username, email, password, confirmPassword });
+        await JarcadeAuth.signup({ email, password, confirmPassword });
         JarcadeAuth.showAuthSuccess('Account created! Welcome to JARCADE.');
         setTimeout(() => { window.location.href = 'index.html'; }, 400);
       } catch (err) {
