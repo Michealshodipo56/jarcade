@@ -11,6 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="ui-enhancements.css">
+  <script src="config.js"></script>
+  <script src="animations.js" defer></script>
+  <script src="auth.js" defer></script>
   <script src="main.js" defer></script>
   <style>
     /* ===== STICKY HEADER ===== */
@@ -232,55 +235,6 @@
       width: calc(100% + 28px);
     }
 
-    .back-to-top-wrap {
-      display: contents;
-    }
-
-    .back-to-top-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 999;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      background: rgba(18, 18, 18, 0.9);
-      border: 2px solid #ffcc00;
-      color: #ffcc00;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-      cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transform: scale(0.8);
-      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
-    }
-
-    .back-to-top-btn.visible {
-      opacity: 1;
-      visibility: visible;
-      transform: scale(1);
-    }
-
-    .back-to-top-btn:hover {
-      background: #ffcc00;
-      color: #000;
-      border-color: #ffcc00;
-      transform: scale(1.08);
-    }
-
-    .back-to-top-btn i {
-      font-size: 1em;
-    }
-
-    .back-to-top-btn .back-to-top-text {
-      display: none;
-    }
-
     @media only screen and (max-width: 850px) {
       /* Non-sticky search container on mobile */
       .games-sticky-header {
@@ -355,14 +309,6 @@
       .cards-grid .game-card:first-child .game-img-div {
         height: 108px;
       }
-
-      .back-to-top-btn {
-        bottom: 20px;
-        right: 16px;
-        width: 48px;
-        height: 48px;
-        font-size: 1.2rem;
-      }
     }
 
     @media only screen and (max-width: 480px) {
@@ -414,12 +360,6 @@
       font-size: 2rem;
       color: rgba(255, 255, 255, 0.35);
       z-index: 1;
-      transition: transform 0.3s ease, color 0.3s ease;
-    }
-
-    .catalog-card:hover .placeholder-thumb i {
-      transform: scale(1.18) rotate(-6deg);
-      color: rgba(255, 255, 255, 0.65);
     }
 
     .catalog-tag {
@@ -571,12 +511,6 @@
 
     <main class="main games-main main-with-header">
       <div id="gamesSections"></div>
-
-      <div class="back-to-top-wrap">
-        <button type="button" class="back-to-top-btn" id="backToTopBtn">
-          <i class="fa-solid fa-chevron-up"></i> <span class="back-to-top-text">Back to Top</span>
-        </button>
-      </div>
 
       <footer class="site-footer">
         <div class="footer-inner">
@@ -775,6 +709,7 @@
         newGames.forEach((g, i) => {
           grid.appendChild(createCatalogCard(g, meta, animate, i));
         });
+        if (window.JarcadeAnimations) window.JarcadeAnimations.refresh(grid);
       } else if (target < currentCount) {
         // Remove excess cards (See Less)
         while (grid.childElementCount > target) grid.lastElementChild.remove();
@@ -799,6 +734,8 @@
       } else {
         section.querySelector(".no-more-label")?.remove();
       }
+
+      if (typeof initializeGameVotes === "function") initializeGameVotes();
     }
 
     function recalcBase(meta) {
@@ -990,6 +927,7 @@
         // Replace grid contents with only matching cards (no animation, for speed)
         grid.innerHTML = "";
         matched.forEach(g => grid.appendChild(createCatalogCard(g, meta, false, 0)));
+        if (window.JarcadeAnimations) window.JarcadeAnimations.refresh(grid);
 
         // Hide see-more / see-less while in search mode
         section.querySelector(".section-see-more-btn").classList.add("hidden");
@@ -1232,6 +1170,11 @@
     </div>
     <span class="loader-label">Loading Game...</span>
   </div>
+
+  <button type="button" class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+    <i class="fa-solid fa-chevron-up"></i>
+    <span class="back-to-top-text">Back to Top</span>
+  </button>
 
 </body>
 </html>

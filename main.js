@@ -51,11 +51,41 @@ function toggleDropdown() {
   document.getElementById("categoryDropdown").classList.toggle("show");
 }
 
+let favouritesCache = null;
+
+function clearFavouritesCache() {
+  favouritesCache = null;
+}
+
+window.clearFavouritesCache = clearFavouritesCache;
+
+async function syncFavouritesFromServer() {
+  if (window.JarcadeAuth?.getToken()) {
+    try {
+      favouritesCache = await JarcadeAuth.fetchFavourites();
+      localStorage.setItem('favourites', JSON.stringify(favouritesCache));
+      return favouritesCache;
+    } catch {
+      /* fall through to local */
+    }
+  }
+  favouritesCache = JSON.parse(localStorage.getItem('favourites') || '[]');
+  return favouritesCache;
+}
+
+window.syncFavouritesFromServer = syncFavouritesFromServer;
+
 function getFavourites() {
-  return JSON.parse(localStorage.getItem('favourites')) || [];
+  if (favouritesCache) return favouritesCache;
+  try {
+    return JSON.parse(localStorage.getItem('favourites')) || [];
+  } catch {
+    return [];
+  }
 }
 
 function saveFavourites(favourites) {
+  favouritesCache = favourites;
   localStorage.setItem('favourites', JSON.stringify(favourites));
 }
 
@@ -65,25 +95,44 @@ function setFavouriteState(element, isFavourite) {
   element.classList.toggle('active', isFavourite);
 }
 
-function toggleFavourite(element) {
+async function toggleFavourite(element) {
   const gameCard = element.closest('.game');
   const gameName = gameCard.querySelector('.name').innerText;
-  const gameImg = gameCard.querySelector('img').src;
+  const gameImg = gameCard.querySelector('img')?.src || '';
   const playOverlay = gameCard.querySelector('.play-overlay');
-  const onclickAttr = playOverlay.getAttribute('onclick');
+  const onclickAttr = playOverlay?.getAttribute('onclick') || '';
+
   let favourites = getFavourites();
-  const existingIndex = favourites.findIndex(f => f.name === gameName);
+  const existingIndex = favourites.findIndex((f) => f.name === gameName);
   const isAdding = existingIndex === -1;
 
-  if (isAdding) {
-    favourites.push({ name: gameName, img: gameImg, onclick: onclickAttr });
-    showNotification(`Added ${gameName} to favourites!`);
-  } else {
-    favourites.splice(existingIndex, 1);
-    showNotification(`Removed ${gameName} from favourites!`);
+  try {
+    if (window.JarcadeAuth?.getToken()) {
+      if (isAdding) {
+        await JarcadeAuth.addFavourite({ name: gameName, img: gameImg, onclick: onclickAttr });
+      } else {
+        await JarcadeAuth.removeFavourite(gameName);
+      }
+      favourites = await JarcadeAuth.fetchFavourites();
+      saveFavourites(favourites);
+    } else {
+      if (isAdding) {
+        favourites.push({ name: gameName, img: gameImg, onclick: onclickAttr });
+      } else {
+        favourites.splice(existingIndex, 1);
+      }
+      saveFavourites(favourites);
+    }
+  } catch (err) {
+    showNotification(err.message || 'Could not update favourites.', 'error');
+    return;
   }
 
-  saveFavourites(favourites);
+  showNotification(
+    isAdding ? `Added ${gameName} to favourites!` : `Removed ${gameName} from favourites!`,
+    'success'
+  );
+
   setFavouriteState(element, isAdding);
   element.classList.remove('heart-pop');
   void element.offsetWidth;
@@ -92,14 +141,16 @@ function toggleFavourite(element) {
 
 let notificationTimeout;
 
-function showNotification(message) {
+function showNotification(message, type) {
   const notification = document.getElementById('notification');
   if (!notification) {
     return;
   }
 
   notification.innerText = message;
-  notification.classList.remove('show');
+  notification.classList.remove('show', 'is-success', 'is-error');
+  if (type === 'success') notification.classList.add('is-success');
+  if (type === 'error') notification.classList.add('is-error');
   void notification.offsetWidth;
   notification.classList.add('show');
 
@@ -126,14 +177,20 @@ function showHelp() {
   showNotification("Help & Tutorials coming soon! Stay tuned.");
 }
 
-function toggleLogin() {
+async function toggleLogin() {
   const isLogged = document.body.getAttribute('data-logged-in') === 'true';
-  document.body.setAttribute('data-logged-in', !isLogged);
-  if (!isLogged) {
-    showNotification("Successfully logged in!");
-  } else {
-    showNotification("Logged out successfully.");
+
+  if (isLogged) {
+    if (window.JarcadeAuth) {
+      await JarcadeAuth.logout();
+    } else {
+      document.body.setAttribute('data-logged-in', 'false');
+    }
+    showNotification('Logged out successfully.');
+    return;
   }
+
+  window.location.href = 'login.html';
 }
 
 window.addEventListener('load', () => {
@@ -141,30 +198,27 @@ window.addEventListener('load', () => {
   initHorizontalScrolls();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initializeGameVotes();
+  if (window.JarcadeAuth?.whenReady) await JarcadeAuth.whenReady();
+  await syncFavouritesFromServer();
 
   const searchInput = document.querySelector('.home-search-input');
-
-  if (!searchInput) {
-    return;
-  }
-
   const gameCards = Array.from(document.querySelectorAll('.game'));
 
-  searchInput.addEventListener('input', (event) => {
-    const searchTerm = event.target.value.trim().toLowerCase();
+  if (searchInput && gameCards.length) {
+    searchInput.addEventListener('input', (event) => {
+      const searchTerm = event.target.value.trim().toLowerCase();
 
-    gameCards.forEach((card) => {
-      const name = card.querySelector('.name')?.textContent.toLowerCase() || '';
-      const details = card.querySelector('.game-text')?.textContent.toLowerCase() || '';
-      const matches = !searchTerm || name.includes(searchTerm) || details.includes(searchTerm);
+      gameCards.forEach((card) => {
+        const name = card.querySelector('.name')?.textContent.toLowerCase() || '';
+        const details = card.querySelector('.game-text')?.textContent.toLowerCase() || '';
+        const matches = !searchTerm || name.includes(searchTerm) || details.includes(searchTerm);
 
-      card.style.display = matches ? '' : 'none';
+        card.style.display = matches ? '' : 'none';
+      });
     });
-  });
-
-
+  }
 
   // --- HEADER SEARCH TOGGLE (Mobile) ---
   const searchToggle = document.getElementById('headerSearchToggle');
@@ -177,37 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (input) input.focus();
       }
     });
-    
-    // Close search when clicking outside
+
     document.addEventListener('click', (e) => {
       if (!searchWrap.contains(e.target) && !searchToggle.contains(e.target)) {
         searchWrap.classList.remove('expanded');
       }
     });
   }
-
-  // --- CARD RIPPLE EFFECT ---
-  document.querySelectorAll('.game').forEach(card => {
-    card.addEventListener('click', function(e) {
-      if (e.target.closest('.card-rating') || e.target.closest('.favourite-icon')) return;
-      
-      const ripple = document.createElement('div');
-      ripple.classList.add('ripple');
-      
-      const rect = this.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
-      
-      this.appendChild(ripple);
-      
-      setTimeout(() => {
-        ripple.remove();
-      }, 500);
-    });
-  });
 });
 
 function getVoteCounts() {
@@ -319,8 +349,12 @@ function incrementVote(element) {
     }
   });
 
-  element.classList.add('heart-pop');
-  setTimeout(() => element.classList.remove('heart-pop'), 300);
+  if (nextCount > 0) {
+    element.classList.remove('star-burst');
+    void element.offsetWidth;
+    element.classList.add('star-burst');
+    element.addEventListener('animationend', () => element.classList.remove('star-burst'), { once: true });
+  }
 }
 
 function initCategoryAutoscroll() {

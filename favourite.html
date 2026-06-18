@@ -12,6 +12,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="ui-enhancements.css">
+  <script src="config.js"></script>
+  <script src="animations.js" defer></script>
+  <script src="auth.js" defer></script>
   <script src="main.js" defer></script>
   <style>
     .fav-title {
@@ -139,7 +142,9 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.JarcadeAuth?.whenReady) await JarcadeAuth.whenReady();
+      await syncFavouritesFromServer();
       renderFavourites();
     });
 
@@ -191,19 +196,32 @@
     }
 
     function removeFromFavs(name, gameCard, heart) {
-      let favourites = getFavourites();
-      favourites = favourites.filter(f => f.name !== name);
-      saveFavourites(favourites);
+      const remove = async () => {
+        try {
+          if (window.JarcadeAuth?.getToken()) {
+            await JarcadeAuth.removeFavourite(name);
+            const favourites = await JarcadeAuth.fetchFavourites();
+            saveFavourites(favourites);
+          } else {
+            let favourites = getFavourites().filter((f) => f.name !== name);
+            saveFavourites(favourites);
+          }
+        } catch (err) {
+          showNotification(err.message || 'Could not remove favourite.', 'error');
+          return;
+        }
 
-      setFavouriteState(heart, false);
-      gameCard.style.opacity = '0';
-      gameCard.style.transform = 'scale(0.8)';
+        setFavouriteState(heart, false);
+        gameCard.style.opacity = '0';
+        gameCard.style.transform = 'scale(0.8)';
 
-      setTimeout(() => {
-        renderFavourites();
-      }, 300);
+        setTimeout(() => {
+          renderFavourites();
+        }, 300);
 
-      showNotification(`Removed ${name} from favourites!`);
+        showNotification(`Removed ${name} from favourites!`, 'success');
+      };
+      remove();
     }
   </script>
   <!-- Platform Selection Modal -->

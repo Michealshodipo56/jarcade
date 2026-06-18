@@ -253,8 +253,73 @@
   };
 
   window.signInWithGoogle = function () {
-    window.location.href = 'index.html';
+    JarcadeAuth.showAuthError('Google sign-in is coming soon. Use email and password for now.');
   };
+
+
+  /* ============================================================
+     AUTH — register / login
+     ============================================================ */
+  const loginForm = document.getElementById('loginForm');
+  const signupForm = document.getElementById('signupForm');
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('elBtn');
+      const login = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const remember = document.getElementById('rememberMe')?.checked;
+
+      if (!login || !password) {
+        JarcadeAuth.showAuthError('Please enter your username/email and password.');
+        return;
+      }
+
+      JarcadeAuth.setButtonLoading(btn, true, 'Entering…');
+      try {
+        await JarcadeAuth.login({ login, password, remember });
+        JarcadeAuth.showAuthSuccess('Welcome back, player!');
+        setTimeout(() => { window.location.href = 'index.html'; }, 400);
+      } catch (err) {
+        JarcadeAuth.showAuthError(err.message);
+      } finally {
+        JarcadeAuth.setButtonLoading(btn, false);
+      }
+    });
+  }
+
+  if (signupForm) {
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('signupBtn');
+      const username = document.getElementById('signupUsername').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirm').value;
+
+      if (!username || !email || !password) {
+        JarcadeAuth.showAuthError('Please fill in all fields.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        JarcadeAuth.showAuthError('Passwords do not match.');
+        return;
+      }
+
+      JarcadeAuth.setButtonLoading(btn, true, 'Creating…');
+      try {
+        await JarcadeAuth.register({ username, email, password, confirmPassword });
+        JarcadeAuth.showAuthSuccess('Account created! Welcome to JARCADE.');
+        setTimeout(() => { window.location.href = 'index.html'; }, 400);
+      } catch (err) {
+        JarcadeAuth.showAuthError(err.message);
+      } finally {
+        JarcadeAuth.setButtonLoading(btn, false);
+      }
+    });
+  }
 
 
   /* ============================================================
