@@ -126,7 +126,7 @@ body {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  padding: 28px 36px 24px;
+  padding: 36px 36px 32px;
   transform-style: preserve-3d;
   transform: rotateX(0deg) rotateY(0deg);
   transition: box-shadow 0.4s ease;
@@ -302,7 +302,7 @@ body {
 /* ── FORM HEADING ── */
 .form-heading {
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   opacity: 0;
 }
 .heading-sub {
@@ -317,7 +317,7 @@ body {
 
 /* ── FIELD GROUP ── */
 .field-group {
-  margin-bottom: 14px;
+  margin-bottom: 18px;
   opacity: 0;
 }
 .field-label {

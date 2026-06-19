@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Game - JARCADE</title>
+  <link rel="icon" type="image/webp" href="images/icon.webp">
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="ghost-loader.css">
+  <link rel="stylesheet" href="ui-enhancements.css">
+  <link rel="stylesheet" href="upload.css">
+  <script src="config.js"></script>
+  <script src="notifications.js" defer></script>
+  <script src="ghost-loader.js" defer></script>
+  <script src="ui-shell.js" defer></script>
+  <script src="animations.js" defer></script>
+  <script src="auth.js" defer></script>
+  <script src="main.js" defer></script>
+  <script src="uploads.js" defer></script>
+  <script src="upload.js" defer></script>
+</head>
+
+<body>
+  <!-- ===== SITE HEADER ===== -->
+  <header id="site-header">
+    <div class="menu" id="menuBtn"><i class="fa-solid fa-bars"></i></div>
+
+    <div class="header-page-title">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <span>Upload Game</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="header-notif-btn" id="headerNotifBtn" aria-label="Notifications" type="button">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-badge"></span>
+      </button>
+      <button class="header-login-btn" id="headerLoginBtn" onclick="window.location.href='login.html'" type="button" aria-label="Login">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span>Login</span>
+      </button>
+      <a href="favourite.html" class="header-fav-btn" id="headerFavBtn" aria-label="Favourites" title="Favourites" aria-hidden="true">
+        <i class="fa-solid fa-heart"></i>
+      </a>
+      <div class="header-avatar" id="headerAvatar" role="img" aria-label="Account" title="Account">
+        <span>JA</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="notification" class="notification"></div>
+
+  <div class="container">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="side-div">
+      <div class="side-bar" id="sidebar">
+        <div class="line"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+        <div class="remove" id="removeBtn">&times;</div>
+
+        <div class="logo">
+          <a href="index.html"><img src="images/logo.webp" alt="Jarcade Logo" class="logo-img"></a>
+        </div>
+
+        <nav class="section">
+          <a href="index.html" class="sc"><i class="fa-solid fa-house"></i><span>Home</span></a>
+          <a href="games.html" class="sc"><i class="fa-solid fa-gamepad"></i><span>Games</span></a>
+          <a href="help.html" class="sc"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+          <a href="" class="sc"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+          <a href="upload.html" class="sc upload-link active"><i class="fa-solid fa-cloud-arrow-up"></i><span>Upload Game</span></a>
+        </nav>
+
+        <hr class="hr hr-bottom">
+        <nav class="section section-secondary">
+          <a target="_blank" href="https://www.facebook.com/profile.php?id=61577225696695" class="sc"><i class="fa-solid fa-users"></i><span>Community</span></a>
+          <a href="" class="sc"><i class="fa-solid fa-rss"></i><span>News</span></a>
+          <button class="sidebar-login-btn sidebar-login-link sc" onclick="window.location.href='login.html'" type="button" aria-label="Login">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Login</span>
+          </button>
+          <button class="sidebar-login-btn sidebar-logout-btn sc" onclick="toggleLogin()" type="button" aria-label="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main main-with-header upload-main">
+
+      <!-- Hero -->
+      <section class="upload-hero reveal-up">
+        <div class="upload-hero-glow"></div>
+        <h1 class="upload-hero-title">Share Your <span>Game</span></h1>
+        <p class="upload-hero-sub">
+          Upload your own <strong>.jar</strong> game to the JARCADE arena. Pick a category,
+          add a cover, and it instantly shows up under <a href="index.html#new">New</a>.
+        </p>
+      </section>
+
+      <!-- Upload form -->
+      <section class="upload-card reveal-up">
+        <form id="uploadForm" novalidate>
+          <div class="upload-grid">
+
+            <!-- Left: drop zone -->
+            <div class="upload-col">
+              <label class="upload-field-label"><i class="fa-solid fa-file-zipper"></i> Game File (.jar)</label>
+              <div id="dropZone" class="dropzone" tabindex="0" role="button" aria-label="Drag and drop a .jar file or browse">
+                <input type="file" id="gameFile" accept=".jar,application/java-archive" hidden>
+                <div class="dropzone-inner" id="dropDefault">
+                  <div class="dropzone-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                  <p class="dropzone-title">Drag &amp; drop your <b>.jar</b> here</p>
+                  <p class="dropzone-or">or</p>
+                  <button type="button" class="import-btn" id="importBtn">
+                    <i class="fa-solid fa-folder-open"></i> Import Game
+                  </button>
+                  <p class="dropzone-hint">Only <b>.jar</b> files are accepted</p>
+                </div>
+                <div class="dropzone-file hidden" id="dropFile">
+                  <div class="file-icon"><i class="fa-solid fa-file-zipper"></i></div>
+                  <div class="file-meta">
+                    <span class="file-name" id="fileName">game.jar</span>
+                    <span class="file-size" id="fileSize">0 KB</span>
+                  </div>
+                  <button type="button" class="file-remove" id="fileRemove" aria-label="Remove file">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Thumbnail (optional) -->
+              <label class="upload-field-label"><i class="fa-solid fa-image"></i> Thumbnail / Cover <span class="optional">(optional)</span></label>
+              <div class="thumb-zone" id="thumbZone" role="button" tabindex="0" aria-label="Upload a thumbnail">
+                <input type="file" id="thumbFile" accept="image/*" hidden>
+                <img id="thumbPreview" class="thumb-preview hidden" alt="Thumbnail preview">
+                <div class="thumb-placeholder" id="thumbPlaceholder">
+                  <i class="fa-solid fa-image"></i>
+                  <span>Click to add a cover image</span>
+                </div>
+                <button type="button" class="thumb-remove hidden" id="thumbRemove" aria-label="Remove thumbnail">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: details -->
+            <div class="upload-col">
+              <label class="upload-field-label" for="gameName"><i class="fa-solid fa-signature"></i> Game Name</label>
+              <input type="text" id="gameName" class="upload-input" placeholder="e.g. Bounce Tales Remix" maxlength="60" required>
+
+              <label class="upload-field-label" for="gameCategory"><i class="fa-solid fa-layer-group"></i> Category</label>
+              <div class="select-wrap">
+                <select id="gameCategory" class="upload-input" required>
+                  <option value="" disabled selected>Choose a category…</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-chevron"></i>
+              </div>
+
+              <label class="upload-field-label" for="gameDescription"><i class="fa-solid fa-align-left"></i> Description</label>
+              <textarea id="gameDescription" class="upload-input upload-textarea" placeholder="Tell players what your game is about…" maxlength="300" rows="5"></textarea>
+              <div class="char-count"><span id="descCount">0</span>/300</div>
+
+              <button type="submit" class="upload-submit" id="uploadSubmit">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Publish Game</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- My uploaded games -->
+      <section class="my-uploads reveal-up">
+        <div class="my-uploads-head">
+          <h2><i class="fa-solid fa-gamepad"></i> My Uploaded Games</h2>
+          <span class="my-uploads-count" id="myUploadsCount">0 games</span>
+        </div>
+        <div class="my-uploads-grid" id="myUploadsGrid"></div>
+        <div class="my-uploads-empty" id="myUploadsEmpty">
+          <i class="fa-solid fa-ghost"></i>
+          <p>You haven't uploaded any games yet.</p>
+          <span>Use the form above to publish your first game.</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Game loader overlay -->
+  <div id="game-loader-overlay" data-jarcade-ghost-loader data-label="Loading game…" aria-hidden="true" aria-live="polite"></div>
+</body>
+</html>

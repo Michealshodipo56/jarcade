@@ -204,12 +204,16 @@ async function toggleLogin() {
 
     if (window.JarcadeUI?.showPageLoader) JarcadeUI.showPageLoader('Signing out…');
 
-    if (window.JarcadeAuth) {
-      await JarcadeAuth.logout();
-    } else {
-      document.body.setAttribute('data-logged-in', 'false');
+    try {
+      if (window.JarcadeAuth) {
+        await JarcadeAuth.logout();
+      } else {
+        document.body.setAttribute('data-logged-in', 'false');
+      }
+    } finally {
+      // Reload so the logged-out UI applies everywhere and the loader clears.
+      window.location.replace('index.html');
     }
-    showNotification('Logged out successfully.', 'success');
     return;
   }
 

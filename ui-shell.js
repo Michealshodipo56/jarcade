@@ -56,6 +56,16 @@
 
   function resetShellState() {
     hidePageLoader();
+
+    // The game launcher overlay can be restored "active" from the bfcache
+    // when returning from a game / external page — force it hidden.
+    const gameOverlay = document.getElementById('game-loader-overlay');
+    if (gameOverlay) {
+      gameOverlay.classList.remove('active');
+      gameOverlay.setAttribute('aria-hidden', 'true');
+    }
+    document.body.classList.remove('motion-paused', 'modal-open');
+
     const modal = document.getElementById('confirmModal');
     if (modal) {
       modal.classList.remove('show');

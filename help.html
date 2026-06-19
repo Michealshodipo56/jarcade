@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Center - JARCADE</title>
+  <meta name="description" content="Everything you need to discover, play and upload Java (.jar) mobile games on JARCADE — guides, FAQs, device support and troubleshooting.">
+  <link rel="icon" type="image/webp" href="images/icon.webp">
+  <script src="https://kit.fontawesome.com/5a3281998b.js" crossorigin="anonymous" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="ghost-loader.css">
+  <link rel="stylesheet" href="ui-enhancements.css">
+  <link rel="stylesheet" href="help.css">
+  <script src="config.js"></script>
+  <script src="notifications.js" defer></script>
+  <script src="ghost-loader.js" defer></script>
+  <script src="ui-shell.js" defer></script>
+  <script src="auth.js" defer></script>
+  <script src="main.js" defer></script>
+  <script src="help.js" defer></script>
+</head>
+
+<body>
+  <!-- ===== SITE HEADER ===== -->
+  <header id="site-header">
+    <div class="menu" id="menuBtn"><i class="fa-solid fa-bars"></i></div>
+
+    <div class="header-page-title">
+      <i class="fa-solid fa-circle-question"></i>
+      <span>Help Center</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="header-login-btn" id="headerLoginBtn" onclick="window.location.href='login.html'" type="button" aria-label="Login">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span>Login</span>
+      </button>
+      <a href="favourite.html" class="header-fav-btn" id="headerFavBtn" aria-label="Favourites" title="Favourites" aria-hidden="true">
+        <i class="fa-solid fa-heart"></i>
+      </a>
+      <div class="header-avatar" id="headerAvatar" role="img" aria-label="Account" title="Account">
+        <span>JA</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="notification" class="notification"></div>
+
+  <div class="container">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="side-div">
+      <div class="side-bar" id="sidebar">
+        <div class="line"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+        <div class="remove" id="removeBtn">&times;</div>
+
+        <div class="logo">
+          <a href="index.html"><img src="images/logo.webp" alt="Jarcade Logo" class="logo-img"></a>
+        </div>
+
+        <nav class="section">
+          <a href="index.html" class="sc"><i class="fa-solid fa-house"></i><span>Home</span></a>
+          <a href="games.html" class="sc"><i class="fa-solid fa-gamepad"></i><span>Games</span></a>
+          <a href="help.html" class="sc active"><i class="fa-solid fa-circle-question"></i><span>Help</span></a>
+          <a href="" class="sc"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+          <a href="upload.html" class="sc upload-link"><i class="fa-solid fa-cloud-arrow-up"></i><span>Upload Game</span></a>
+        </nav>
+
+        <hr class="hr hr-bottom">
+        <nav class="section section-secondary">
+          <a target="_blank" href="https://www.facebook.com/profile.php?id=61577225696695" class="sc"><i class="fa-solid fa-users"></i><span>Community</span></a>
+          <a href="" class="sc"><i class="fa-solid fa-rss"></i><span>News</span></a>
+          <button class="sidebar-login-btn sidebar-login-link sc" onclick="window.location.href='login.html'" type="button" aria-label="Login">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Login</span>
+          </button>
+          <button class="sidebar-login-btn sidebar-logout-btn sc" onclick="toggleLogin()" type="button" aria-label="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main main-with-header help-main">
+
+      <!-- HERO -->
+      <section class="help-hero" id="top">
+        <div class="help-hero-bg"></div>
+        <div class="help-hero-grid"></div>
+        <div class="particles" id="particles" aria-hidden="true"></div>
+
+        <span class="help-hero-badge"><i class="fa-solid fa-circle"></i> Welcome to the JARCADE Help Center</span>
+        <h1 class="help-hero-title">Relive the <span class="grad">Golden Age</span><br>of Java Gaming</h1>
+        <p class="help-hero-sub">
+          JARCADE lets you discover and play classic <strong>.jar</strong> mobile games right in your
+          browser — no downloads, no installs. This is your guide to getting started, fast.
+        </p>
+        <div class="help-cta-row">
+          <a href="games.html" class="help-btn help-btn-primary"><i class="fa-solid fa-gamepad"></i> Browse Games</a>
+          <a href="#how" class="help-btn help-btn-ghost"><i class="fa-solid fa-circle-play"></i> How it Works</a>
+        </div>
+        <a href="#how" class="help-scroll-cue" aria-label="Scroll down"><i class="fa-solid fa-chevron-down"></i></a>
+      </section>
+
+      <!-- QUICK NAV -->
+      <nav class="help-quicknav" id="quicknav" aria-label="Help sections">
+        <a href="#how">How it Works</a>
+        <a href="#devices">Devices</a>
+        <a href="#features">Features</a>
+        <a href="#upload">Uploads</a>
+        <a href="#faq">FAQ</a>
+        <a href="#troubleshoot">Troubleshooting</a>
+        <a href="#community">Community</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <!-- HOW IT WORKS -->
+      <section class="help-section" id="how">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-bolt"></i> How JARCADE Works</span>
+        <h2 class="help-h2 reveal">From zero to <span>playing</span> in four steps</h2>
+        <p class="help-lead reveal">No accounts required to play — though signing in saves your progress and favourites across devices.</p>
+
+        <div class="help-timeline">
+          <div class="help-step reveal">
+            <div class="help-step-num">1</div>
+            <div class="help-step-body">
+              <h3><i class="fa-solid fa-compass"></i> Browse games</h3>
+              <p>Explore curated rows on the home page or open <a href="games.html">Games</a> for the full catalog, sorted into 13+ categories like Action, Racing and RPG.</p>
+            </div>
+          </div>
+          <div class="help-step reveal">
+            <div class="help-step-num">2</div>
+            <div class="help-step-body">
+              <h3><i class="fa-solid fa-magnifying-glass"></i> Search instantly</h3>
+              <p>Use the search bar in the header to filter games live by name — results update as you type.</p>
+            </div>
+          </div>
+          <div class="help-step reveal">
+            <div class="help-step-num">3</div>
+            <div class="help-step-body">
+              <h3><i class="fa-solid fa-circle-info"></i> View game details</h3>
+              <p>Tap a card to see the game, rate it with a star, and add it to your favourites with the heart icon.</p>
+            </div>
+          </div>
+          <div class="help-step reveal">
+            <div class="help-step-num">4</div>
+            <div class="help-step-body">
+              <h3><i class="fa-solid fa-circle-play"></i> Play in your browser</h3>
+              <p>Hit play and the game launches in an emulator right on the page — on phone or desktop.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEVICE COMPATIBILITY -->
+      <section class="help-section" id="devices">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-mobile-screen"></i> Device Compatibility</span>
+        <h2 class="help-h2 reveal">Play <span>anywhere</span></h2>
+        <p class="help-lead reveal">Most J2ME games are designed for a numeric keypad. JARCADE maps those controls to touch and keyboard for you.</p>
+
+        <div class="help-grid cols-2">
+          <div class="help-card device-card android reveal">
+            <div class="device-head">
+              <div class="device-icon"><i class="fa-brands fa-android"></i></div>
+              <div>
+                <h3>Android &amp; Mobile</h3>
+                <span>Touch controls</span>
+              </div>
+            </div>
+            <ul class="device-list">
+              <li><i class="fa-solid fa-hand-pointer"></i> An on-screen D-pad and action buttons appear over the game.</li>
+              <li><i class="fa-solid fa-rotate"></i> Rotate your device for landscape titles.</li>
+              <li><i class="fa-solid fa-expand"></i> Tap fullscreen for the most immersive view.</li>
+            </ul>
+            <div class="device-keys">
+              <span class="key-cap">▲</span><span class="key-cap">▼</span><span class="key-cap">◀</span><span class="key-cap">▶</span>
+              <span class="key-cap">OK</span><span class="key-cap">A</span><span class="key-cap">B</span>
+            </div>
+          </div>
+
+          <div class="help-card device-card desktop reveal">
+            <div class="device-head">
+              <div class="device-icon"><i class="fa-solid fa-desktop"></i></div>
+              <div>
+                <h3>Desktop &amp; Laptop</h3>
+                <span>Keyboard controls</span>
+              </div>
+            </div>
+            <ul class="device-list">
+              <li><i class="fa-solid fa-keyboard"></i> Arrow keys move; <b>Enter</b> selects / fires.</li>
+              <li><i class="fa-solid fa-hashtag"></i> Number keys map to the classic phone keypad (2,4,6,8).</li>
+              <li><i class="fa-solid fa-gauge-high"></i> Bigger screen, smoother performance.</li>
+            </ul>
+            <div class="device-keys">
+              <span class="key-cap">↑</span><span class="key-cap">↓</span><span class="key-cap">←</span><span class="key-cap">→</span>
+              <span class="key-cap">Enter</span><span class="key-cap">2 4 6 8</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="both-banner reveal">
+          <i class="fa-solid fa-circle-nodes"></i> Many games run on <strong>both</strong> — your controls switch automatically based on the device you're using.
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section class="help-section" id="features">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-star"></i> Features Overview</span>
+        <h2 class="help-h2 reveal">Everything in <span>one arcade</span></h2>
+
+        <div class="help-grid cols-3">
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-magnifying-glass"></i></div><h3>Search</h3><p>Find any title instantly with live filtering as you type.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-layer-group"></i></div><h3>Categories</h3><p>Jump between 13+ genres from Action to Strategy and RPG.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-gamepad"></i></div><h3>Game Pages</h3><p>Ratings, descriptions and one-tap play for every game.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div><h3>Upload</h3><p>Share your own .jar games with the whole community.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-heart"></i></div><h3>Favourites</h3><p>Save the games you love and find them in one place.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-user"></i></div><h3>Accounts</h3><p>Sign in to sync favourites and progress across devices.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div><h3>Recommendations</h3><p>Discover fresh picks based on what's trending and new.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-bolt"></i></div><h3>New Section</h3><p>The latest community uploads, always front and centre.</p></div>
+        </div>
+      </section>
+
+      <!-- UPLOADS -->
+      <section class="help-section" id="upload">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-cloud-arrow-up"></i> Uploaded Games</span>
+        <h2 class="help-h2 reveal">Share your <span>own games</span></h2>
+        <p class="help-lead reveal">Got a classic .jar to share? Publishing it takes under a minute.</p>
+
+        <div class="help-grid cols-3">
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-folder-open"></i></div><h3>1. Add your file</h3><p>Open <a href="upload.html">Upload Game</a> and drag in a .jar file, or browse for it manually.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-pen"></i></div><h3>2. Add details</h3><p>Give it a name, pick a category, write a short description, and optionally add a cover.</p></div>
+          <div class="help-card reveal"><div class="help-card-icon"><i class="fa-solid fa-bolt"></i></div><h3>3. Find it under New</h3><p>Once published it appears in the <a href="index.html#new">New</a> row and inside its category.</p></div>
+        </div>
+        <div class="both-banner reveal" style="margin-top:24px">
+          <i class="fa-solid fa-gamepad"></i> Your uploads live in <strong>My Uploaded Games</strong> on the upload page, where you can manage or remove them anytime.
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="help-section" id="faq">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-comments"></i> FAQ</span>
+        <h2 class="help-h2 reveal">Quick <span>answers</span></h2>
+
+        <div class="faq-list" id="faqList">
+          <div class="faq-item reveal">
+            <button class="faq-q" type="button"><span>What is a .jar game?</span><span class="faq-ico"><i class="fa-solid fa-plus"></i></span></button>
+            <div class="faq-a"><div class="faq-a-inner">A <b>.jar</b> (Java Archive) is the format used by classic J2ME mobile games from the early 2000s. JARCADE runs them in your browser using an emulator, so you don't need an old phone.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" type="button"><span>Are the games free?</span><span class="faq-ico"><i class="fa-solid fa-plus"></i></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Yes — every game on JARCADE is free to play. No subscriptions, no paywalls.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" type="button"><span>Is JARCADE safe?</span><span class="faq-ico"><i class="fa-solid fa-plus"></i></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Games run inside a sandboxed emulator in your browser, so they can't touch your device. We recommend playing community uploads from creators you trust.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" type="button"><span>Why won't a game run?</span><span class="faq-ico"><i class="fa-solid fa-plus"></i></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Some titles need a specific screen size or are touch-only. Try a different resolution option if offered, refresh the page, or use a modern browser (Chrome, Edge, Firefox). See the Troubleshooting section below.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" type="button"><span>What devices are supported?</span><span class="faq-ico"><i class="fa-solid fa-plus"></i></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Any device with a modern browser — Android phones, tablets, laptops and desktops. Controls adapt automatically to touch or keyboard.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" type="button"><span>How do I report issues?</span><span class="faq-ico"><i class="fa-solid fa-plus"></i></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Use the Contact &amp; Support section at the bottom of this page, or reach us through the Community link in the sidebar.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TROUBLESHOOTING -->
+      <section class="help-section" id="troubleshoot">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-screwdriver-wrench"></i> Troubleshooting Center</span>
+        <h2 class="help-h2 reveal">Fix it <span>yourself</span></h2>
+
+        <div class="trouble-tabs reveal" role="tablist">
+          <button class="trouble-tab active" data-tab="playing"><i class="fa-solid fa-circle-play"></i> Playing problems</button>
+          <button class="trouble-tab" data-tab="gameissues"><i class="fa-solid fa-gamepad"></i> Game issues</button>
+          <button class="trouble-tab" data-tab="account"><i class="fa-solid fa-user-gear"></i> Account setup</button>
+          <button class="trouble-tab" data-tab="device"><i class="fa-solid fa-mobile-screen"></i> Device compatibility</button>
+        </div>
+
+        <div class="trouble-panel active reveal" data-panel="playing">
+          <ol class="trouble-steps">
+            <li><b>Refresh the page</b> — most launch hiccups clear with a reload.</li>
+            <li><b>Update your browser</b> to the latest version for full emulator support.</li>
+            <li><b>Allow the page to finish loading</b> — large games take a few seconds.</li>
+            <li><b>Disable aggressive ad-blockers</b> that may block the emulator scripts.</li>
+          </ol>
+        </div>
+        <div class="trouble-panel reveal" data-panel="gameissues">
+          <ol class="trouble-steps">
+            <li><b>Pick the right resolution</b> when a game offers multiple sizes.</li>
+            <li><b>Try fullscreen</b> if controls feel cramped or off-screen.</li>
+            <li><b>Restart the game</b> from its page if it freezes mid-play.</li>
+            <li><b>Report broken uploads</b> via the Community section so we can review them.</li>
+          </ol>
+        </div>
+        <div class="trouble-panel reveal" data-panel="account">
+          <ol class="trouble-steps">
+            <li><b>Create an account</b> from the <a href="login.html">Login</a> page to save data.</li>
+            <li><b>Forgot your password?</b> Use the reset link on the login screen.</li>
+            <li><b>Favourites missing?</b> Make sure you're signed in on the same account.</li>
+            <li><b>Guest progress</b> is stored on your device and won't sync between browsers.</li>
+          </ol>
+        </div>
+        <div class="trouble-panel reveal" data-panel="device">
+          <ol class="trouble-steps">
+            <li><b>Use a modern browser</b> — Chrome, Edge, Firefox or Safari.</li>
+            <li><b>Rotate to landscape</b> on mobile for wide games.</li>
+            <li><b>Free up memory</b> by closing other heavy tabs and apps.</li>
+            <li><b>Check your connection</b> — games load over the network the first time.</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- COMMUNITY -->
+      <section class="help-section" id="community">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-users"></i> Community</span>
+        <h2 class="help-h2 reveal">Join the <span>arcade crew</span></h2>
+
+        <div class="help-grid cols-3">
+          <div class="help-card community-card reveal">
+            <div class="help-card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h3>Report broken games</h3>
+            <p>Spotted a game that won't load? Let us know and we'll get it fixed.</p>
+            <a href="#contact" class="help-btn help-btn-ghost">Report</a>
+          </div>
+          <div class="help-card community-card reveal">
+            <div class="help-card-icon"><i class="fa-solid fa-lightbulb"></i></div>
+            <h3>Suggest new games</h3>
+            <p>Missing a classic? Tell us which titles you'd love to see added.</p>
+            <a href="#contact" class="help-btn help-btn-ghost">Suggest</a>
+          </div>
+          <div class="help-card community-card reveal">
+            <div class="help-card-icon"><i class="fa-brands fa-facebook"></i></div>
+            <h3>Join the discussion</h3>
+            <p>Connect with other retro gamers in our community group.</p>
+            <a href="https://www.facebook.com/profile.php?id=61577225696695" target="_blank" rel="noopener" class="help-btn help-btn-ghost">Join</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="help-section" id="contact">
+        <span class="help-eyebrow reveal"><i class="fa-solid fa-headset"></i> Contact &amp; Support</span>
+        <h2 class="help-h2 reveal">Still need a <span>hand?</span></h2>
+
+        <div class="contact-wrap">
+          <div class="contact-methods reveal">
+            <a href="mailto:support@jarcade.app" class="contact-method">
+              <i class="fa-solid fa-envelope"></i>
+              <span><span class="cm-title">Email support</span><span class="cm-sub">support@jarcade.app</span></span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61577225696695" target="_blank" rel="noopener" class="contact-method">
+              <i class="fa-brands fa-facebook"></i>
+              <span><span class="cm-title">Community page</span><span class="cm-sub">Message us on Facebook</span></span>
+            </a>
+            <a href="games.html" class="contact-method">
+              <i class="fa-solid fa-book-open"></i>
+              <span><span class="cm-title">Browse the catalog</span><span class="cm-sub">Find your next game</span></span>
+            </a>
+          </div>
+
+          <div class="support-flow reveal">
+            <h3>How support works</h3>
+            <ol>
+              <li>Reach out with as much detail as you can.</li>
+              <li>We confirm we've received your message.</li>
+              <li>We investigate and reply with a fix or next steps.</li>
+            </ol>
+            <p class="resp">Typical response time: <b>within 1–2 days</b>. Broken-game reports are prioritised.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL CTA -->
+      <section class="help-section">
+        <div class="help-final reveal">
+          <h2>Ready to play?</h2>
+          <p>Dive into hundreds of classic .jar games — no downloads, no installs.</p>
+          <div class="help-cta-row">
+            <a href="games.html" class="help-btn help-btn-primary"><i class="fa-solid fa-gamepad"></i> Browse Games</a>
+            <a href="upload.html" class="help-btn help-btn-ghost"><i class="fa-solid fa-cloud-arrow-up"></i> Upload a Game</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Game loader overlay -->
+  <div id="game-loader-overlay" data-jarcade-ghost-loader data-label="Loading game…" aria-hidden="true" aria-live="polite"></div>
+</body>
+</html>

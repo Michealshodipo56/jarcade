@@ -19,6 +19,7 @@
   <script src="animations.js" defer></script>
   <script src="auth.js" defer></script>
   <script src="main.js" defer></script>
+  <script src="uploads.js" defer></script>
   <style>
     /* ===== STICKY HEADER ===== */
     .games-sticky-header {
@@ -487,14 +488,14 @@
           <a href="games.html" class="sc active games-link">
             <i class="fa-solid fa-gamepad"></i><span>Games</span>
           </a>
-          <a href="#" class="sc">
+          <a href="help.html" class="sc">
             <i class="fa-solid fa-circle-question"></i><span>Help</span>
           </a>
           <a href="" class="sc">
             <i class="fa-solid fa-gear"></i><span>Settings</span>
           </a>
-          <a href="#" class="sc">
-            <i class="fa-solid fa-upload"></i><span>Upload Game</span>
+          <a href="upload.html" class="sc upload-link">
+            <i class="fa-solid fa-cloud-arrow-up"></i><span>Upload Game</span>
           </a>
         </nav>
 
@@ -632,21 +633,29 @@
       card.dataset.category = meta.key;
       card.dataset.name = game.n;
 
+      const upload = game._upload;
       const descs = CAT_DESCS[meta.key] || CAT_DESCS.general;
       // pick description deterministically from game name so it stays stable
       const descIdx = game.n.charCodeAt(0) % descs.length;
-      const desc = descs[descIdx];
+      const desc = upload
+        ? (upload.description || "A community-uploaded J2ME game.")
+        : descs[descIdx];
 
       const starsHtml = '<div class="stars-group">' +
         '<i class="fa-solid fa-star" style="color:#ffcc00"></i>'.repeat(4) +
         '<i class="fa-regular fa-star" style="color:#ffcc00"></i>' +
         '</div>';
 
+      const thumbHtml = upload
+        ? (upload.thumbnail
+            ? `<img loading="lazy" src="${escHtml(upload.thumbnail)}" alt="${escHtml(game.n)}" style="width:100%;height:100%;object-fit:cover">`
+            : `<div class="upload-thumb-fallback"><i class="fa-solid fa-gamepad"></i></div>`)
+        : `<div class="placeholder-thumb" style="--c1:${meta.color}"><i class="fa-solid ${meta.icon}" aria-hidden="true"></i></div>`;
+
       card.innerHTML = `
         <div class="game-img-div">
-          <div class="placeholder-thumb" style="--c1:${meta.color}">
-            <i class="fa-solid ${meta.icon}" aria-hidden="true"></i>
-          </div>
+          ${thumbHtml}
+          ${upload ? '<span class="upload-card-badge">NEW</span>' : ''}
           <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
             <i class="fa-regular fa-star"></i>
             <span class="count">0</span>
@@ -660,6 +669,12 @@
             <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
           </div>
         </div>`;
+
+      if (upload) {
+        card.dataset.uploadId = upload.id;
+        card.addEventListener("click", () => window.JarcadeUploads?.play(upload.id));
+        return card;
+      }
 
       if (animate) {
         card.classList.add("card-entering");
@@ -683,14 +698,23 @@
     async function loadCategory(key) {
       if (catalogCache[key] !== undefined) return;
       catalogCache[key] = null; // mark as loading
+      let games = [];
       try {
         const res = await fetch("games/categories/" + key + ".json");
         if (!res.ok) throw new Error("HTTP " + res.status);
-        catalogCache[key] = await res.json();
+        games = await res.json();
       } catch (e) {
         console.warn("Could not load category:", key, e);
-        catalogCache[key] = [];
+        games = [];
       }
+      // Prepend community uploads for this category (newest first).
+      if (window.JarcadeUploads) {
+        const uploads = window.JarcadeUploads.getByCategory(key).map(u => ({
+          n: u.name, u: "", _upload: u,
+        }));
+        games = uploads.concat(games);
+      }
+      catalogCache[key] = games;
     }
 
     /* ── render / update section ───────────────────────────── */

@@ -21,6 +21,7 @@
   <script src="animations.js" defer></script>
   <script src="auth.js" defer></script>
   <script src="main.js" defer></script>
+  <script src="uploads.js" defer></script>
 </head>
 
 <body>
@@ -112,14 +113,14 @@
           <a href="games.html" class="sc">
             <i class="fa-solid fa-gamepad"></i><span>Games</span>
           </a>
-          <a href="#" class="sc">
+          <a href="help.html" class="sc">
             <i class="fa-solid fa-circle-question"></i><span>Help</span>
           </a>
           <a href="" class="sc">
             <i class="fa-solid fa-gear"></i><span>Settings</span>
           </a>
-          <a href="#" class="sc">
-            <i class="fa-solid fa-upload"></i><span>Upload Game</span>
+          <a href="upload.html" class="sc upload-link">
+            <i class="fa-solid fa-cloud-arrow-up"></i><span>Upload Game</span>
           </a>
         </nav>
 
@@ -157,7 +158,7 @@
             <a href="#trending">Trending</a>
             <a href="#new">New</a>
             <a href="#action">Action</a>
-            <a href="#adventure">Adventure</a>
+            <a href="games.html#section-adventure">Adventure</a>
             <a href="#racing">Racing</a>
             <a href="#sports">Sports</a>
             <a href="#casino">Casino</a>
@@ -468,6 +469,8 @@
           <i class="fa-solid fa-chevron-left"></i>
         </button>
         <div class="categories-container">
+          <a href="index.html#new" class="category-item category-item-new"><i class="fa-solid fa-bolt"></i><span>New</span></a>
+          <a href="upload.html" class="category-item category-item-upload"><i class="fa-solid fa-cloud-arrow-up"></i><span>Upload</span></a>
           <a href="games.html#section-casual" class="category-item"><i class="fa-solid fa-gamepad"></i><span>Casual</span></a>
           <a href="games.html#section-action" class="category-item"><i class="fa-solid fa-bolt-lightning"></i><span>Action</span></a>
           <a href="games.html#section-puzzle" class="category-item"><i class="fa-solid fa-puzzle-piece"></i><span>Puzzle</span></a>
@@ -498,216 +501,21 @@
 
       <br>
 
-      <!-- ===== CLASSIC ADVENTURES ===== -->
-      <div id="adventure" class="type">
+      <!-- ===== NEW — LATEST UPLOADS ===== -->
+      <div id="new" class="type type-new">
         <svg width="400" height="90" viewBox="0 0 400 90" xmlns="http://www.w3.org/2000/svg">
           <text x="50%" y="60" text-anchor="middle" font-family="'Dynamix', sans-serif" font-size="38" fill="url(#jarcadeGradient)" style="letter-spacing: 2px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));">
-            ADVENTURE
+            NEW
           </text>
         </svg>
+        <p class="type-new-sub">Freshly uploaded by the community — <a href="upload.html">share yours</a></p>
       </div>
       <div class="scroll-wrapper">
-        <div class="scroll" id="adventureScroll">
+        <div class="scroll" id="newScroll" data-uploads-feed="all" data-uploads-empty="false">
 
-        <!-- Bounce Tales -->
-        <div class="game">
-          <div class="game-img-div">
-            <img loading="lazy" src="images/game7.jpg" alt="Bounce Tales">
-            <div onclick="openChoiceModal('BounceTales_both.jar', 'RMIDlet', 'size-no')" class="play-overlay">
-              <i class="fa-solid fa-gamepad"></i>
-            </div>
-            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
-              <i class="fa-regular fa-star"></i>
-              <span class="count">1.5K</span>
-            </div>
-          </div>
-          <div class="game-text">
-            <div class="name">Bounce Tales</div>
-            The legendary red ball is back! Help Bounce save the world from gloom.
-            <div class="star">
-              <div class="stars-group">
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-              </div>
-              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Diamond Rush -->
-        <div class="game">
-          <div class="game-img-div">
-            <img loading="lazy" src="images/game9.jpg" alt="Diamond Rush">
-            <div onclick="openChoiceModal('diamond_rush_key.jar', 'GloftDIRU', 'size-240x320')" class="play-overlay">
-              <i class="fa-solid fa-gamepad"></i>
-            </div>
-            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
-              <i class="fa-regular fa-star"></i>
-              <span class="count">2.2K</span>
-            </div>
-          </div>
-          <div class="game-text">
-            <div class="name">Diamond Rush</div>
-            Solve puzzles and collect diamonds in ancient temples and scary jungles.
-            <div class="star">
-              <div class="stars-group">
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-              </div>
-              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Assassin's Creed: Brotherhood -->
-        <div class="game">
-          <div class="game-img-div">
-            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/b/b5/Assassins_Creed_Brotherhood_Box_Art.jpg" alt="Assassin's Creed: Brotherhood">
-            <div onclick="openChoiceModal('assasin_s_creed_brot_360x640_139036.jar', 'GloftASBR', 'size-360x640', 'assassins_creed_br_259290_480x800.jar', 'GloftASBR', 'size-480x800')" class="play-overlay">
-              <i class="fa-solid fa-gamepad"></i>
-            </div>
-            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
-              <i class="fa-regular fa-star"></i>
-              <span class="count">1.8K</span>
-            </div>
-          </div>
-          <div class="game-text">
-            <div class="name">Assassin's Creed: Brotherhood</div>
-            Join Ezio and lead the brotherhood in this legendary historical adventure.
-            <div class="star">
-              <div class="stars-group">
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-              </div>
-              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- High School Hook Ups -->
-        <div class="game">
-          <div class="game-img-div">
-            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/f/f6/High_School_Hook_Ups_logo.png" alt="High School Hook Ups">
-            <div onclick="openChoiceModal('high_school_hook_ups_480x800_touch_258928.jar', 'GloftHUHS', 'size-480x800')" class="play-overlay">
-              <i class="fa-solid fa-gamepad"></i>
-            </div>
-            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
-              <i class="fa-regular fa-star"></i>
-              <span class="count">920</span>
-            </div>
-          </div>
-          <div class="game-text">
-            <div class="name">High School Hook Ups</div>
-            Navigate teen dramas, make friends, and find love in high school.
-            <div class="star">
-              <div class="stars-group">
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-              </div>
-              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Time Cherry Scroll -->
-        <div class="game">
-          <div class="game-img-div">
-            <img loading="lazy" src="java/img/sgyhc.png" alt="Time Cherry Scroll">
-            <div onclick="openChoiceModal('sgyhc.jar', 'Secrit_II', 'size-240x320')" class="play-overlay">
-              <i class="fa-solid fa-gamepad"></i>
-            </div>
-            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
-              <i class="fa-regular fa-star"></i>
-              <span class="count">670</span>
-            </div>
-          </div>
-          <div class="game-text">
-            <div class="name">Time Cherry Scroll</div>
-            Embark on an interactive fantasy visual novel adventure.
-            <div class="star">
-              <div class="stars-group">
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-              </div>
-              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Double Dance Mania -->
-        <div class="game">
-          <div class="game-img-div">
-            <img loading="lazy" src="java/img/sldwm.png" alt="Double Dance Mania">
-            <div onclick="openChoiceModal('sldwm.jar', 'dedron.game.ClientMIDlet', 'size-240x320')" class="play-overlay">
-              <i class="fa-solid fa-gamepad"></i>
-            </div>
-            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
-              <i class="fa-regular fa-star"></i>
-              <span class="count">540</span>
-            </div>
-          </div>
-          <div class="game-text">
-            <div class="name">Double Dance Mania</div>
-            Feel the rhythm and master steps in this anime style dance game.
-            <div class="star">
-              <div class="stars-group">
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-              </div>
-              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Club Tycoon -->
-        <div class="game">
-          <div class="game-img-div">
-            <img loading="lazy" src="https://images.igdb.com/igdb/image/upload/t_cover_big/co5qvy.webp" alt="Club Tycoon">
-            <div onclick="openChoiceModal('club_tycoon_260837.jar', 'phone.Midlet', 'size-240x320')" class="play-overlay">
-              <i class="fa-solid fa-gamepad"></i>
-            </div>
-            <div class="card-rating" onclick="incrementVote(this); event.stopPropagation();">
-              <i class="fa-regular fa-star"></i>
-              <span class="count">1.1K</span>
-            </div>
-          </div>
-          <div class="game-text">
-            <div class="name">Club Tycoon</div>
-            Manage and design your own mega nightclub empire.
-            <div class="star">
-              <div class="stars-group">
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-                <i class="fa-solid fa-star" style="color: #ffcc00;"></i>
-              </div>
-              <i class="fa-regular fa-heart favourite-icon" onclick="toggleFavourite(this); event.stopPropagation();"></i>
-            </div>
-          </div>
-        </div>
-
-        <a href="games.html" class="see-more-card">
-          <div class="see-more-icon"><i class="fa-solid fa-angles-right"></i></div>
-          <span>Browse All</span>
+        <a href="upload.html" class="see-more-card upload-cta-card">
+          <div class="see-more-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <span>Upload Game</span>
         </a>
       </div>
       </div>
