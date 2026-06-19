@@ -143,10 +143,12 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (window.JarcadeAuth?.whenReady) await JarcadeAuth.whenReady();
-      await syncFavouritesFromServer();
-      renderFavourites();
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.JarcadeAuth?.whenReady) {
+        JarcadeAuth.whenReady().then(() => syncFavouritesFromServer().then(renderFavourites)).catch(renderFavourites);
+      } else {
+        syncFavouritesFromServer().then(renderFavourites).catch(renderFavourites);
+      }
     });
 
     function renderFavourites() {
@@ -193,7 +195,7 @@
         favList.appendChild(gameDiv);
       });
 
-      initializeGameVotes();
+      initializeGameVotes(favList);
     }
 
     function removeFromFavs(name, gameCard, heart) {

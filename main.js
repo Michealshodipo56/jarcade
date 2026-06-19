@@ -203,10 +203,14 @@ window.addEventListener('load', () => {
   initHorizontalScrolls();
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   initializeGameVotes();
-  if (window.JarcadeAuth?.whenReady) await JarcadeAuth.whenReady();
-  await syncFavouritesFromServer();
+
+  if (window.JarcadeAuth?.whenReady) {
+    JarcadeAuth.whenReady().then(() => syncFavouritesFromServer()).catch(() => {});
+  } else {
+    syncFavouritesFromServer().catch(() => {});
+  }
 
   const searchInput = document.querySelector('.home-search-input');
   const gameCards = Array.from(document.querySelectorAll('.game'));
@@ -302,18 +306,17 @@ function createVoteCounter() {
   return counter;
 }
 
-function initializeGameVotes() {
+function initializeGameVotes(scope) {
+  const root = scope instanceof Element ? scope : document;
   const votes = getVoteCounts();
 
-  document.querySelectorAll('.game').forEach((card) => {
-    const imageWrap = card.querySelector('.game-img-div');
+  root.querySelectorAll('.game').forEach((card) => {
+    if (card.dataset.votesInit === '1') return;
 
-    if (!imageWrap) {
-      return;
-    }
+    const imageWrap = card.querySelector('.game-img-div');
+    if (!imageWrap) return;
 
     let counter = imageWrap.querySelector('.card-rating');
-
     if (!counter) {
       counter = createVoteCounter();
       imageWrap.appendChild(counter);
@@ -324,6 +327,7 @@ function initializeGameVotes() {
 
     counter.dataset.voteKey = voteKey;
     setVoteDisplay(counter, count);
+    card.dataset.votesInit = '1';
   });
 }
 
@@ -370,22 +374,30 @@ function initCategoryAutoscroll() {
   if (!container) return;
 
   const originalItems = Array.from(container.children);
-  originalItems.forEach(item => {
-    const clone = item.cloneNode(true);
-    container.appendChild(clone);
+  originalItems.forEach((item) => {
+    container.appendChild(item.cloneNode(true));
   });
 
-  let baseSpeed = 0.4;
-  let fastSpeed = 6;
+  let baseSpeed = 0.35;
+  let fastSpeed = 4;
   let currentSpeed = baseSpeed;
   let direction = 1;
   let isHovered = false;
+  let isVisible = true;
   let actualScrollLeft = container.scrollLeft;
 
-  container.addEventListener('mouseenter', () => isHovered = true);
-  container.addEventListener('mouseleave', () => isHovered = false);
-  container.addEventListener('touchstart', () => isHovered = true, { passive: true });
-  container.addEventListener('touchend', () => isHovered = false);
+  const visibilityObserver = new IntersectionObserver(
+    (entries) => {
+      isVisible = entries.some((entry) => entry.isIntersecting);
+    },
+    { threshold: 0.05 }
+  );
+  visibilityObserver.observe(container);
+
+  container.addEventListener('mouseenter', () => { isHovered = true; });
+  container.addEventListener('mouseleave', () => { isHovered = false; });
+  container.addEventListener('touchstart', () => { isHovered = true; }, { passive: true });
+  container.addEventListener('touchend', () => { isHovered = false; });
 
   if (nextBtn) {
     const startFastRight = () => { isHovered = false; currentSpeed = fastSpeed; direction = 1; };
@@ -394,8 +406,6 @@ function initCategoryAutoscroll() {
     nextBtn.addEventListener('mouseleave', stopFast);
     nextBtn.addEventListener('mousedown', startFastRight);
     nextBtn.addEventListener('mouseup', stopFast);
-    nextBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startFastRight(); }, { passive: false });
-    nextBtn.addEventListener('touchend', stopFast);
   }
 
   if (prevBtn) {
@@ -405,12 +415,10 @@ function initCategoryAutoscroll() {
     prevBtn.addEventListener('mouseleave', stopFast);
     prevBtn.addEventListener('mousedown', startFastLeft);
     prevBtn.addEventListener('mouseup', stopFast);
-    prevBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startFastLeft(); }, { passive: false });
-    prevBtn.addEventListener('touchend', stopFast);
   }
 
   function animate() {
-    if (!categoryScrollPaused && (!isHovered || currentSpeed > baseSpeed)) {
+    if (!categoryScrollPaused && isVisible && (!isHovered || currentSpeed > baseSpeed)) {
       if (Math.abs(actualScrollLeft - container.scrollLeft) > 2) {
         actualScrollLeft = container.scrollLeft;
       }
@@ -419,11 +427,11 @@ function initCategoryAutoscroll() {
       const halfWidth = Math.floor(container.scrollWidth / 2);
 
       if (direction === 1 && actualScrollLeft >= halfWidth) {
-        actualScrollLeft -= halfWidth; 
+        actualScrollLeft -= halfWidth;
       } else if (direction === -1 && actualScrollLeft <= 0) {
         actualScrollLeft += halfWidth;
       }
-      
+
       container.scrollLeft = actualScrollLeft;
     }
     requestAnimationFrame(animate);
@@ -603,40 +611,40 @@ function openChoiceModal(jar, className, canvasSize, mobileJar = null, mobileCla
     mobileClassName,
     mobileCanvasSize,
     title: 'Awesome Game',
-    desc: 'Get ready to play this amazing classic game!',
-    img: 'images/logo.webp'
+    desc: 'Get ready to play this classic game!',
+    img: 'images/logo.webp',
+    platform: 'desktop',
   };
-  
-  const e = typeof event !== 'undefined' ? event : window.event;
-  if (e) {
-    const target = e.currentTarget || e.target;
-    const gameCard = target.closest('.game, .game-card');
-    if (gameCard) {
-      const titleEl = gameCard.querySelector('.name');
-      const textEl = gameCard.querySelector('.game-text');
-      const imgEl = gameCard.querySelector('img');
-      
-      if (titleEl) currentPendingGame.title = titleEl.innerText;
-      if (imgEl) currentPendingGame.img = imgEl.src;
 
-      const categoryKey = gameCard.dataset.category || '';
-      if (categoryKey) {
-        currentPendingGame.category = categoryKey
-          .replace(/-/g, ' ')
-          .replace(/\b\w/g, c => c.toUpperCase());
-      }
-      
-      if (textEl) {
-         let clone = textEl.cloneNode(true);
-         let nEl = clone.querySelector('.name');
-         let sEl = clone.querySelector('.star');
-         if (nEl) nEl.remove();
-         if (sEl) sEl.remove();
-         currentPendingGame.desc = clone.innerText.trim();
-      }
+  const e = typeof event !== 'undefined' ? event : null;
+  const trigger = e?.currentTarget || e?.target;
+  const gameCard = trigger?.closest?.('.game, .game-card');
+
+  if (gameCard) {
+    const titleEl = gameCard.querySelector('.name');
+    const imgEl = gameCard.querySelector('img');
+    const textEl = gameCard.querySelector('.game-text');
+
+    if (titleEl) currentPendingGame.title = titleEl.innerText.trim();
+    if (imgEl?.src) currentPendingGame.img = imgEl.src;
+
+    const categoryKey = gameCard.dataset.category || '';
+    if (categoryKey) {
+      currentPendingGame.category = categoryKey
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+    }
+
+    if (textEl) {
+      const nameEl = textEl.querySelector('.name');
+      const starEl = textEl.querySelector('.star');
+      let desc = textEl.textContent || '';
+      if (nameEl) desc = desc.replace(nameEl.textContent, '');
+      if (starEl) desc = desc.replace(starEl.textContent, '');
+      currentPendingGame.desc = desc.trim() || currentPendingGame.desc;
     }
   }
-  
+
   const modal = document.getElementById('choiceModal');
   if (modal) modal.classList.add('show');
   syncModalState();

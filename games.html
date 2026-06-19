@@ -569,6 +569,7 @@
 
     /* ── state ─────────────────────────────────────────────── */
     const catalogCache = {};          // key → [{n, u}]
+    const SEARCH_RESULT_LIMIT = 80;
     const sectionState = {};          // key → { loaded, visible, base }
     const INITIAL_ROWS  = 3;
     const LOAD_MORE_ROWS = 3;
@@ -736,7 +737,7 @@
         section.querySelector(".no-more-label")?.remove();
       }
 
-      if (typeof initializeGameVotes === "function") initializeGameVotes();
+      if (typeof initializeGameVotes === "function") initializeGameVotes(grid);
     }
 
     function recalcBase(meta) {
@@ -913,7 +914,7 @@
         const allGames = catalogCache[key] || [];
 
         // Filter full game list by search term
-        const matched = allGames.filter(g => g.n.toLowerCase().includes(term));
+        const matched = allGames.filter(g => g.n.toLowerCase().includes(term)).slice(0, SEARCH_RESULT_LIMIT);
 
         if (matched.length === 0) {
           section.classList.add("hidden");
