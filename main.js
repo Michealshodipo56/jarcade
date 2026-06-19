@@ -1,7 +1,11 @@
 function playGame(jar, className, canvasSize = 'size-no', platform = 'desktop') {
-  // Show the ghost loader overlay immediately, covering all page content
   const overlay = document.getElementById('game-loader-overlay');
-  if (overlay) overlay.classList.add('active');
+  if (overlay) {
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+  }
+
+  setBackgroundMotionPaused(true);
 
   const isMobile = platform === 'mobile';
   const baseUrl = isMobile ? 'java/mobile.html' : 'java/main.html';
@@ -13,7 +17,12 @@ function playGame(jar, className, canvasSize = 'size-no', platform = 'desktop') 
   if (isMobile) {
     url += '&rotate=270';
   }
-  window.location.href = url;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.location.assign(url);
+    });
+  });
 }
 
 const VOTE_STORAGE_KEY = 'gameCardVotes';
@@ -46,6 +55,21 @@ function slugify(value) {
 function getGameStorageProfile(jar, className) {
   return `${getDeviceId()}-${slugify(jar)}-${slugify(className || 'default')}`;
 }
+
+let categoryScrollPaused = false;
+
+function setBackgroundMotionPaused(paused) {
+  document.body.classList.toggle('motion-paused', paused);
+}
+
+function syncModalState() {
+  const active = !!document.querySelector('.modal.show');
+  document.body.classList.toggle('modal-open', active);
+  categoryScrollPaused = active;
+  setBackgroundMotionPaused(active);
+}
+
+window.syncModalState = syncModalState;
 
 function toggleDropdown() {
   document.getElementById("categoryDropdown").classList.toggle("show");
@@ -139,26 +163,7 @@ async function toggleFavourite(element) {
   element.classList.add('heart-pop');
 }
 
-let notificationTimeout;
-
-function showNotification(message, type) {
-  const notification = document.getElementById('notification');
-  if (!notification) {
-    return;
-  }
-
-  notification.innerText = message;
-  notification.classList.remove('show', 'is-success', 'is-error');
-  if (type === 'success') notification.classList.add('is-success');
-  if (type === 'error') notification.classList.add('is-error');
-  void notification.offsetWidth;
-  notification.classList.add('show');
-
-  clearTimeout(notificationTimeout);
-  notificationTimeout = setTimeout(() => {
-    notification.classList.remove('show');
-  }, 3000);
-}
+window.setModalOpen = syncModalState;
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
@@ -405,7 +410,7 @@ function initCategoryAutoscroll() {
   }
 
   function animate() {
-    if (!isHovered || currentSpeed > baseSpeed) {
+    if (!categoryScrollPaused && (!isHovered || currentSpeed > baseSpeed)) {
       if (Math.abs(actualScrollLeft - container.scrollLeft) > 2) {
         actualScrollLeft = container.scrollLeft;
       }
@@ -602,7 +607,7 @@ function openChoiceModal(jar, className, canvasSize, mobileJar = null, mobileCla
     img: 'images/logo.webp'
   };
   
-  const e = window.event;
+  const e = typeof event !== 'undefined' ? event : window.event;
   if (e) {
     const target = e.currentTarget || e.target;
     const gameCard = target.closest('.game, .game-card');
@@ -634,20 +639,24 @@ function openChoiceModal(jar, className, canvasSize, mobileJar = null, mobileCla
   
   const modal = document.getElementById('choiceModal');
   if (modal) modal.classList.add('show');
+  syncModalState();
 }
 
 function closeChoiceModal() {
   const modal = document.getElementById('choiceModal');
   if (modal) modal.classList.remove('show');
+  syncModalState();
 }
 
 function closeInfoModal() {
   const modal = document.getElementById('infoModal');
   if (modal) modal.classList.remove('show');
+  syncModalState();
 }
 
 function startActualGame() {
   if (!currentPendingGame) return;
+  if (!currentPendingGame.platform) currentPendingGame.platform = 'desktop';
   const useMobileVersion = currentPendingGame.platform === 'mobile' && currentPendingGame.mobileJar;
   const selectedJar = useMobileVersion ? currentPendingGame.mobileJar : currentPendingGame.jar;
   const selectedClassName = useMobileVersion ? (currentPendingGame.mobileClassName || currentPendingGame.className) : currentPendingGame.className;
@@ -762,7 +771,10 @@ function selectPlatform(platform) {
 
   closeChoiceModal();
   const infoModal = document.getElementById('infoModal');
-  if (infoModal) infoModal.classList.add('show');
+  if (infoModal) {
+    infoModal.classList.add('show');
+    syncModalState();
+  }
 }
 
 // Global window event listeners to handle dismiss click on backdrops

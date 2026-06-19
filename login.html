@@ -15,35 +15,10 @@
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="ui-enhancements.css">
   <style>
-    .notification {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translate(-50%, -150px);
-      background: #007bff;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 10px;
-      font-weight: 600;
-      z-index: 10000;
-      opacity: 0;
-      pointer-events: none;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
-      max-width: min(90vw, 420px);
-      text-align: center;
-    }
-    .notification.show {
-      transform: translate(-50%, 0);
-      opacity: 1;
-    }
-    .notification.is-error { background: linear-gradient(135deg, #2e0d0d, #ef4444); }
-    .notification.is-success { background: linear-gradient(135deg, #0d2e1a, #10b981); }
     .cta-btn.is-loading { opacity: 0.75; pointer-events: none; }
   </style>
 </head>
 <body>
-
-  <div id="notification" class="notification"></div>
 
   <!-- ── PARTICLE CANVAS ── -->
   <canvas id="particleCanvas"></canvas>
@@ -262,6 +237,7 @@
   </div><!-- /scene -->
 
   <script src="config.js"></script>
+  <script src="notifications.js"></script>
   <script src="auth.js"></script>
   <script src="login.js"></script>
 </body>

@@ -672,6 +672,13 @@ body.modal-open {
   overflow: hidden;
 }
 
+body.motion-paused::before,
+body.motion-paused::after,
+body.modal-open::before,
+body.modal-open::after {
+  animation-play-state: paused !important;
+}
+
 /* =============================================
    RESPONSIVE — Max-width for ultra-wide monitors
    ============================================= */
@@ -689,12 +696,169 @@ body.modal-open {
 }
 
 /* =============================================
-   NOTIFICATION — brand colour tweak
+   TOAST NOTIFICATIONS — modern glass popups
    ============================================= */
-.notification {
-  background: linear-gradient(135deg, #1a1a2e, #007bff);
-  border: 1px solid rgba(0, 123, 255, 0.4);
-  box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 25000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 12px;
+  padding: 14px 14px 18px;
+  border-radius: 16px;
+  background: rgba(12, 14, 24, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #fff;
+  overflow: hidden;
+  pointer-events: auto;
+  animation: toastIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.toast--leaving {
+  animation: toastOut 0.28s ease forwards;
+}
+
+.toast__glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.toast--success .toast__glow {
+  background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.35), transparent 55%);
+}
+
+.toast--error .toast__glow {
+  background: radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.35), transparent 55%);
+}
+
+.toast--info .toast__glow {
+  background: radial-gradient(circle at 0% 0%, rgba(0, 123, 255, 0.35), transparent 55%);
+}
+
+.toast__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.toast--success .toast__icon {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.toast--error .toast__icon {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.toast--info .toast__icon {
+  background: rgba(0, 123, 255, 0.15);
+  color: #60a5fa;
+}
+
+.toast__message {
+  margin: 6px 0 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}
+
+.toast__close {
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.55);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.toast__close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.toast__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  transform-origin: left center;
+  animation: toastProgress 4s linear forwards;
+}
+
+.toast--success .toast__progress { background: linear-gradient(90deg, #10b981, #34d399); }
+.toast--error .toast__progress { background: linear-gradient(90deg, #ef4444, #f87171); }
+.toast--info .toast__progress { background: linear-gradient(90deg, #007bff, #60a5fa); }
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes toastOut {
+  to {
+    opacity: 0;
+    transform: translateX(16px) scale(0.96);
+  }
+}
+
+@keyframes toastProgress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@media (max-width: 520px) {
+  .toast-container {
+    top: auto;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+  .toast__progress { animation: none; opacity: 0.5; }
+}
+
+/* Legacy notification element — hidden when toasts are active */
+#notification.notification {
+  display: none !important;
 }
 
 /* =============================================

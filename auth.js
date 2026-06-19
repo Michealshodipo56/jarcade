@@ -9,8 +9,6 @@
   const USER_KEY = 'jarcadeUser';
   const LOCAL_FAV_KEY = 'favourites';
 
-  let notificationTimeout;
-
   const PROD_API_URL = 'https://jarcade-backend.onrender.com/api';
 
   function detectApiBase() {
@@ -65,25 +63,13 @@
     }
   }
 
-  function showNotification(message, type) {
-    const notification = document.getElementById('notification');
-    if (!notification) {
-      if (type === 'error') alert(message);
+  function notify(message, type) {
+    if (typeof window.showNotification === 'function') {
+      window.showNotification(message, type);
       return;
     }
-
-    notification.innerText = message;
-    notification.classList.remove('show', 'is-success', 'is-error');
-    if (type === 'success') notification.classList.add('is-success');
-    if (type === 'error') notification.classList.add('is-error');
-    void notification.offsetWidth;
-    notification.classList.add('show');
-
-    clearTimeout(notificationTimeout);
-    notificationTimeout = setTimeout(() => notification.classList.remove('show'), 3200);
+    if (type === 'error') alert(message);
   }
-
-  window.showNotification = showNotification;
 
   async function api(path, options = {}) {
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
@@ -228,11 +214,11 @@
   }
 
   function showAuthError(message) {
-    showNotification(message, 'error');
+    notify(message, 'error');
   }
 
   function showAuthSuccess(message) {
-    showNotification(message, 'success');
+    notify(message, 'success');
   }
 
   window.JarcadeAuth = {
