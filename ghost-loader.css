@@ -1,0 +1,219 @@
+/* JARCADE — pixel ghost loader (uiverse.io style) */
+
+.jarcade-ghost {
+  position: relative;
+  scale: 0.8;
+}
+
+.jarcade-ghost-body {
+  animation: jarcadeGhostUpNDown infinite 0.5s;
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  grid-template-rows: repeat(14, 1fr);
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+  grid-template-areas:
+    "a1  a2  a3  a4  a5  top0  top0  top0  top0  a10 a11 a12 a13 a14"
+    "b1  b2  b3  top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14"
+    "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14"
+    "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14"
+    "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14"
+    "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+    "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5"
+    "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18";
+}
+
+@keyframes jarcadeGhostUpNDown {
+  0%, 49% { transform: translateY(0); }
+  50%, 100% { transform: translateY(-10px); }
+}
+
+.jarcade-ghost-body .g-top0,
+.jarcade-ghost-body .g-top1,
+.jarcade-ghost-body .g-top2,
+.jarcade-ghost-body .g-top3,
+.jarcade-ghost-body .g-top4,
+.jarcade-ghost-body .g-st0,
+.jarcade-ghost-body .g-st1,
+.jarcade-ghost-body .g-st2,
+.jarcade-ghost-body .g-st3,
+.jarcade-ghost-body .g-st4,
+.jarcade-ghost-body .g-st5 {
+  background-color: red;
+}
+
+.jarcade-ghost-body .g-top0 { grid-area: top0; }
+.jarcade-ghost-body .g-top1 { grid-area: top1; }
+.jarcade-ghost-body .g-top2 { grid-area: top2; }
+.jarcade-ghost-body .g-top3 { grid-area: top3; }
+.jarcade-ghost-body .g-top4 { grid-area: top4; }
+.jarcade-ghost-body .g-st0 { grid-area: st0; }
+.jarcade-ghost-body .g-st1 { grid-area: st1; }
+.jarcade-ghost-body .g-st2 { grid-area: st2; }
+.jarcade-ghost-body .g-st3 { grid-area: st3; }
+.jarcade-ghost-body .g-st4 { grid-area: st4; }
+.jarcade-ghost-body .g-st5 { grid-area: st5; }
+
+.jarcade-ghost-body .g-an1 { grid-area: an1; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+.jarcade-ghost-body .g-an18 { grid-area: an18; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+.jarcade-ghost-body .g-an2 { grid-area: an2; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an17 { grid-area: an17; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an3 { grid-area: an3; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an16 { grid-area: an16; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an4 { grid-area: an4; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an15 { grid-area: an15; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an6 { grid-area: an6; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+.jarcade-ghost-body .g-an12 { grid-area: an12; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+.jarcade-ghost-body .g-an7 { grid-area: an7; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+.jarcade-ghost-body .g-an13 { grid-area: an13; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+.jarcade-ghost-body .g-an9 { grid-area: an9; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an10 { grid-area: an10; animation: jarcadeGhostFlicker1 infinite 0.5s; }
+.jarcade-ghost-body .g-an8 { grid-area: an8; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+.jarcade-ghost-body .g-an11 { grid-area: an11; animation: jarcadeGhostFlicker0 infinite 0.5s; }
+
+@keyframes jarcadeGhostFlicker0 {
+  0%, 49% { background-color: red; }
+  50%, 100% { background-color: transparent; }
+}
+
+@keyframes jarcadeGhostFlicker1 {
+  0%, 49% { background-color: transparent; }
+  50%, 100% { background-color: red; }
+}
+
+.jarcade-ghost-body .g-eye {
+  width: 40px;
+  height: 50px;
+  position: absolute;
+  top: 30px;
+  left: 10px;
+}
+
+.jarcade-ghost-body .g-eye::before {
+  content: "";
+  background-color: white;
+  width: 20px;
+  height: 50px;
+  transform: translateX(10px);
+  display: block;
+  position: absolute;
+}
+
+.jarcade-ghost-body .g-eye::after {
+  content: "";
+  background-color: white;
+  width: 40px;
+  height: 30px;
+  transform: translateY(10px);
+  display: block;
+  position: absolute;
+}
+
+.jarcade-ghost-body .g-eye1 {
+  width: 40px;
+  height: 50px;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+.jarcade-ghost-body .g-eye1::before {
+  content: "";
+  background-color: white;
+  width: 20px;
+  height: 50px;
+  transform: translateX(10px);
+  display: block;
+  position: absolute;
+}
+
+.jarcade-ghost-body .g-eye1::after {
+  content: "";
+  background-color: white;
+  width: 40px;
+  height: 30px;
+  transform: translateY(10px);
+  display: block;
+  position: absolute;
+}
+
+.jarcade-ghost-body .g-pupil {
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  z-index: 1;
+  animation: jarcadeGhostEyesMovement infinite 3s;
+}
+
+.jarcade-ghost-body .g-pupil1 {
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  z-index: 1;
+  animation: jarcadeGhostEyesMovement infinite 3s;
+}
+
+@keyframes jarcadeGhostEyesMovement {
+  0%, 49% { transform: translateX(0); }
+  50%, 99% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+
+.jarcade-ghost-shadow {
+  background-color: black;
+  width: 140px;
+  height: 140px;
+  position: absolute;
+  border-radius: 50%;
+  transform: rotateX(80deg);
+  filter: blur(20px);
+  top: 80%;
+  animation: jarcadeGhostShadowMovement infinite 0.5s;
+}
+
+@keyframes jarcadeGhostShadowMovement {
+  0%, 49% { opacity: 0.5; }
+  50%, 100% { opacity: 0.2; }
+}
+
+.jarcade-loader-label,
+.loader-label {
+  font-family: 'Dynamix', 'Orbitron', Arial, sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  animation: jarcadeLoaderPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes jarcadeLoaderPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jarcade-ghost-body,
+  .jarcade-ghost-body [class^="g-an"],
+  .jarcade-ghost-body .g-pupil,
+  .jarcade-ghost-body .g-pupil1,
+  .jarcade-ghost-shadow,
+  .jarcade-loader-label,
+  .loader-label {
+    animation: none !important;
+  }
+}

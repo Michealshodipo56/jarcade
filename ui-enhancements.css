@@ -352,12 +352,12 @@ body:not([data-logged-in="true"]) .header-notif-btn { display: none; }
   position: fixed;
   inset: 0;
   z-index: 30000;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(0, 0, 0, 0.92);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 28px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -368,21 +368,13 @@ body:not([data-logged-in="true"]) .header-notif-btn { display: none; }
   pointer-events: all;
 }
 
-.page-transition-ring {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.12);
-  border-top-color: #ffcc00;
-  border-right-color: #007bff;
-  animation: gameLoaderSpin 0.75s linear infinite;
-}
-
 .page-transition-label {
-  font-size: 0.82rem;
-  letter-spacing: 0.12em;
+  font-family: 'Dynamix', 'Orbitron', Arial, sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
+  animation: jarcadeLoaderPulse 1.2s ease-in-out infinite;
 }
 
 /* Confirm modal */

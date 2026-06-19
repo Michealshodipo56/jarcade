@@ -36,36 +36,6 @@ body {
   pointer-events: all;
 }
 
-#game-loader-overlay .loader-label {
-  font-family: 'Dynamix', Arial, sans-serif;
-  font-size: 1.1rem;
-  letter-spacing: 3px;
-  color: rgba(255, 255, 255, 0.5);
-  text-transform: uppercase;
-  animation: loaderPulse 1.2s ease-in-out infinite;
-}
-
-@keyframes loaderPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-/* --- Lightweight game loader (GPU-friendly) --- */
-.game-loader-ring {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.12);
-  border-top-color: #ffcc00;
-  border-right-color: #007bff;
-  animation: gameLoaderSpin 0.75s linear infinite;
-  will-change: transform;
-}
-
-@keyframes gameLoaderSpin {
-  to { transform: rotate(360deg); }
-}
-
 body::before {
   content: "";
   position: fixed;

@@ -9,14 +9,14 @@
   function injectShell() {
     if (document.getElementById('page-transition-overlay')) return;
 
+    const ghostHtml = window.JarcadeGhostLoader?.withLabel('Loading…', 'page-transition-label')
+      || '<div class="page-transition-ring" role="status" aria-label="Loading"></div><span class="page-transition-label">Loading…</span>';
+
     const overlay = document.createElement('div');
     overlay.id = 'page-transition-overlay';
     overlay.className = 'page-transition-overlay';
     overlay.setAttribute('aria-hidden', 'true');
-    overlay.innerHTML = `
-      <div class="page-transition-ring" role="status" aria-label="Loading"></div>
-      <span class="page-transition-label">Loading…</span>
-    `;
+    overlay.innerHTML = ghostHtml;
     document.body.appendChild(overlay);
 
     const confirm = document.createElement('div');
@@ -41,7 +41,7 @@
     injectShell();
     const overlay = document.getElementById('page-transition-overlay');
     if (!overlay) return;
-    const text = overlay.querySelector('.page-transition-label');
+    const text = overlay.querySelector('.page-transition-label, .jarcade-loader-label');
     if (text && label) text.textContent = label;
     overlay.classList.add('active');
     overlay.setAttribute('aria-hidden', 'false');
