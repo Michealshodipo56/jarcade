@@ -11,18 +11,20 @@
 
   let notificationTimeout;
 
+  const PROD_API_URL = 'https://jarcade-backend.onrender.com/api';
+
   function detectApiBase() {
     if (window.JARCADE_API_URL) {
       return String(window.JARCADE_API_URL).replace(/\/$/, '');
     }
 
     const host = window.location.hostname;
-    if (host === 'localhost' || host === '127.0.0.1' || host === '') {
+    if (host === 'localhost' || host === '127.0.0.1') {
       return 'http://localhost:8080/api';
     }
 
-    console.warn('[JARCADE] Set JARCADE_API_URL in config.js to your Render API URL.');
-    return 'http://localhost:8080/api';
+    // Deployed site without config.js — use production API
+    return PROD_API_URL;
   }
 
   const API_BASE = detectApiBase();
@@ -92,7 +94,12 @@
     try {
       res = await fetch(`${API_BASE}${path}`, { ...options, headers });
     } catch {
-      throw new Error('Cannot reach the server. Start the API with: go run ./cmd/server');
+      const origin = window.location.origin && window.location.origin !== 'null'
+        ? window.location.origin
+        : 'your site URL';
+      throw new Error(
+        `Cannot reach the API (${API_BASE}). Add "${origin}" to CORS_ORIGIN on Render, then redeploy the backend.`
+      );
     }
 
     let data = {};
