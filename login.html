@@ -79,15 +79,15 @@
             <span class="heading-sub">WELCOME BACK, PLAYER</span>
           </h2>
 
-          <form class="auth-form" id="loginForm" novalidate autocomplete="off">
+          <form class="auth-form" id="loginForm" novalidate>
 
             <div class="field-group" id="elField1">
               <label class="field-label" for="loginEmail">
                 <i class="fa-solid fa-user"></i> Username / Email
               </label>
               <div class="field-wrap">
-                <input type="text" id="loginEmail" class="field-input"
-                       placeholder="Enter your username or email" autocomplete="username">
+                <input type="email" id="loginEmail" name="email" class="field-input"
+                       placeholder="Enter your username or email" autocomplete="username email" inputmode="email" autocapitalize="none" spellcheck="false">
                 <span class="field-line"></span>
               </div>
             </div>
@@ -97,7 +97,7 @@
                 <i class="fa-solid fa-lock"></i> Password
               </label>
               <div class="field-wrap">
-                <input type="password" id="loginPassword" class="field-input"
+                <input type="password" id="loginPassword" name="password" class="field-input"
                        placeholder="••••••••••••" autocomplete="current-password">
                 <button type="button" class="eye-toggle" aria-label="Show password"
                         onclick="togglePassword('loginPassword', this)">
@@ -113,7 +113,7 @@
                 <span class="custom-check"></span>
                 <span>Remember me</span>
               </label>
-              <a href="#" class="forgot-link">Forgot password?</a>
+              <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
             </div>
 
             <button type="submit" class="cta-btn" id="elBtn">
@@ -129,11 +129,11 @@
               <span>or</span>
             </div>
 
-            <button type="button" class="google-btn" id="elGoogleBtn"
-                    onclick="signInWithGoogle(); return false;">
+            <button type="button" class="google-btn" id="elGoogleBtn">
               <i class="fa-brands fa-google" aria-hidden="true"></i>
               <span>Sign in with Google</span>
             </button>
+            <div id="googleSignInMount" class="google-signin-mount" hidden></div>
 
           </form>
 
@@ -149,14 +149,14 @@
             <span class="heading-sub">JOIN THE ARENA</span>
           </h2>
 
-          <form class="auth-form" id="signupForm" novalidate autocomplete="off">
+          <form class="auth-form" id="signupForm" novalidate>
 
             <div class="field-group">
               <label class="field-label" for="signupUsername">
                 <i class="fa-solid fa-user"></i> Username
               </label>
               <div class="field-wrap">
-                <input type="text" id="signupUsername" class="field-input"
+                <input type="text" id="signupUsername" name="username" class="field-input"
                        placeholder="Choose a username" autocomplete="username">
                 <span class="field-line"></span>
               </div>
@@ -167,8 +167,8 @@
                 <i class="fa-solid fa-envelope"></i> Email
               </label>
               <div class="field-wrap">
-                <input type="email" id="signupEmail" class="field-input"
-                       placeholder="your@email.com" autocomplete="email">
+                <input type="email" id="signupEmail" name="email" class="field-input"
+                       placeholder="your@email.com" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false">
                 <span class="field-line"></span>
               </div>
             </div>
@@ -178,7 +178,7 @@
                 <i class="fa-solid fa-lock"></i> Password
               </label>
               <div class="field-wrap">
-                <input type="password" id="signupPassword" class="field-input"
+                <input type="password" id="signupPassword" name="new-password" class="field-input"
                        placeholder="••••••••••••" autocomplete="new-password">
                 <button type="button" class="eye-toggle" aria-label="Show password"
                         onclick="togglePassword('signupPassword', this)">
@@ -193,7 +193,7 @@
                 <i class="fa-solid fa-shield-halved"></i> Confirm Password
               </label>
               <div class="field-wrap">
-                <input type="password" id="signupConfirm" class="field-input"
+                <input type="password" id="signupConfirm" name="confirm-password" class="field-input"
                        placeholder="••••••••••••" autocomplete="new-password">
                 <button type="button" class="eye-toggle" aria-label="Show password"
                         onclick="togglePassword('signupConfirm', this)">
@@ -216,8 +216,7 @@
               <span>or</span>
             </div>
 
-            <button type="button" class="google-btn"
-                    onclick="signInWithGoogle(); return false;">
+            <button type="button" class="google-btn" id="signupGoogleBtn">
               <i class="fa-brands fa-google" aria-hidden="true"></i>
               <span>Sign up with Google</span>
             </button>
@@ -236,8 +235,37 @@
     </div><!-- /panel -->
   </div><!-- /scene -->
 
+  <!-- Forgot password modal -->
+  <div class="forgot-modal" id="forgotModal" aria-hidden="true">
+    <div class="forgot-modal__backdrop" data-forgot-close></div>
+    <div class="forgot-modal__panel" role="dialog" aria-modal="true" aria-labelledby="forgotModalTitle">
+      <h3 class="forgot-modal__title" id="forgotModalTitle">Reset your password</h3>
+      <p class="forgot-modal__text">Enter the email for your account. We will send reset instructions if it exists.</p>
+      <form id="forgotForm">
+        <div class="field-group" style="margin-bottom:0">
+          <label class="field-label" for="forgotEmail">
+            <i class="fa-solid fa-envelope"></i> Email
+          </label>
+          <div class="field-wrap">
+            <input type="email" id="forgotEmail" name="email" class="field-input"
+                   placeholder="your@email.com" autocomplete="email" required>
+            <span class="field-line"></span>
+          </div>
+        </div>
+        <div id="forgotResetLinkWrap" hidden>
+          <a href="#" class="forgot-reset-link" id="forgotResetLink" target="_blank" rel="noopener">Open reset link</a>
+        </div>
+        <div class="forgot-modal__actions">
+          <button type="button" class="forgot-modal__btn forgot-modal__btn--ghost" data-forgot-close>Cancel</button>
+          <button type="submit" class="forgot-modal__btn forgot-modal__btn--primary" id="forgotSubmitBtn">Send reset link</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="config.js"></script>
   <script src="notifications.js"></script>
+  <script src="ui-shell.js"></script>
   <script src="auth.js"></script>
   <script src="login.js"></script>
 </body>

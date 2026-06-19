@@ -53,7 +53,11 @@ function slugify(value) {
 }
 
 function getGameStorageProfile(jar, className) {
-  return `${getDeviceId()}-${slugify(jar)}-${slugify(className || 'default')}`;
+  const user = window.JarcadeAuth?.getUser?.();
+  if (user?.id) {
+    return `user-${user.id}-${slugify(jar)}-${slugify(className || 'default')}`;
+  }
+  return `device-${getDeviceId()}-${slugify(jar)}-${slugify(className || 'default')}`;
 }
 
 let categoryScrollPaused = false;
@@ -186,16 +190,34 @@ async function toggleLogin() {
   const isLogged = document.body.getAttribute('data-logged-in') === 'true';
 
   if (isLogged) {
+    const confirmed = window.JarcadeUI?.showConfirm
+      ? await JarcadeUI.showConfirm({
+          title: 'Log out?',
+          message: 'You will need to sign in again to access your favourites and saved progress.',
+          confirmText: 'Log out',
+          cancelText: 'Stay',
+          danger: true,
+        })
+      : window.confirm('Log out of JARCADE?');
+
+    if (!confirmed) return;
+
+    if (window.JarcadeUI?.showPageLoader) JarcadeUI.showPageLoader('Signing out…');
+
     if (window.JarcadeAuth) {
       await JarcadeAuth.logout();
     } else {
       document.body.setAttribute('data-logged-in', 'false');
     }
-    showNotification('Logged out successfully.');
+    showNotification('Logged out successfully.', 'success');
     return;
   }
 
-  window.location.href = 'login.html';
+  if (window.JarcadeUI?.navigateWithLoader) {
+    JarcadeUI.navigateWithLoader('login.html', 'Opening login…');
+  } else {
+    window.location.href = 'login.html';
+  }
 }
 
 window.addEventListener('load', () => {

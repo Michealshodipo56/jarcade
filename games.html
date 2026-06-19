@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="ui-enhancements.css">
   <script src="config.js"></script>
   <script src="notifications.js" defer></script>
+  <script src="ui-shell.js" defer></script>
   <script src="animations.js" defer></script>
   <script src="auth.js" defer></script>
   <script src="main.js" defer></script>
@@ -455,7 +456,11 @@
         <i class="fa-solid fa-right-to-bracket"></i>
         <span>Login</span>
       </button>
-      <div class="header-avatar" id="headerAvatar" onclick="toggleLogin()" role="button" aria-label="Logout" tabindex="0" title="Click to logout">
+      <a href="favourite.html" class="header-fav-btn" id="headerFavBtn" aria-label="Favourites" title="Favourites" aria-hidden="true">
+        <i class="fa-solid fa-heart"></i>
+      </a>
+
+      <div class="header-avatar" id="headerAvatar" role="img" aria-label="Account" title="Account">
         <span>JA</span>
       </div>
     </div>

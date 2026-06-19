@@ -55,6 +55,12 @@
     if (avatar) {
       const span = avatar.querySelector('span');
       if (span) span.textContent = user?.initials || 'JA';
+      avatar.title = 'Account';
+    }
+
+    const favBtn = document.getElementById('headerFavBtn');
+    if (favBtn) {
+      favBtn.setAttribute('aria-hidden', loggedIn ? 'false' : 'true');
     }
 
     const sidebarLogin = document.querySelector('.sidebar-login-link span');
@@ -131,6 +137,29 @@
     }
   }
 
+  async function loginWithGoogle(idToken) {
+    const data = await api('/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ idToken }),
+    });
+    await setSession(data.user, data.token);
+    return data.user;
+  }
+
+  async function forgotPassword(email) {
+    return api('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  async function resetPassword({ token, password, confirmPassword }) {
+    return api('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, password, confirmPassword }),
+    });
+  }
+
   async function signup({ email, password, confirmPassword }) {
     const data = await api('/auth/signup', {
       method: 'POST',
@@ -198,11 +227,15 @@
   function setButtonLoading(btn, loading, label) {
     if (!btn) return;
     if (loading) {
-      btn.dataset.originalHtml = btn.innerHTML;
+      if (!btn.dataset.originalHtml) btn.dataset.originalHtml = btn.innerHTML;
       btn.disabled = true;
       btn.classList.add('is-loading');
       const content = btn.querySelector('.btn-content span:last-child');
-      if (content) content.textContent = label || 'Loading…';
+      if (content) {
+        content.textContent = label || 'Loading…';
+      } else {
+        btn.textContent = label || 'Loading…';
+      }
     } else {
       btn.disabled = false;
       btn.classList.remove('is-loading');
@@ -228,7 +261,10 @@
     isLoggedIn,
     signup,
     login,
+    loginWithGoogle,
     logout,
+    forgotPassword,
+    resetPassword,
     restoreSession,
     applyAuthUI,
     fetchFavourites,

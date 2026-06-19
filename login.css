@@ -23,17 +23,27 @@
 }
 
 /* ── BASE ── */
-html { height: 100%; overflow: hidden; }
+html {
+  height: 100%;
+  overflow-x: hidden;
+}
 
 body {
   font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: #fff;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100dvh;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding:
+    max(28px, env(safe-area-inset-top, 0px))
+    max(20px, env(safe-area-inset-right, 0px))
+    max(28px, env(safe-area-inset-bottom, 0px))
+    max(20px, env(safe-area-inset-left, 0px));
 }
 
 /* ── PARTICLE CANVAS ── */
@@ -117,7 +127,9 @@ body {
   z-index: 20;
   perspective: 1200px;
   width: var(--panel-w);
-  max-width: 96vw;
+  max-width: min(460px, calc(100vw - 40px));
+  padding: clamp(16px, 4vh, 40px) 0;
+  margin: auto;
 }
 
 /* ── PANEL ── */
@@ -424,6 +436,93 @@ body {
 }
 .forgot-link:hover { color: var(--gold); }
 
+/* ── FORGOT PASSWORD MODAL ── */
+.forgot-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.forgot-modal.show {
+  display: flex;
+}
+
+.forgot-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.forgot-modal__panel {
+  position: relative;
+  width: min(420px, 100%);
+  background: linear-gradient(145deg, rgba(24, 24, 36, 0.98), rgba(10, 10, 18, 0.99));
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.forgot-modal__title {
+  margin: 0 0 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.05rem;
+  color: var(--cyan);
+}
+
+.forgot-modal__text {
+  margin: 0 0 18px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.forgot-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.forgot-modal__btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.forgot-modal__btn--ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.forgot-modal__btn--primary {
+  background: linear-gradient(135deg, var(--gold), #ff9500);
+  color: #111;
+}
+
+.forgot-reset-link {
+  display: block;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(0, 200, 255, 0.08);
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  color: var(--cyan);
+  font-size: 0.78rem;
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.forgot-reset-link:hover {
+  color: var(--gold);
+}
+
 /* ── CTA BUTTON ── */
 .cta-btn {
   position: relative;
@@ -553,6 +652,16 @@ body {
   transform: scale(0.98) translateZ(0);
 }
 
+.google-signin-mount {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.google-signin-mount[hidden] {
+  display: none !important;
+}
+
 /* ── SWITCH TEXT ── */
 .switch-text {
   text-align: center;
@@ -621,17 +730,17 @@ body {
 
   .scene {
     width: 100%;
-    min-height: 100dvh;
+    min-height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 0;
+    padding: clamp(32px, 8vh, 56px) 0;
   }
 
   .panel {
-    padding: 28px 20px 24px;
+    padding: 28px 20px 28px;
     border-radius: 18px;
-    width: calc(100vw - 32px);
+    width: min(100%, calc(100vw - 32px));
     margin: 0 auto;
     /* Neon glow border fallback — replaces SVG trace on mobile */
     border: 1px solid rgba(0,200,255,0.5);

@@ -252,9 +252,180 @@
     sliderWrap.classList.remove('show-signup');
   };
 
-  window.signInWithGoogle = function () {
-    JarcadeAuth.showAuthError('Google sign-in is coming soon. Use email and password for now.');
-  };
+  function redirectAfterAuth() {
+    const go = () => {
+      if (window.JarcadeUI?.navigateWithLoader) {
+        JarcadeUI.navigateWithLoader('index.html', 'Entering JARCADE…');
+      } else {
+        window.location.href = 'index.html';
+      }
+    };
+    setTimeout(go, 400);
+  }
+
+  function initRememberedEmail() {
+    const emailInput = document.getElementById('loginEmail');
+    const rememberCheck = document.getElementById('rememberMe');
+    if (!emailInput) return;
+
+    const remembered = window.JarcadeUI?.getRememberedLoginEmail?.() || '';
+    if (remembered) {
+      emailInput.value = remembered;
+      if (rememberCheck) rememberCheck.checked = true;
+    }
+  }
+
+  initRememberedEmail();
+
+  function initGoogleSignIn() {
+    const clientId = window.JARCADE_GOOGLE_CLIENT_ID;
+    const loginBtn = document.getElementById('elGoogleBtn');
+    const signupBtn = document.getElementById('signupGoogleBtn');
+    const mount = document.getElementById('googleSignInMount');
+
+    function showGoogleUnavailable() {
+      JarcadeAuth.showAuthError(
+        'Google sign-in is not configured yet. Enter your Gmail in the email field above — your browser can save and suggest it.'
+      );
+    }
+
+    if (!clientId) {
+      loginBtn?.addEventListener('click', showGoogleUnavailable);
+      signupBtn?.addEventListener('click', showGoogleUnavailable);
+      return;
+    }
+
+    function loadGoogleScript() {
+      return new Promise((resolve, reject) => {
+        if (window.google?.accounts?.id) {
+          resolve();
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('Could not load Google sign-in.'));
+        document.head.appendChild(script);
+      });
+    }
+
+    loadGoogleScript()
+      .then(() => {
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: async (response) => {
+            if (!response?.credential) return;
+            try {
+              if (loginBtn) JarcadeAuth.setButtonLoading(loginBtn, true, 'Signing in…');
+              await JarcadeAuth.loginWithGoogle(response.credential);
+              JarcadeAuth.showAuthSuccess('Welcome back, player!');
+              redirectAfterAuth();
+            } catch (err) {
+              JarcadeAuth.showAuthError(err.message);
+            } finally {
+              if (loginBtn) JarcadeAuth.setButtonLoading(loginBtn, false);
+            }
+          },
+          auto_select: false,
+          cancel_on_tap_outside: true,
+          itp_support: true,
+        });
+
+        if (mount) {
+          mount.hidden = false;
+          window.google.accounts.id.renderButton(mount, {
+            type: 'standard',
+            theme: 'filled_black',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'pill',
+            width: Math.min(360, mount.offsetWidth || 320),
+          });
+        }
+
+        loginBtn?.addEventListener('click', () => {
+          window.google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              mount?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          });
+        });
+        signupBtn?.addEventListener('click', () => loginBtn?.click());
+      })
+      .catch(() => {
+        loginBtn?.addEventListener('click', showGoogleUnavailable);
+        signupBtn?.addEventListener('click', showGoogleUnavailable);
+      });
+  }
+
+  initGoogleSignIn();
+
+
+  /* ============================================================
+     FORGOT PASSWORD
+     ============================================================ */
+  const forgotModal = document.getElementById('forgotModal');
+  const forgotForm = document.getElementById('forgotForm');
+  const forgotLink = document.getElementById('forgotPasswordLink');
+  const forgotResetWrap = document.getElementById('forgotResetLinkWrap');
+  const forgotResetLink = document.getElementById('forgotResetLink');
+
+  function openForgotModal() {
+    if (!forgotModal) return;
+    const loginEmail = document.getElementById('loginEmail')?.value.trim();
+    const forgotEmail = document.getElementById('forgotEmail');
+    if (forgotEmail && loginEmail) forgotEmail.value = loginEmail;
+    if (forgotResetWrap) forgotResetWrap.hidden = true;
+    forgotModal.classList.add('show');
+    forgotModal.setAttribute('aria-hidden', 'false');
+    forgotEmail?.focus();
+  }
+
+  function closeForgotModal() {
+    if (!forgotModal) return;
+    forgotModal.classList.remove('show');
+    forgotModal.setAttribute('aria-hidden', 'true');
+  }
+
+  forgotLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openForgotModal();
+  });
+
+  forgotModal?.querySelectorAll('[data-forgot-close]').forEach((el) => {
+    el.addEventListener('click', closeForgotModal);
+  });
+
+  if (forgotForm) {
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('forgotSubmitBtn');
+      const email = document.getElementById('forgotEmail')?.value.trim();
+      if (!email) {
+        JarcadeAuth.showAuthError('Enter your email address.');
+        return;
+      }
+
+      JarcadeAuth.setButtonLoading(btn, true, 'Sending…');
+      try {
+        const data = await JarcadeAuth.forgotPassword(email);
+        JarcadeAuth.showAuthSuccess(data.message || 'Check your email for reset instructions.');
+        if (data.resetUrl && forgotResetLink && forgotResetWrap) {
+          forgotResetLink.href = data.resetUrl;
+          forgotResetLink.textContent = data.resetUrl;
+          forgotResetWrap.hidden = false;
+        } else {
+          closeForgotModal();
+        }
+      } catch (err) {
+        JarcadeAuth.showAuthError(err.message);
+      } finally {
+        JarcadeAuth.setButtonLoading(btn, false);
+      }
+    });
+  }
 
 
   /* ============================================================
@@ -279,8 +450,13 @@
       JarcadeAuth.setButtonLoading(btn, true, 'Entering…');
       try {
         await JarcadeAuth.login({ email: login, password });
+        if (remember && window.JarcadeUI?.rememberLoginEmail) {
+          JarcadeUI.rememberLoginEmail(login);
+        } else if (window.JarcadeUI?.clearRememberedLoginEmail) {
+          JarcadeUI.clearRememberedLoginEmail();
+        }
         JarcadeAuth.showAuthSuccess('Welcome back, player!');
-        setTimeout(() => { window.location.href = 'index.html'; }, 400);
+        redirectAfterAuth();
       } catch (err) {
         JarcadeAuth.showAuthError(err.message);
       } finally {
@@ -311,7 +487,7 @@
       try {
         await JarcadeAuth.signup({ email, password, confirmPassword });
         JarcadeAuth.showAuthSuccess('Account created! Welcome to JARCADE.');
-        setTimeout(() => { window.location.href = 'index.html'; }, 400);
+        redirectAfterAuth();
       } catch (err) {
         JarcadeAuth.showAuthError(err.message);
       } finally {
