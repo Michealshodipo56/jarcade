@@ -129,7 +129,8 @@
       }, '-=0.08')
       .to(elDivider, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.24, ease: 'power2.out' }, '-=0.12')
       .to(elGoogleBtn, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.28, ease: 'power2.out' }, '-=0.18')
-      .to(elSwitch, { opacity: 1, duration: 0.25, ease: 'power1.out' }, '-=0.05');
+      .to(elSwitch, { opacity: 1, duration: 0.25, ease: 'power1.out' }, '-=0.05')
+      .add(() => syncSliderClipHeight());
   }
 
   /* ── DESKTOP SEQUENCE: full trace + shockwave ── */
@@ -164,7 +165,7 @@
       .to(elGoogleBtn, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.32, ease: 'power2.out' }, '-=0.18')
       .to(elSwitch, { opacity: 1, duration: 0.3, ease: 'power1.out' }, '-=0.05')
       // Start floating animation on the panel — removed per user request
-      .add(() => { initTiltEffect(); }, '+=0.1');
+      .add(() => { initTiltEffect(); syncSliderClipHeight(); }, '+=0.1');
 
     gsap.set([elLogo, elHeading, elField1, elField2, elOptions, elBtn, elDivider, elGoogleBtn], {
       y: 18, filter: 'blur(6px)'
@@ -230,19 +231,37 @@
      LOGIN ↔ SIGNUP SWITCH
      ============================================================ */
   const sliderWrap = document.getElementById('sliderWrap');
+  const sliderClip = document.querySelector('.slider-clip');
   let isSignup = false;
+
+  function syncSliderClipHeight() {
+    if (!sliderClip) return;
+    const face = isSignup
+      ? document.getElementById('signupFace')
+      : document.getElementById('loginFace');
+    if (!face) return;
+    sliderClip.style.height = `${face.offsetHeight}px`;
+  }
+
+  window.addEventListener('resize', () => {
+    window.requestAnimationFrame(syncSliderClipHeight);
+  }, { passive: true });
 
   window.switchToSignup = function () {
     if (isSignup) return;
     isSignup = true;
     sliderWrap.classList.add('show-signup');
+    syncSliderClipHeight();
 
     // Animate signup fields in
     const signupFace = document.getElementById('signupFace');
     const fields = signupFace.querySelectorAll('.field-group, .form-heading, .cta-btn, .auth-divider, .google-btn, .switch-text');
     gsap.fromTo(fields,
       { opacity: 0, y: 14, filter: 'blur(4px)' },
-      { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.4, stagger: 0.07, ease: 'power2.out', delay: 0.35 }
+      {
+        opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.4, stagger: 0.07, ease: 'power2.out', delay: 0.35,
+        onComplete: syncSliderClipHeight,
+      }
     );
   };
 
@@ -250,6 +269,7 @@
     if (!isSignup) return;
     isSignup = false;
     sliderWrap.classList.remove('show-signup');
+    syncSliderClipHeight();
   };
 
   function redirectAfterAuth() {

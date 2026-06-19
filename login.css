@@ -37,13 +37,15 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding:
-    max(28px, env(safe-area-inset-top, 0px))
+    clamp(48px, 10vh, 88px)
     max(20px, env(safe-area-inset-right, 0px))
-    max(28px, env(safe-area-inset-bottom, 0px))
+    clamp(48px, 10vh, 88px)
     max(20px, env(safe-area-inset-left, 0px));
+  padding-top: max(clamp(48px, 10vh, 88px), env(safe-area-inset-top, 0px));
+  padding-bottom: max(clamp(48px, 10vh, 88px), env(safe-area-inset-bottom, 0px));
 }
 
 /* ── PARTICLE CANVAS ── */
@@ -128,8 +130,8 @@ body {
   perspective: 1200px;
   width: var(--panel-w);
   max-width: min(460px, calc(100vw - 40px));
-  padding: clamp(16px, 4vh, 40px) 0;
   margin: auto;
+  flex-shrink: 0;
 }
 
 /* ── PANEL ── */
@@ -138,7 +140,8 @@ body {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
-  padding: 28px 36px 24px;
+  padding: 24px 32px 22px;
+  height: fit-content;
   transform-style: preserve-3d;
   transform: rotateX(0deg) rotateY(0deg);
   transition: box-shadow 0.4s ease;
@@ -274,11 +277,14 @@ body {
 .slider-clip {
   overflow: hidden;
   width: 100%;
+  height: auto;
+  transition: height 0.45s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 .slider-wrap {
   display: flex;
   width: 200%;
+  align-items: flex-start;
   transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
   will-change: transform;
 }
@@ -730,15 +736,11 @@ body {
 
   .scene {
     width: 100%;
-    min-height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: clamp(32px, 8vh, 56px) 0;
+    padding: 0;
   }
 
   .panel {
-    padding: 28px 20px 28px;
+    padding: 24px 20px 24px;
     border-radius: 18px;
     width: min(100%, calc(100vw - 32px));
     margin: 0 auto;

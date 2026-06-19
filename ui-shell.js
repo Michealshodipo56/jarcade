@@ -54,6 +54,15 @@
     overlay.setAttribute('aria-hidden', 'true');
   }
 
+  function resetShellState() {
+    hidePageLoader();
+    const modal = document.getElementById('confirmModal');
+    if (modal) {
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
   function navigateWithLoader(url, label) {
     showPageLoader(label || 'Loading…');
     requestAnimationFrame(() => {
@@ -125,14 +134,19 @@
     clearRememberedLoginEmail,
   };
 
+  window.addEventListener('pageshow', resetShellState);
+  window.addEventListener('pagehide', hidePageLoader);
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       injectShell();
+      resetShellState();
       wireFavNavigation();
       wireInternalNavigation();
     });
   } else {
     injectShell();
+    resetShellState();
     wireFavNavigation();
     wireInternalNavigation();
   }
