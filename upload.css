@@ -2,6 +2,8 @@
    JARCADE — Upload Game page
    ============================================================ */
 
+.hidden { display: none !important; }
+
 .upload-main {
   padding: 18px clamp(14px, 3vw, 40px) 60px;
   max-width: 1180px;

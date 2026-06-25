@@ -183,7 +183,11 @@ window.onclick = function(event) {
 }
 
 function showHelp() {
-  showNotification("Help & Tutorials coming soon! Stay tuned.");
+  if (window.JarcadeUI?.navigateWithLoader) {
+    JarcadeUI.navigateWithLoader('help.html', 'Opening Help Center…');
+  } else {
+    window.location.href = 'help.html';
+  }
 }
 
 async function toggleLogin() {

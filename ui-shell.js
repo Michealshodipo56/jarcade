@@ -193,6 +193,8 @@
       const label = url.pathname.includes('login') ? 'Opening login…'
         : url.pathname.includes('favourite') ? 'Opening favourites…'
         : url.pathname.includes('games') ? 'Loading games…'
+        : url.pathname.includes('upload') ? 'Opening upload…'
+        : url.pathname.includes('help') ? 'Opening Help Center…'
         : 'Loading…';
       navigateWithLoader(url.pathname + url.search + url.hash, label);
     });

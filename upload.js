@@ -255,7 +255,7 @@
             })
           : window.confirm('Remove this game?');
         if (!confirmed) return;
-        window.JarcadeUploads.removeUpload(id);
+        await window.JarcadeUploads.removeUpload(id);
         renderMyUploads();
         notify('Game removed.', 'success');
       });
@@ -268,7 +268,7 @@
   function wireForm() {
     const form = $('uploadForm');
     if (!form) return;
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = $('gameName').value.trim();
       const category = $('gameCategory').value;
@@ -282,18 +282,16 @@
       btn.classList.add('is-loading');
       btn.disabled = true;
 
-      window.JarcadeUploads.addUpload({
-        name,
-        category,
-        description,
-        fileName: selectedFile.name,
-        fileSize: selectedFile.size,
-        thumbnail: thumbnailDataUrl,
-      });
+      try {
+        await window.JarcadeUploads.addUpload({
+          name,
+          category,
+          description,
+          fileName: selectedFile.name,
+          fileSize: selectedFile.size,
+          thumbnail: thumbnailDataUrl,
+        });
 
-      setTimeout(() => {
-        btn.classList.remove('is-loading');
-        btn.disabled = false;
         form.reset();
         clearFile();
         clearThumb();
@@ -301,7 +299,12 @@
         renderMyUploads();
         notify(`"${name}" published! Find it under New.`, 'success');
         document.getElementById('myUploadsGrid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 500);
+      } catch {
+        notify('Could not publish that game. Try again.', 'error');
+      } finally {
+        btn.classList.remove('is-loading');
+        btn.disabled = false;
+      }
     });
   }
 

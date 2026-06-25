@@ -538,8 +538,9 @@
           <nav class="footer-nav" aria-label="Footer navigation">
             <a href="games.html">All Games</a>
             <a href="favourite.html">Favourites</a>
-            <a href="#">Help</a>
-            <a href="#">Support</a>
+            <a href="help.html">Help</a>
+            <a href="help.html#contact">Support</a>
+            <a href="upload.html">Upload</a>
             <a href="">Privacy Policy</a>
             <a href="">Terms &amp; Conditions</a>
           </nav>
@@ -973,6 +974,29 @@
       });
     }
 
+    /* ── refresh community uploads in loaded categories ──── */
+    async function refreshUploadsInCatalog() {
+      if (!window.JarcadeUploads) return;
+      const keys = Object.keys(catalogCache).filter((k) => catalogCache[k] !== null && catalogCache[k] !== undefined);
+      for (const key of keys) {
+        delete catalogCache[key];
+        await loadCategory(key);
+        const meta = CATEGORY_META.find((m) => m.key === key);
+        const state = sectionState[key];
+        if (meta && state?.loaded) {
+          const section = document.querySelector(`[data-category-section="${key}"]`);
+          const grid = section?.querySelector(".cards-grid");
+          if (grid) {
+            while (grid.firstChild) grid.removeChild(grid.firstChild);
+            const games = catalogCache[key] || [];
+            state.base = calcBase(grid, games.length);
+            state.visible = Math.max(state.visible, state.base);
+            renderSection(meta, true);
+          }
+        }
+      }
+    }
+
     /* ── init ──────────────────────────────────────────────── */
     document.addEventListener("DOMContentLoaded", () => {
       // sidebar toggle
@@ -1076,6 +1100,10 @@
         const target = document.getElementById("section-" + key);
         if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
       }
+
+      window.addEventListener("jarcade:uploads-changed", () => {
+        refreshUploadsInCatalog().catch(() => {});
+      });
     });
 
   </script>

@@ -1,19 +1,15 @@
 /**
- * JARCADE — community game uploads (client-side store)
+ * JARCADE — community game uploads
  *
- * Backend is not implemented yet, so uploaded game metadata + thumbnail are
- * persisted in localStorage. The UI is structured so a real API can drop in
- * later (see JarcadeUploads.addUpload / getUploads).
- *
- * Stored shape (array under STORE_KEY):
- *   { id, name, category, description, fileName, fileSize, thumbnail, owner, createdAt }
+ * Merges server-backed uploads (when API + migration are available) with
+ * localStorage for guests and offline fallback.
  */
 (function () {
   'use strict';
 
   const STORE_KEY = 'jarcadeUploadedGames';
+  let serverGames = [];
 
-  // Keep in sync with the games.html category catalog (+ friendly labels).
   const CATEGORIES = [
     { key: 'action', label: 'Action' },
     { key: 'adventure', label: 'Adventure' },
@@ -30,12 +26,43 @@
     { key: 'general', label: 'Other / General' },
   ];
 
+  function apiBase() {
+    return window.JarcadeAuth?.API_BASE || 'https://jarcade-backend.onrender.com/api';
+  }
+
   function currentOwner() {
     const user = window.JarcadeAuth?.getUser?.();
     return user?.id ? `user-${user.id}` : 'guest';
   }
 
-  function readAll() {
+  function mapApiGame(g) {
+    if (!g) return null;
+    const userId = g.userId || g.user_id || '';
+    return {
+      id: g.id,
+      name: g.name,
+      category: g.category,
+      description: g.description || '',
+      fileName: g.fileName || g.file_name || '',
+      fileSize: g.fileSize ?? g.file_size ?? 0,
+      thumbnail: g.thumbnail || '',
+      owner: userId ? `user-${userId}` : 'guest',
+      createdAt: g.createdAt || g.created_at || new Date().toISOString(),
+    };
+  }
+
+  async function apiFetch(path, options = {}) {
+    const headers = { Accept: 'application/json', ...(options.headers || {}) };
+    const token = window.JarcadeAuth?.getToken?.();
+    if (token) headers.Authorization = `Bearer ${token}`;
+    if (options.body && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json';
+    }
+    const res = await fetch(`${apiBase()}${path}`, { ...options, headers });
+    return res;
+  }
+
+  function readLocal() {
     try {
       const list = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
       return Array.isArray(list) ? list : [];
@@ -44,21 +71,40 @@
     }
   }
 
-  function writeAll(list) {
+  function writeLocal(list) {
     localStorage.setItem(STORE_KEY, JSON.stringify(list));
+  }
+
+  function notifyChanged() {
     window.dispatchEvent(new CustomEvent('jarcade:uploads-changed'));
+  }
+
+  function readAll() {
+    const serverIds = new Set(serverGames.map((g) => g.id));
+    const localOnly = readLocal().filter((g) => !serverIds.has(g.id));
+    return [...serverGames, ...localOnly].sort(byNewest);
   }
 
   function byNewest(a, b) {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   }
 
-  /** All uploads (public feed) sorted newest first. */
-  function getAll() {
-    return readAll().sort(byNewest);
+  async function syncFromServer() {
+    try {
+      const res = await apiFetch('/uploads');
+      if (!res.ok) return;
+      const data = await res.json();
+      serverGames = (data.games || []).map(mapApiGame).filter(Boolean);
+      notifyChanged();
+    } catch {
+      /* API unavailable — localStorage still works */
+    }
   }
 
-  /** Uploads owned by the current user, newest first. */
+  function getAll() {
+    return readAll();
+  }
+
   function getMine() {
     const me = currentOwner();
     return readAll().filter((g) => g.owner === me).sort(byNewest);
@@ -68,26 +114,70 @@
     return readAll().filter((g) => g.category === key).sort(byNewest);
   }
 
-  function addUpload(game) {
-    const list = readAll();
-    const entry = {
-      id: `up-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+  async function addUpload(game) {
+    const payload = {
       name: String(game.name || 'Untitled Game').trim(),
       category: game.category || 'general',
       description: String(game.description || '').trim(),
       fileName: game.fileName || '',
       fileSize: game.fileSize || 0,
       thumbnail: game.thumbnail || '',
+    };
+
+    const token = window.JarcadeAuth?.getToken?.();
+    if (token) {
+      try {
+        const res = await apiFetch('/uploads', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const entry = mapApiGame(data.game);
+          if (entry) {
+            serverGames = [entry, ...serverGames.filter((g) => g.id !== entry.id)];
+            notifyChanged();
+            return entry;
+          }
+        }
+      } catch {
+        /* fall through to local storage */
+      }
+    }
+
+    const list = readLocal();
+    const entry = {
+      id: `up-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      ...payload,
       owner: currentOwner(),
       createdAt: new Date().toISOString(),
     };
     list.push(entry);
-    writeAll(list);
+    writeLocal(list);
+    notifyChanged();
     return entry;
   }
 
-  function removeUpload(id) {
-    writeAll(readAll().filter((g) => g.id !== id));
+  async function removeUpload(id) {
+    const token = window.JarcadeAuth?.getToken?.();
+    const onServer = serverGames.some((g) => g.id === id);
+
+    if (token && onServer) {
+      try {
+        const res = await apiFetch(`/uploads/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        if (res.ok) {
+          serverGames = serverGames.filter((g) => g.id !== id);
+          notifyChanged();
+          return;
+        }
+      } catch {
+        /* try local removal below */
+      }
+    }
+
+    writeLocal(readLocal().filter((g) => g.id !== id));
+    serverGames = serverGames.filter((g) => g.id !== id);
+    notifyChanged();
   }
 
   function categoryLabel(key) {
@@ -112,7 +202,6 @@
     }
   }
 
-  /* ── Storefront-style card (matches the site's .game cards) ───────── */
   function buildGameCard(game) {
     const card = document.createElement('div');
     card.className = 'game upload-game';
@@ -128,7 +217,7 @@
     card.innerHTML = `
       <div class="game-img-div">
         ${thumb}
-        <div class="play-overlay" onclick="JarcadeUploads.play('${game.id}'); event.stopPropagation();">
+        <div class="play-overlay" onclick="JarcadeUploads.play('${escapeHtml(game.id)}'); event.stopPropagation();">
           <i class="fa-solid fa-gamepad"></i>
         </div>
         <span class="upload-card-badge">NEW</span>
@@ -148,10 +237,6 @@
     return card;
   }
 
-  /**
-   * Render uploads into a horizontal scroll / grid container.
-   * opts: { limit, category ('all' or key), emptyState (bool), seeMoreHref }
-   */
   function renderInto(container, opts = {}) {
     if (!container) return 0;
     const { limit = 0, category = 'all', emptyState = true, seeMoreHref = 'upload.html' } = opts;
@@ -191,7 +276,6 @@
     }
   }
 
-  /* Auto-render any container marked with [data-uploads-feed]. */
   function renderFeeds() {
     document.querySelectorAll('[data-uploads-feed]').forEach((el) => {
       renderInto(el, {
@@ -203,15 +287,19 @@
     });
   }
 
-  function init() {
+  async function init() {
+    if (window.JarcadeAuth?.whenReady) {
+      await JarcadeAuth.whenReady().catch(() => {});
+    }
+    await syncFromServer();
     renderFeeds();
     window.addEventListener('jarcade:uploads-changed', renderFeeds);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', () => { init().catch(() => {}); });
   } else {
-    init();
+    init().catch(() => {});
   }
 
   window.JarcadeUploads = {
@@ -221,6 +309,7 @@
     getByCategory,
     addUpload,
     removeUpload,
+    syncFromServer,
     categoryLabel,
     formatDate,
     escapeHtml,
